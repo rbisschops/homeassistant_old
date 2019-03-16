@@ -1,0 +1,133 @@
+# Core configuration file for Home Assistant  
+# Type: Home Assistant yaml file
+# Date: 19-01-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.1.1:  Minor comment updates
+# V0.2.0:  Splited of zones into zones.yaml file
+# V0.3.0:  New build per november 16th 2018
+# V0.4.0:  New build for homeserver
+# V0.5.0:  Major updates. moved several configs to packages
+
+homeassistant:
+  name: !secret ha_name
+  latitude: !secret latitude_home
+  longitude: !secret longitude_home
+  elevation: !secret elevation_home
+  unit_system: metric
+  time_zone: !secret system_time_zone
+  # Custom packages
+  packages: !include_dir_named packages/
+
+## Cloud
+cloud:
+
+## Enables configuration UI
+config:
+
+## Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+## Discover some devices automatically
+discovery:
+  ignore:
+    - philips_hue
+
+## Enables the frontend
+frontend: !include frontend.yaml
+
+## Google assistant
+#google_assistant:
+#  project_id: !secret ga_project_name
+#  api_key: !secret ga_api_key
+#  exposed_domains:
+#    - light
+#  entity_config:
+#    switch.kitchen:
+#      name: CUSTOM_NAME_FOR_GOOGLE_ASSISTANT
+#      aliases:
+#        - BRIGHT_LIGHTS
+#        - ENTRY_LIGHTS
+#    light.living_room:
+#      expose: false
+#      room: LIVING_ROOM
+
+## Enables support for tracking state changes over time
+history:
+
+## Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+#http:
+#  api_password: !secret http_password
+#  base_url: https://rbisschops.duckdns.org:8123
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem
+
+## Show links to resources in log and frontend
+# introduction:
+
+## enable iOS component
+#ios:
+
+## View all events in a logbook
+logbook:
+
+## Lovelace UI
+lovelace:
+  mode: yaml
+
+## Enables a map showing the location of tracked devices
+map:
+
+## External MQTT broker (mosquitto)
+mqtt:
+  broker: !secret ip_mqtt_broker_hs
+  username: !secret userid_mqtt_broker
+  password: !secret password_mqtt_broker
+
+## Tracked history is kept for 10 days
+recorder:
+  purge_keep_days: 10
+
+## Track the sun
+sun:
+
+## System health
+system_health:
+
+## Text to speech
+tts:
+  - platform: google
+
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+## Xiaomi Gateways
+#xiaomi_aqara:
+#  discovery_retry: 5
+#  gateways:
+#    - mac: !secret mac_bridge_xiaomi >> leave commented for now!!
+#      host: !secret ip_xiaomi_aquara
+#      key: !secret xiaomi_aquara_key
+
+### Configuations items (presence, Sensors, groups, automations and scripts)
+device_tracker: !include includes/device_trackers.yaml
+# input_boolean: !include_dir_merge_named includes/input_boolean
+# input_number: !include_dir_merge_named includes/input_number    >> leave commented for now!!
+# input_select: !include_dir_merge_named includes/input_select
+group: !include_dir_merge_named includes/groups
+scene: !include_dir_merge_named includes/scenes
+
+### OLD STUFF, MIGRATE TO ABOVE ###
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/

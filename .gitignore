@@ -1,0 +1,29 @@
+# .gitignore file for the homeassitant config dir.
+# Ensure that everything will be ignored first
+*
+
+# Whitelist files/folders for the config dir.
+!*.yaml
+!.gitignore
+!.md
+
+# Ignore the folowing folders.
+.storage
+.cloud
+.google.token
+deps
+private
+tts
+floorplans
+
+# Ensure individual files to be ignored
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml
+
+anneke.jpg
+kimberly.jpg
+ralph.jpg
+anneke48*.png
+kimberly48*.png
+ralph48*.png

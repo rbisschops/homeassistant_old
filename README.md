@@ -4,7 +4,7 @@ Here's my [Home Assistant](https://home-assistant.io/) configuration. I have ins
 
 I plan to move everything to a dedicated NUC in time. Docker should make this simple. 
 
-I'm new to HASS coming from a Domoticz RPi environment. That's why the two are running in parallel at the moment. This will change once HASS is fully operational. I spent quite some time to get the two working together.  
+I'm relatively new to HASS coming from a Domoticz RPi environment. That's why the two are running in parallel at the moment. This will change once HASS is fully operational. I spent quite some time to get the two working together.  
 
 I regularly update my configuration files as HASS is still heavily under development.
 

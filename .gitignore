@@ -5,7 +5,7 @@
 # Whitelist files/folders for the config dir.
 !*.yaml
 !.gitignore
-!.md
+!*.md
 
 # Whitelist folders and files.
 !packages

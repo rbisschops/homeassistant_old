@@ -1,0 +1,116 @@
+# Package file for Home Assistant, used for setting the Hue scenes  
+# Type: Home Assistant yaml file
+# Date: 27-02-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.1.1:  Minor comments updates
+# V0.1.2:  Update group name
+# V0.1.3:  Removed Verlichting uit as its not a real Hue scene 
+# V0.2.0:  Major update for HA 
+# V1.0.0:  Production version 1.0.0
+
+# Notes: Scenes are stored in the Hue Bridge and can be 
+# edited with the Hue V1 and/or V2 App
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    script.set_hue_scene:
+      icon: mdi:lightbulb
+
+## Hue bridges and emulators
+hue:
+  bridges:
+    - host: !secret ip_hue_bridge
+      filename: phue_bridge.conf
+      allow_unreachable: true
+      allow_hue_groups: true
+#    - host: !secret ip_ha_bridge
+#      filename: phue_emulator.conf
+#      allow_unreachable: true
+
+###############################################################################
+#                              Entities
+###############################################################################
+
+# Input selectors for scenes and Rooms
+input_select:
+  hue_scenes:
+    name: Licht scenes woonkamer
+    icon: mdi:lightbulb
+    options:
+      - Concentratie
+      - Energie
+      - Gedimd
+      - Helder 
+      - Lezen
+      - Nachtlampje
+      - Ontspannen
+      - Schoonmaken
+      - TV mode
+      - Verlichting aan
+    initial: Verlichting aan
+  hue_groups:
+    name: Ruimte
+    icon: mdi:group
+    options:
+      - Woonkamer
+      - Keuken
+    initial: Woonkamer
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+# Group with the Scenes, Rooms and script, used in the UI
+group:
+  hue_light_control:
+    name: Verlichting
+    icon: mdi:spotlight
+    entities:
+      - light.woonkamer
+      - input_select.hue_scenes
+      - input_select.hue_groups
+      - script.set_hue_scene
+
+###############################################################################
+#                              Automations
+###############################################################################
+
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+# Script for setting the Hue scene manual
+script:
+  manual_set_hue_scene:
+    alias: Set Hue scenes handmatig
+    sequence: 
+      - service: script.set_hue_scene
+        data_template:
+          group: '{{ states.input_select.hue_groups.state }}'
+          name: '{{ states.input_select.hue_scenes.state }}'
+
+  set_hue_scene:
+    alias: Send Hue scene naar Hue Bridge
+    sequence: 
+      - service: hue.hue_activate_scene
+        data_template:
+          group_name: '{{ group }}'
+          scene_name: '{{ name }}'
+
+###############################################################################
+#                              Timers
+###############################################################################
+

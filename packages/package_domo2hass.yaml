@@ -1,0 +1,206 @@
+# Package file for Home Assistant, used for getting Domoticz data via MQTT 
+# Type: Home Assistant yaml file
+# Date: 10-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Updated with additional input booleans
+# V0.3.0:  Added switches that copies bahaviour of HA Bridge sensors
+# V0.3.1:  Removed sensors from domo, removed groups
+# V0.3.2:  Removed sensors from domo, removed groups
+# V0.4.0:  Code cleaned, removed all code for environental sensors
+# V0.5.0:  Added code for receiving Domoticz data from switches 
+#          (lighting2 and Light/Switch types)
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+homeassistant:
+
+###############################################################################
+#                              Entities
+###############################################################################
+input_boolean:
+  # Light switches
+  domo_garden_light:
+    name: Verlichting tuin
+  domo_porch_light:
+    name: Buiten lamp
+  domo_hallway_light:
+    name: Verlichting halletje
+  domo_kitchen_cabinets:
+    name: Verlichting hoge kasten
+  domo_bar_light:
+    name: Verlichting bar
+  domo_christmastree:             
+    name: Kerstboom
+  # Other switches  
+  domo_virtual_heating:
+    name: Virtuele verwarming
+  domo_water_ornament:
+    name: Waterbollen tuin
+#  domo_entertainment:  > moved to package_media_center.yaml 
+#    name: Entertainment
+
+## Alternative switch to use as template copy. Not tested yet. Won't work as it is now 
+# switch:
+#   - platform: template
+#     switches:
+#       copy:
+#         value_template: "{{ is_state('binary_sensor.habridge_bar_light', 'on') }}"
+#         turn_on:
+#           service: switch.turn_on
+#           data:
+#             entity_id: binary_sensor.habridge_bar_light
+#         turn_off:
+#           service: switch.turn_off
+#           data:
+#             entity_id: binary_sensor.habridge_bar_light
+
+###############################################################################
+#                               Groups
+###############################################################################
+group:
+
+
+###############################################################################
+#                              Automations
+###############################################################################
+automation:
+  ## Publish a switch to Domoticz
+  - alias: Domoticz publish switch
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:     
+      platform: state
+      entity_id: 
+        - input_boolean.domo_entertainment
+        - input_boolean.domo_garden_light
+        - input_boolean.domo_porch_light
+        - input_boolean.domo_hallway_light
+        - input_boolean.domo_kitchen_cabinets
+        - input_boolean.domo_christmastree    
+        - input_boolean.domo_bar_light
+        - input_boolean.domo_virtual_heating
+        - input_boolean.domo_water_ornament
+    condition:
+    action:
+      - service: script.domoticz_switch
+        data_template:
+          device: '{{ trigger.to_state.attributes.friendly_name }}'
+          new_state: >-
+            {{ trigger.to_state.state }}        
+
+  ## Convert Domoticz Zigbee switch (type Light/Switch) to Hass 
+  - alias: Read domoticz Zigbee switch via MQTT
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:
+      - platform: mqtt
+        topic: 'domoticz/out'
+    condition:
+      condition: template
+      value_template: 
+        '{{ trigger.payload_json.dtype == "Light/Switch" }}'
+    action:
+      - service: script.domoticz_input
+        data_template:
+          device: '{{ trigger.payload_json.idx }}'
+          state: >-
+            {{ trigger.payload_json.svalue1 }}   
+
+
+  ## Convert Domoticz CoCo switch (type Lighting 2) to Hass 
+  - alias: Read domoticz COCO switch via MQTT
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:
+      - platform: mqtt
+        topic: 'domoticz/out'
+    condition:
+      condition: template
+      value_template: 
+        '{{ trigger.payload_json.dtype == "Lighting 2" }}'
+    action:
+      - service: script.domoticz_input
+        data_template:
+          device: '{{ trigger.payload_json.idx }}'
+          state: >-
+            {{ trigger.payload_json.nvalue }}    
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+script:
+  #############################################################################
+  # Script for converting and setting Domoticz switches via MQTT.
+  # Uses a dict to lookup the ID of the switch in Domoticz.
+  # Uses a dict to convert state to a state recognized by Domoticz.
+  # The Domoticz API call is packed in JSON and sent to the MQTT topic 
+  # domoticz/in as the payload. 
+  ############################################################################# 
+
+  ## Convert Hass switch to Domoticz
+  domoticz_switch:  
+    alias: Set domoticz switch via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'          
+          payload_template: >-
+            {% set domoticz_devices = 
+              {
+              "Buiten lamp": 20,
+              "Entertainment": 26,
+              "Verlichting tuin": 28,
+              "Verlichting halletje": 21,
+              "Verlichting hoge kasten": 23,
+              "Kerstboom": 36,
+              "Verlichting bar": 27,
+              "Virtuele verwarming": 161,
+              "Waterbollen tuin": 29
+              } 
+            %}
+            {% set status =
+              {
+              "on": "On",  
+              "off": "Off"
+              }
+            %}
+            {% set id = domoticz_devices[device] %}
+            {% set new_state = status[new_state] %}
+            {{ {
+             "command": "switchlight",
+             "idx": id,
+             "switchcmd": new_state
+            }|tojson }}
+
+  domoticz_input:
+    alias: Receive domoticz switch via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: >-
+           'home/switch/100/switch'
+          payload_template: >-
+            {% set payload = "n/a" %}
+            {% if state == "0" %}
+            {% set payload = 'off' %}  
+            {% elif state == "1" %}
+            {% set payload = 'on' %} 
+            {% endif %}
+            {{ {
+             "command": payload,
+             "source": device
+            }|tojson }}           
+
+###############################################################################
+#                              Timers
+###############################################################################
+

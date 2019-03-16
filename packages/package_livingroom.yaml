@@ -1,0 +1,295 @@
+# Package file for Home Assistant, used for the Livingroom
+# Type: Home Assistant yaml file
+# Date: 10-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Major updates
+# V0.3.0:  Added various switches for entities based on HA Bridge control
+# V0.3.1:  Bugfix formatting entities 
+# V0.3.2:  Added new sensors/switches
+# V0.3.3:  Changed ha bridge to domo automations to one script - experimental
+# V0.4.0:  Removed HA-Bridge automation for gardenlights (moved to package_garden)
+
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+homeassistant:
+  customize:
+    # ZigBeee2MQTT Switches
+    switch.tradfri_media_switch:
+      friendly_name: Entertainment
+    # Scripts        
+    script.livingroom_lights_on:
+      icon: mdi:lightbulb
+    script.livingroom_lights_off:
+      icon: mdi:lightbulb
+    script.livingroom_lights_adjust:
+      icon: mdi:lightbulb
+
+# logger:
+#   default: info
+#   logs:
+#     homeassistant.components.script: debug
+
+###############################################################################
+#                              Entities
+###############################################################################
+input_select:
+ ## Mode selector for the lights in the livingroom
+ #  used for the modes the light can be set in from media center 
+  livingroom_lights_mode:
+    name: Verlichtsmode Woonkamer 
+    options:
+      - Normaal
+      - Video
+    initial: Normaal
+    icon: mdi:lightbulb      
+
+## Status of lighting in the livingroom used to see if lighitng is on 
+#  several automations depend on this
+input_boolean:
+  livingroom_lights_status:
+    name: Verlichting woonkamer
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+
+###############################################################################
+#                               Automations
+###############################################################################
+automation:
+  # Switch on livingroom lights from HA-Bridge
+  - alias: "Verlichting woonkamer aan (HA Bridge)"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_livingroom_lights_on
+      to: 'on'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights_status
+
+  # Switch off livingroom lights from HA-Bridge
+  - alias: "Verlichting woonkamer uit (HA Bridge)"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_livingroom_lights_off
+      to: 'on'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.livingroom_lights_status
+
+  # Switch livingroom lights on and off
+  - alias: "Verlichting woonkamer"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.livingroom_lights_status
+    action:
+      - service_template: >-
+          {% if is_state('input_boolean.livingroom_lights_status', 'on') %}
+            script.livingroom_lights_on
+          {% elif is_state('input_boolean.livingroom_lights_status', 'off') %}
+            script.livingroom_lights_off  
+          {% endif%}      
+
+  # Switch livingroomlights to mode for watching television kind a modes
+  - alias: "Licht televisie kijken mode"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_select.livingroom_lights_mode
+    condition:  
+      - condition: state
+        entity_id: input_boolean.livingroom_lights_status
+        state: 'on'
+    action:
+      - service: script.livingroom_lights_adjust
+
+  # Switch bar lights on an off from HA-Bridge
+  - alias: "Bar lampen - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_bar_light
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_bar_light', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_bar_light', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_bar_light
+
+  # Switch porch lights on an off from HA-Bridge
+  - alias: "Buitenlamp - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_porch_light
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_porch_light', 'on') %}
+          homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_porch_light', 'off') %}
+          homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_porch_light  
+
+  # Switch Christmas tree on an off from HA-Bridge
+  - alias: "Kerstboom - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_christmastree
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_christmastree', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_christmastree', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_christmastree 
+
+  # Switch hallway lights on an off from HA-Bridge
+  - alias: "Hallway lights - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_hallway_light
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_hallway_light', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_hallway_light', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_hallway_light
+
+  # Switch water ornament on an off from HA-Bridge
+  - alias: "Water ornament - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_water_ornament
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_water_ornament', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_water_ornament', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_water_ornament
+
+  # Switch Dome entity based on HA Bridge sensor
+  # - alias: "Domo entry - voice"
+  #   hide_entity: false
+  #   initial_state: 'on'
+  #   trigger:
+  #     platform: state
+  #     entity_id:
+  #       - binary_sensor.habridge_christmastree
+  #   action:
+  #     - service: script.switch_to_domo
+  #       data_template:
+  #         device: '{{ trigger.to_state.object_id }}'
+  #     - service: logbook.log
+  #       data_template:
+  #         name: Device value
+  #         message: '{{ trigger.to_state.object_id }}'
+
+###############################################################################
+#                              Scripts
+###############################################################################
+script:
+  # switch_to_domo:
+  #   alias: Convert to domoticz entity
+  #   sequence:
+  #     - service_template: >-
+  #         {% set device = device|replace("habridge_", "") %}
+  #         {% if is_state(["binary_sensor.habridge_",device]|join(), 'on') %}
+  #           homeassistant.turn_on
+  #         {% elif is_state(["binary_sensor.habridge_",device]|join(), 'off') %}
+  #           homeassistant.turn_off
+  #         {% endif%}
+  #       data_template:
+  #         entity_id: >-
+  #           {% set entity = ["input_boolean.domo_",device]|join() %}
+  #           {{ entity }}
+  
+  livingroom_lights_on:
+    alias: Woonkamer licht aan script
+    sequence:
+      - service: homeassistant.turn_on
+        entity_id: 
+          - input_boolean.domo_kitchen_cabinets
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.hue_scenes
+          option: >-
+            {% if is_state('input_select.livingroom_lights_mode', 'Normaal') %}
+            Verlichting aan
+            {% elif is_state('input_select.livingroom_lights_mode', 'Video') %}
+            TV mode
+            {% endif %}          
+      - service: script.set_hue_scene
+        data_template:
+          group: 'Woonkamer'
+          name: '{{ states.input_select.hue_scenes.state }}'
+
+  livingroom_lights_off:
+    alias: Woonkamer licht uit script
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id: 
+          - light.woonkamer
+      - delay: '00:01:00'
+      - service: homeassistant.turn_off
+        entity_id:
+          - input_boolean.domo_kitchen_cabinets
+
+  livingroom_lights_adjust:
+    alias: woonkamer licht aanpassen script
+    sequence:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.hue_scenes
+          option: >-
+            {% if is_state('input_select.livingroom_lights_mode', 'Normaal') %}
+            Verlichting aan
+            {% elif is_state('input_select.livingroom_lights_mode', 'Video') %}
+            TV mode
+            {% endif %}          
+      - service: script.set_hue_scene
+        data_template:
+          group: 'Woonkamer'
+          name: '{{ states.input_select.hue_scenes.state }}'
+
+###############################################################################
+#                              Timers
+###############################################################################
+

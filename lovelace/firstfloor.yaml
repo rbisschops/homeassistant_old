@@ -1,0 +1,158 @@
+# < Insert Header >
+
+title: 1e verdieping
+panel: true
+cards:
+  - type: picture-elements
+    image: /local/floorplans/first_floor.png
+    elements:
+      # Outdoor temperature (buienradar)
+      - type: state-label
+        entity: sensor.rotterdam_temperature
+        prefix: 'Buiten temperatuur '
+        style:
+          top: 80%
+          left: 85%
+          font-size: 120%
+          font-weight: 'bold'          
+      - type: state-label
+        entity: sensor.rotterdam_humidity
+        prefix: 'Relatieve luchtvochtigheid '
+        style:
+          top: 85%
+          left: 85%
+          font-size: 120%
+          font-weight: 'bold' 
+      # Indoor temerature and humdity sensors
+      - type: state-label
+        entity: sensor.room_temp_bathroom
+        style:
+          top: 66%
+          left: 32.5%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold' 
+      - type: state-label
+        entity: sensor.room_humidity_bathroom
+        style:
+          top: 69%
+          left: 32.5%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'             
+      - type: state-label
+        entity: sensor.room_temp_office
+        style:
+          top: 66%
+          left: 52%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold' 
+      - type: state-label
+        entity: sensor.room_humidity_office
+        style:
+          top: 69%
+          left: 52%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'  
+      - type: state-label
+        entity: sensor.room_temp_bedroom
+        style:
+          top: 35%
+          left: 15.5%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold' 
+      - type: state-label
+        entity: sensor.room_humidity_bedroom
+        style:
+          top: 38%
+          left: 15.5%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
+      # Motion sensors    
+      - type: state-icon
+        entity: binary_sensor.motion_sensor_office
+        title: Beweging kantoor
+        tap_action:
+          action: none
+        style:
+          top: 60%
+          left: 52%
+          --iron-icon-height: 35px
+          --iron-icon-width: 35px
+      # Doors and windows overlays
+      - type: image
+        entity: input_boolean.bath_room_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/bath_room_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.bed_room_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/bed_room_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.hallway_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/hallway_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.office_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/office_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.office_window
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/office_window.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.side_room_window
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/side_room_window.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)       

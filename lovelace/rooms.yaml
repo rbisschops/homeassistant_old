@@ -1,0 +1,8 @@
+# < Insert Header >
+
+title: Ruimtes
+icon: 'mdi:home'
+cards:
+  - type: weather-forecast
+    title: Weather
+    entity: weather.dark_sky

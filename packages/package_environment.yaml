@@ -1,0 +1,437 @@
+# Package file for Home Assistant, used for environment
+# Type: Home Assistant yaml file
+# Date: 10-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V1.0.0:  Production version 1.0.0
+# V1.1.0:  Corrected sensors sun to be a sensor instead of a lost template
+# V1.2.0:  Added new sensors
+# V1.2.1:  Added new sensors
+# V1.2.2:  Added groups for new sensors
+# V1.2.3:  Added new sensors
+# V1.3.0:  Added friendly names for remaining sensors
+# V1.3.1:  Fixed duplicate keys 
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    ### ENVIRONMENT
+    sun.sun:
+      friendly_name: Dag/Nacht
+    # Temperature sensors
+    sensor.room_temp_office:
+      friendly_name: Temperatuur Kantoor
+    sensor.room_temp_livingroom:
+      friendly_name: Temperatuur Woonkamer
+    sensor.room_temp_bathroom:
+      friendly_name: Temperatuur Badkamer
+    sensor.room_temp_bedroom:
+      friendly_name: Temperatuur Slaapkamer
+    sensor.room_temp_kim:
+      friendly_name: Temperatuur kamer Kim
+    sensor.room_temp_toilet:
+      friendly_name: Temperatuur Toilet
+    sensor.room_temp_storage:
+      friendly_name: Temperatuur Berging
+  # Humidity sensors
+    sensor.room_humidity_office:
+      friendly_name: Rel. Vochtigheid Kantoor
+    sensor.room_humidity_livingroom:
+      friendly_name: Rel. Vochtigheid Woonkamer
+    sensor.room_humidity_bathroom:
+      friendly_name: Rel. Vochtigheid Badkamer
+    sensor.room_humidity_bedroom:
+      friendly_name: Rel. Vochtigheid Slaapkamer
+    sensor.room_humidity_kim:
+      friendly_name: Rel. Vochtigheid kamer Kim
+    sensor.room_humidity_toilet:
+      friendly_name: Rel. Vochtigheid Toilet
+    sensor.room_humidity_storage:
+      friendly_name: Rel. Vochtigheid Berging
+  # Pressure sensors
+    sensor.room_pressure_office:
+      friendly_name: Luchtdruk Kantoor   
+    sensor.room_pressure_livingroom:
+      friendly_name: Luchtdruk Woonkamer 
+    sensor.room_pressure_bathroom:
+      friendly_name: Luchtdruk Badkamer
+    sensor.room_pressure_bedroom:
+      friendly_name: Luchtdruk Slaapkamer
+    sensor.room_pressure_kim:
+      friendly_name: Luchtdruk kamer Kim
+    sensor.room_pressure_toilet:
+      friendly_name: Luchtdruk Toilet
+    sensor.room_pressure_storage:
+      friendly_name: Luchtdruk Berging  
+
+###############################################################################
+#                              Entities
+###############################################################################
+
+sensor:
+  ## SUNRISE/SUNSET SENSORS
+  - platform: template
+    sensors:
+      sunset:
+        value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
+        unit_of_measurement: 'PM'
+      sunrise:
+        value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
+        unit_of_measurement: 'AM'    
+
+  ## Inhouse environment sensors - temperature
+  - platform: "mqtt"
+    name: room_temp_office
+    state_topic: "zigbee2mqtt/aqara_office_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.0
+  - platform: "mqtt"
+    name: room_temp_bathroom
+    state_topic: "zigbee2mqtt/aqara_bathroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_temp_bedroom
+    state_topic: "zigbee2mqtt/aqara_bedroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage" 
+  # Added in V1.2.1
+  - platform: "mqtt"
+    name: room_temp_kim
+    state_topic: "zigbee2mqtt/aqara_kim_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"  
+  # Added in V1.2.3    
+  - platform: "mqtt"
+    name: room_temp_livingroom
+    state_topic: "zigbee2mqtt/aqara_livingroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_temp_toilet
+    state_topic: "zigbee2mqtt/aqara_toilet_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_temp_storage
+    state_topic: "zigbee2mqtt/aqara_storage_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"                              
+  ## Inhouse environment sensors - humidity
+  - platform: "mqtt"
+    name: room_humidity_office
+    state_topic: "zigbee2mqtt/aqara_office_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.0
+  - platform: "mqtt"
+    name: room_humidity_bathroom
+    state_topic: "zigbee2mqtt/aqara_bathroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_humidity_bedroom
+    state_topic: "zigbee2mqtt/aqara_bedroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"      
+  # Added in V1.2.1
+  - platform: "mqtt"
+    name: room_humidity_kim
+    state_topic: "zigbee2mqtt/aqara_kim_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.3
+  - platform: "mqtt"
+    name: room_humidity_livingroom
+    state_topic: "zigbee2mqtt/aqara_livingroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_humidity_toilet
+    state_topic: "zigbee2mqtt/aqara_toilet_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_humidity_storage
+    state_topic: "zigbee2mqtt/aqara_storage_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"      
+  ## Inhouse environment sensors - pressure
+  - platform: "mqtt"
+    name: room_pressure_office  
+    state_topic: "zigbee2mqtt/aqara_office_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.0    
+  - platform: "mqtt"
+    name: room_pressure_bathroom
+    state_topic: "zigbee2mqtt/aqara_bathroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_pressure_bedroom
+    state_topic: "zigbee2mqtt/aqara_bedroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.1   
+  - platform: "mqtt"
+    name: room_pressure_kim
+    state_topic: "zigbee2mqtt/aqara_kim_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  # Added in V1.2.3  
+  - platform: "mqtt"
+    name: room_pressure_livingroom
+    state_topic: "zigbee2mqtt/aqara_livingroom_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_pressure_toilet
+    state_topic: "zigbee2mqtt/aqara_toilet_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+  - platform: "mqtt"
+    name: room_pressure_storage
+    state_topic: "zigbee2mqtt/aqara_storage_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"     
+ 
+###############################################################################
+#                               Groups
+###############################################################################
+
+group:
+  ## Environment
+  environment:
+    name: Omgeving
+    entities:
+      - sun.sun
+  ## Temperature sensors    
+  temperture_sensors:
+    name: Temperatuur
+    entities:
+      - sensor.room_temp_office
+      - sensor.room_temp_bathroom
+      - sensor.room_temp_bedroom
+      - sensor.room_temp_kim
+      - sensor.room_temp_livingroom
+      - sensor.room_temp_toilet
+      - sensor.room_temp_storage
+  ## Humidity sensors
+  humidity_sensors:
+    name: Relatieve vochtigheid
+    entities:
+      - sensor.room_humidity_office
+      - sensor.room_humidity_bathroom 
+      - sensor.room_humidity_bedroom
+      - sensor.room_humidity_kim
+      - sensor.room_humidity_livingroom
+      - sensor.room_humidity_toilet
+      - sensor.room_humidity_storage
+  ## Pressure sensors
+  pressure_sensors:
+    name: Luchtdruk
+    entities:
+      - sensor.room_pressure_office
+      - sensor.room_pressure_bathroom
+      - sensor.room_pressure_bedroom
+      - sensor.room_pressure_kim
+      - sensor.room_pressure_livingroom
+      - sensor.room_pressure_toilet
+      - sensor.room_pressure_storage
+  ## Indoor Environment - per room
+  office_room_environment_sensors:
+    name: Omgevings condities kantoor
+    entities:
+      - sensor.room_temp_office
+      - sensor.room_humidity_office
+      - sensor.room_pressure_office
+  #    - sensor.illumination_7811dcb265c3
+  #    - binary_sensor.light_level_office
+  bathroom_environment_sensors:
+    name: Omgevings condities badkamer
+    entities:
+      - sensor.room_temp_bathroom
+      - sensor.room_humidity_bathroom
+      - sensor.room_pressure_bathroom  
+  masterbedroom_environment_sensors:
+    name: Omgevings condities slaapkamer
+    entities:
+      - sensor.room_temp_bedroom
+      - sensor.room_humidity_bedroom
+      - sensor.room_pressure_bedroom
+  kimsbedroom_environment_sensors:
+    name: Omgevings condities kamer Kim
+    entities:
+      - sensor.room_temp_kim
+      - sensor.room_humidity_kim
+      - sensor.room_pressure_kim  
+  livingroom_environment_sensors:
+    name: Omgevings condities Woonkamer
+    entities:
+      - sensor.room_temp_livingroom
+      - sensor.room_humidity_livingroom
+      - sensor.room_pressure_livingroom
+  toliet_environment_sensors:
+    name: Omgevings condities toilet
+    entities:
+      - sensor.room_temp_toilet
+      - sensor.room_humidity_toilet
+      - sensor.room_pressure_toilet
+  storage_environment_sensors:
+    name: Omgevings condities berging
+    entities:
+      - sensor.room_temp_storage
+      - sensor.room_humidity_storage
+      - sensor.room_pressure_storage
+
+###############################################################################
+#                               Automations
+###############################################################################
+
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################

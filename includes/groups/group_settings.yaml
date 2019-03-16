@@ -1,0 +1,14 @@
+# Groups file for settings for Home Assistant  
+# Type: Home Assistant yaml file
+# Date: 21-03-2018
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Added presence states & lumination groups
+
+#lumination_levels:
+#  name: Verlichtings niveau's
+#  entities:
+#    - sensor.illumination_7811dcb265c3
+#    - binary_sensor.light_level_office

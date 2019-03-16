@@ -1,0 +1,537 @@
+# Package file for Home Assistant, used for mediacenter
+# Type: Home Assistant yaml file
+# Date: 19-01-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Added tradfri entertainment switch (replaces domo switch)  
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+homeassistant:
+  customize:
+    ## Harmony Hub remote
+    remote.bisschops:
+      friendly_name: Harmony Hub
+      entity_picture: /local/harmony_icon.jpg
+    ## Media devices from HA Bridge 
+    light.television:
+      friendly_name: Televisie
+    light.smart_tv:
+      friendly_name: Smart-TV
+    light.media_player:
+      friendly_name: Mediaplayer
+    light.apple_tv:
+      friendly_name: Apple-TV      
+    light.radio:
+      friendly_name: Radio
+    light.streaming_music:
+      friendly_name: Muziek
+    timer.media_center_delay:
+      friendly_name: Inschakelvertraging
+
+## Remotes
+remote:
+  - platform: harmony
+    name: bisschops
+    host: !secret ip_harmony_hub
+
+## Media players
+  # LG television
+media_player:
+  - platform: webostv
+    host: !secret ip_lgtelevision
+    name: Living Room TV
+    filename: webostv.conf
+    timeout: 5
+    turn_on_action:
+      service: persistent_notification.create
+      data:
+        message: "Turn on action"
+    customize:
+      sources:
+        - Netflix
+        - Set-top Box
+        - Spotify Music - Luister gratis op LG TV
+
+###############################################################################
+#                              Entities
+###############################################################################
+input_select: 
+  # Harmony activities set thru the Harmony Hub
+  harmony_livingroom:
+    name: Activiteiten Harmony 
+    options:
+      - Televisie
+      - Smart-TV
+      - Netflix
+      - Spotify
+      - Mediaplayer
+      - Apple-TV
+      - Radio
+      - Muziek
+      - DVD
+      - Teletekst
+      - PowerOff 
+    initial: PowerOff
+    icon: mdi:remote
+  test_old_status:
+    name: Oude status
+    options:
+      - Televisie
+      - Smart-TV
+      - Netflix
+      - Spotify
+      - Mediaplayer
+      - Apple-TV
+      - Radio
+      - Muziek
+      - DVD
+      - Teletekst
+      - PowerOff 
+    initial: PowerOff
+    icon: mdi:remote      
+
+input_boolean:
+  # Switch for Media center operations
+  domo_entertainment:
+    name: Entertainment
+  # Switch used for setting the recoder mode on   
+  recording_mode:
+    name: Recorder mode aan
+    icon: mdi:video
+  poweroff:
+    name: PowerOff
+  television:
+    name: Televisie
+  mediaplayer:
+    name: Mediaplayer
+  appletv:
+    name: Apple-TV
+  radio:
+    name: Radio
+  music:
+    name: Muziek
+  dvd:
+    name: DVD
+  teletext:
+    name: Teletekst
+  smarttv:
+    name: Smart-TV
+  netflix:
+    name: Netflix
+  spotify:
+    name: Spotify  
+
+sensor:
+  # Switch for Media center operations, sensor (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_media_switch
+    state_topic: "zigbee2mqtt/tradfri_media_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"    
+
+switch:
+  # Switch for Media center operations (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_media_switch
+    state_topic: "zigbee2mqtt/tradfri_media_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_off: "OFF"
+    payload_on: "ON"
+    value_template: "{{ value_json.state }}"
+    command_topic: "zigbee2mqtt/tradfri_media_switch/set"
+  # Harmony Hub switches
+  - platform: template
+    switches:
+      # TELEVISION HARMONY ACTIVITY
+      poweroff:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'PowerOff') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'PowerOff'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+      # TELEVISION HARMONY ACTIVITY
+      television:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Televisie') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Televisie'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+      # MEDIA PLAYER HARMONY ACTIVITY
+      mediaplayer:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Mediaplayer') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Mediaplayer'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+      # APPLE-TV HARMONY ACTIVITY
+      appletv:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Apple-TV') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Apple-TV'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+      # RADIO HARMONY ACTIVITY
+      radio:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Radio') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Radio'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''            
+      # MUSIC HARMONY ACTIVITY
+      music:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Muziek') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Muziek'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: '' 
+     # DVD HARMONY ACTIVITY
+      dvd:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'DVD') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'DVD'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+     # TELETEKST HARMONY ACTIVITY
+      teletext:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Teletekst') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Teletekst'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''                                        
+      # SMART-TV HARMONY ACTIVITY
+      smarttv:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Smart-TV') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Smart-TV'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+
+###############################################################################
+#                               Groups
+###############################################################################
+group:
+  # Media center
+  remote:
+    name: Afstandsbediening
+    entities:
+      - remote.bisschops
+  input_media_modes:
+    name: Media modes (inputs)
+    entities:
+      - input_boolean.poweroff
+      - input_boolean.television
+      - input_boolean.mediaplayer
+      - input_boolean.appletv
+      - input_boolean.radio
+      - input_boolean.music
+      - input_boolean.dvd
+      - input_boolean.teletext
+      - input_boolean.smarttv
+      - input_boolean.netflix
+      - input_boolean.spotify
+  habridge_media_modes:
+    name: Media modes (HA Bridge)
+    entities:
+      - light.television
+      - light.smart_tv
+      - light.media_player
+      - light.apple_tv
+      - light.radio
+      - light.streaming_music
+      - light.netflix
+      - light.spotify
+
+###############################################################################
+#                              Automations
+###############################################################################
+automation:
+  - alias: "Start media acties vanuit inputs"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+        - input_boolean.poweroff
+        - input_boolean.television
+        - input_boolean.mediaplayer
+        - input_boolean.appletv
+        - input_boolean.radio
+        - input_boolean.music
+        - input_boolean.dvd
+        - input_boolean.teletext
+        - input_boolean.smarttv
+        - input_boolean.netflix
+        - input_boolean.spotify        
+      to: 'on'
+    condition:
+
+    action:
+      - service: script.media_mode
+        data_template:
+          new_state: '{{ trigger.to_state.attributes.friendly_name }}'
+          old_state: '{{ states.input_select.harmony_livingroom.state }}'
+      # - service_template: >-
+      #     {% if is_state('input_boolean.domo_entertainment', 'on') %}
+      #       script.media_from_on
+      #     {% elif is_state('input_boolean.domo_entertainment', 'off') %}
+      #       script.media_from_off
+      #     {% endif%}
+      - service_template: >-
+          {% if is_state('switch.tradfri_media_switch', 'on') %}
+            script.media_from_on
+          {% elif is_state('switch.tradfri_media_switch', 'off') %}
+            script.media_from_off
+          {% endif%}
+
+  - alias: "Start media mode acties vanuit HA-Bridge"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.television
+        - binary_sensor.mediaplayer
+        - binary_sensor.appletv
+        - binary_sensor.radio
+        - binary_sensor.music
+        - binary_sensor.dvd
+        - binary_sensor.teletext
+        - binary_sensor.smarttv
+        - binary_sensor.netflix
+        - binary_sensor.spotify   
+      to: 'on'
+    condition:
+
+    action:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: >-
+            {% set name = '{{ trigger.to.state.name }}' %}
+            {% set entity = ["input_boolean",name]|join(".") %}
+            {{ entity }}
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+script:
+  media_mode:  
+    alias: Set media mode script
+    sequence:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.test_old_status
+          option: '{{ old_state }}'
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.harmony_livingroom
+          option: '{{ new_state }}'
+      - service: input_boolean.turn_off
+        data_template:
+          entity_id: >-
+            {% set media_devices = 
+              {
+              "PowerOff":"poweroff",
+              "Televisie":"television",
+              "Mediaplayer":"mediaplayer",
+              "Apple-TV":"appletv",
+              "Radio":"radio",
+              "Muziek":"music",
+              "DVD":"dvd",
+              "Teletekst":"teletext",
+              "Smart-TV":"smarttv",
+              "Netflix":"netflix",
+              "Spotify":"spotify"
+              } 
+            %}
+            {% set entity = ["input_boolean",media_devices[old_state]]|join(".") %}
+            {{ entity }}
+
+  media_from_off:
+    alias: Media start als media switch uit
+    sequence:
+      - service: timer.start
+        data:
+          entity_id: timer.media_center_delay
+      - service: homeassistant.turn_on
+        entity_id: switch.tradfri_media_switch 
+      # - service: homeassistant.turn_on
+      #   entity_id: input_boolean.domo_entertainment 
+      - service: homeassistant.turn_on        
+        entity_id: light.entertainment
+      - delay: '00:00:30'
+      - service: remote.send_command
+        data:
+          entity_id: remote.bisschops
+          command:
+            - PowerToggle
+          device: Popcorn
+      - delay: '00:00:01'    
+      - service: script.media_set_harmony
+        data_template:
+          current_state: '{{ states.input_select.harmony_livingroom.state }}'
+  
+  media_from_on:
+    alias: Media start als media switch aan
+    sequence:
+      # - delay: '00:00:02'
+      - service: script.media_set_harmony
+        data_template:
+          current_state: '{{ states.input_select.harmony_livingroom.state }}'
+
+  media_set_harmony:
+    alias: Start Harmony acties
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: >-
+            {% set media_devices = 
+              {
+              "PowerOff":"poweroff",
+              "Televisie":"television",
+              "Mediaplayer":"mediaplayer",
+              "Apple-TV":"appletv",
+              "Radio":"radio",
+              "Muziek":"music",
+              "DVD":"dvd",
+              "Teletekst":"teletext",
+              "Smart-TV":"smarttv",
+              "Netflix":"smarttv",
+              "Spotify":"smarttv"
+              }           
+            %}
+            {% set entity = ["switch",media_devices[current_state]]|join(".") %}
+            {{ entity }}
+      - delay: '00:00:01'
+      - service_template: >-
+          {% if current_state == "Spotify"%}
+            script.media_mode_spotify 
+          {% elif current_state == "Netflix" %}
+            script.media_mode_netflix 
+          {% else %}
+            script.media_mode_dolby 
+          {% endif %}
+
+  media_mode_spotify:
+    alias: Aanvullende media settings Spotify
+    sequence:
+      - service: 
+          remote.send_command
+        data:
+          entity_id: remote.bisschops
+          device: Versterker
+          command:
+            - ModeStereo
+      - service: media_player.select_source
+        data:
+          entity_id: media_player.living_room_tv
+          source: Spotify Music - Luister gratis op LG TV
+
+  media_mode_netflix:
+    alias: Aanvullende media settings Netflix
+    sequence:
+      - service: 
+          remote.send_command
+        data:
+          entity_id: remote.bisschops
+          device: Versterker
+          command:
+            - ModeDolbyPLII
+      - service: media_player.select_source
+        data:
+          entity_id: media_player.living_room_tv
+          source: Netflix
+
+  amplifier_mode_music:
+    alias: Set device mode muziek
+    sequence:
+      - service:  
+          remote.send_command
+        data:
+          entity_id: remote.bisschops
+          command:
+            - ModeStereo
+          device: Versterker
+
+  amplifier_mode_dolby:
+    alias: Set device mode Dolby
+    sequence:
+      - service:  
+          remote.send_command
+        data:
+          entity_id: remote.bisschops
+          command:
+            - ModeDolbyPLII
+          device: Versterker
+
+###############################################################################
+#                              Timers
+###############################################################################
+timer:
+  media_center_delay:
+    duration: '00:00:30'
+  media_center_dummy:
+    duration: '00:00:00'    

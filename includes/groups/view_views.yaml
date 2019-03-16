@@ -1,0 +1,109 @@
+# Views file  Home Assistant  
+# Type: Home Assistant yaml file
+# Date: 17-11-2018
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0: First version
+# V0.2.0: Added default view with icon for future use (commented for now)
+# V0.2.1: Added settings view for future use
+# V0.3.0: Added group presence_states & lumination_levels to settings view
+# V0.4.0: Added views for toilet and storage 
+ 
+default_view:
+  view: no
+  icon: mdi:home-assistant
+
+# Living room tab 
+livingroom_view:
+  view: yes
+  name: Woonkamer
+  entities:
+    - device_tracker.owntracks_anneke_s7
+    - device_tracker.owntracks_kimberly_s7
+    - device_tracker.owntracks_ralph_iphone7
+    - group.living_room_hue_lights
+    - group.hue_light_control
+    - group.remote
+    - group.living_room_environment_sensors
+
+# Hallway tab
+hallway_view:
+  view: yes
+  name: Halletje
+  entities:
+    - timer.porchlight
+    - timer.hallwaylight
+    - group.frontdoor_lights
+
+# Toilet tab
+toilet_view:
+  view: yes
+  name: Toilet
+  entities:
+    - group.toilet_room_environment_sensors 
+
+# Storage tab
+storage_view:
+  view: yes
+  name: Berging
+  entities:
+    - group.storage_room_environment_sensors
+
+# Master bedroom tab
+masterbedroom_view:
+  view: yes
+  name: Slaapkamer
+  entities:
+    - group.masterbedroom_environment_sensors
+
+# Kims bedroom tab
+kimsbedroom_view:
+  view: yes
+  name: Kamer Kim
+  entities:
+    - group.kimsbedroom_environment_sensors
+
+# Office tab
+office_view:
+  view: yes
+  name: Kantoor
+  entities:
+    - group.office_room_environment_sensors
+    - group.office_room_motion_sensors  
+
+# Bathroom tab
+bathroom_view:
+  view: yes
+  name: Badkamer
+  entities:
+    - group.bathroom_environment_sensors
+
+# Weather tab
+weather_view:
+  view: yes
+  icon: 'mdi:weather-cloudy'
+  name: Weer
+  entities:
+    - group.weather
+    - group.daily_forecast
+
+# Network view
+network_view:
+  view: yes
+  icon: 'mdi:stethoscope'
+  name: Status
+  entities:
+    - group.network_stats
+    - group.critical_network_parts
+    - group.alarm_sensors_stats
+
+# Settings tab
+settings_view:
+  view: yes
+  icon: 'mdi:settings'
+  name: Instellingen
+  entities:
+    - group.enable_scripts
+    - group.presence_states
+#    - group.lumination_levels

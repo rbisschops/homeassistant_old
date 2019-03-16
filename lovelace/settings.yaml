@@ -1,0 +1,65 @@
+# Lovelace-UI file for Home Assistant, Settings view
+# Type: Home Assistant yaml file
+# Date: 01-02-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+#
+
+title: Settings
+icon: 'mdi:settings'
+cards:
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Instellingen
+    - type: entities
+      show_header_toggle: false
+      entities:
+      - entity: input_boolean.text_notifications
+        name: Tekst notificaties
+        icon: 'mdi:bell'
+      - entity: input_boolean.holiday_mode 
+        name: Vakantie mode
+        icon: 'mdi:briefcase'
+      - entity: input_boolean.recording_mode
+        name: Recorder mode
+        icon: 'mdi:video'
+
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Verlichting woonkamer (handmatig)
+    - type: entities
+      show_state: false
+      show_name: false
+      entities:
+      - light.woonkamer
+      - input_select.hue_scenes
+      - input_select.hue_groups
+      - script.manual_set_hue_scene
+
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Automatiseringen
+    - type: entities
+      show_header_toggle: false
+      entities:
+      - entity: automation.buitenlamp_bij_thuiskomst
+        name: Buitenlamp bij thuiskomst
+      - entity: automation.er_komt_iemand_thuis
+        name: Er komt iemand thuis
+      - entity: automation.iedereen_is_weg  
+        name: Iedereen is weg
+      - entity: automation.tuinverlichting_bij_thuiskomst
+        name: Tuinverlichting aan bij thuiskomst
+      - entity: automation.tuinverlichting_bij_zonsondergang 
+        name: Tuinverlichting aan bij zonsondergang
+      - entity: automation.start_media_acties_vanuit_inputs 
+        name: Media center scripts 
+ 

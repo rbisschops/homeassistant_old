@@ -1,0 +1,67 @@
+# < Insert Header >
+
+title: 2e verdieping
+panel: true  
+cards:
+  - type: picture-elements
+    image: /local/floorplans/second_floor.png
+    elements:
+      # Outdoor temperature (buienradar)
+      - type: state-label
+        entity: sensor.rotterdam_temperature
+        prefix: 'Buiten temperatuur '
+        style:
+          top: 80%
+          left: 85%
+          font-size: 120%
+          font-weight: 'bold'          
+      - type: state-label
+        entity: sensor.rotterdam_humidity
+        prefix: 'Relatieve luchtvochtigheid '
+        style:
+          top: 85%
+          left: 85%
+          font-size: 120%  
+          font-weight: 'bold'
+      # Indoor temerature and humdity sensors
+      - type: state-label
+        entity: sensor.room_temp_kim
+        style:
+          top: 70%
+          left: 30%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
+      - type: state-label
+        entity: sensor.room_humidity_kim
+        style:
+          top: 73%
+          left: 30%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
+      # Doors and windows overlays
+      - type: image
+        entity: input_boolean.heating_room_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/heating_room_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.top_floor_room
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/top_floor_room.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)

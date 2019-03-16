@@ -1,0 +1,385 @@
+# Lovelace-UI file for Home Assistant, Statistics view
+# Type: Home Assistant yaml file
+# Date: 01-02-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Changed layout for presence
+#          Changed colors of non- critical network devices 
+
+title: Status
+icon: 'mdi:stethoscope'
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Kritische netwerk componenten
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_diskstation
+            icon: mdi:nas
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Diskstation
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_voip
+            icon: mdi:phone-voip
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: VOIP
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_printer
+            icon: mdi:printer
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Laser Printer
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+      - type: horizontal-stack
+        cards: 
+          - type: "custom:button-card"
+            entity: sensor.nc_domoticz_master
+            icon: mdi:desktop-tower
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Domoticz (M) 
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_domoticz_slave
+            icon: mdi:desktop-tower
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Domoticz (S) 
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_homeassistant_pi
+            icon: mdi:desktop-tower
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: HASS
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+      - type: horizontal-stack
+        cards:    
+          - type: "custom:button-card"
+            entity: sensor.nc_harmonyhub
+            icon: mdi:router-wireless
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Harmony Hub
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_hue_bridge
+            icon: mdi:router-wireless
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Hue Bridge
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_xiaomi_bridge
+            icon: mdi:router-wireless
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Xiaomi Bridge
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_ha_bridge
+            icon: mdi:desktop-tower
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: HA-Bridge
+            style:
+              - font-size: 1.0em
+              - font-weight: normal
+          - type: "custom:button-card"
+            entity: sensor.nc_amazonecho
+            icon: mdi:microphone
+            size: 30%
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info   
+            name: Echo Dot
+            style:
+              - font-size: 1.0em
+              - font-weight: normal 
+          - type: "custom:button-card"
+            color_type: icon
+            color: auto
+            color_off: rgb(255, 0, 0)      
+            action: more_info
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Internet
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            entities: 
+            - sensor.speedtest_download 
+          - type: custom:mini-graph-card
+            entities: 
+            - sensor.speedtest_upload 
+      - type: horizontal-stack
+        cards:  
+          - type: glance
+            show_name: true
+            show_state: true
+            entities:
+              - entity: sensor.speedtest_ping
+                tap_action:
+                  action: none
+          - type: glance
+            show_name: true
+            show_state: true
+            entities:
+              - entity: sensor.uptime
+                tap_action:
+                  action: none 
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Overige netwerk componenten
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_laptop_rediscript
+            icon: mdi:laptop
+            size: 30%
+            color_type: icon
+            color: auto
+            #      
+            action: more_info   
+            name: Rediscript
+            style:
+              - font-size: 1.0em
+              - font-weight: normal     
+          - type: "custom:button-card"
+            entity: sensor.nc_laptop_ralph
+            icon: mdi:laptop
+            size: 30%
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Ralph
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_laptop_kim
+            icon: mdi:laptop
+            size: 30%
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Kim
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_pc_ralph
+            icon: mdi:desktop-tower
+            size: 30%
+            color_type: icon
+            color: auto 
+                  
+            action: more_info   
+            name: Ralph
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_popcornhour
+            icon: mdi:popcorn
+            size: 30%
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Popcorn
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_appletv
+            icon: mdi:apple
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Apple-TV
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+      - type: horizontal-stack                  
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_lgtelevision
+            icon: mdi:television
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: LG TV
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_denon
+            icon: mdi:volume-high
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Denon
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_humax
+            icon: mdi:satellite-variant
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Humax
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.nc_ipad
+            icon: mdi:tablet-ipad
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: iPad
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_bosch_washing_machine
+            icon: mdi:washing-machine
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Wasmachine
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+          - type: "custom:button-card"
+            entity: sensor.nc_bosch_dryer
+            icon: mdi:tumble-dryer
+            size: 30%            
+            color_type: icon
+            color: auto
+                  
+            action: more_info   
+            name: Droger
+            style:
+              - font-size: 1.0em
+              - font-weight: normal  
+  - type: vertical-stack
+    cards:
+      - type: entities
+        title: Aanwezigheid
+        show_header_toggle: false
+        entities:
+          - type: section
+            label: Iemand thuis
+          - entity: binary_sensor.people_home             
+          - type: section
+            label: Wifi
+          - entity: device_tracker.anneke_s7
+            name: ' '
+          - entity: device_tracker.kimberly_s7
+            name: ' ' 
+          - entity: device_tracker.ralph_iphone7
+            name: ' ' 
+          - type: section
+            label: Locatie
+          - entity: device_tracker.owntracks_anneke_s7
+            name: ' ' 
+          - entity: device_tracker.owntracks_kimberly_s7
+            name: ' ' 
+          - entity: device_tracker.owntracks_ralph_iphone7  
+            name: ' '
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ## Schakelaars
+    - type: entities
+      show_state: false
+      show_name: false
+      entities:
+        - entity: input_boolean.alarm
+          icon: mdi:alarm-light

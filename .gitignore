@@ -7,6 +7,29 @@
 !.gitignore
 !.md
 
+# Whitelist folders and files.
+!packages
+!lovelace
+!includes
+!includes/automations
+!includes/binary_sensors
+!includes/customizations
+!includes/groups
+!includes/input_boolean
+!includes/input_number
+!includes/input_select
+!includes/scenes
+!includes/scripts
+!includes/sensors
+!includes/zones
+!www
+!www/*.jpg
+!www/*.png
+!www/custom_cards
+!www/custom_cards/*.js
+!www/custom_icons
+!www/custom_icons/*.png
+
 # Ignore the folowing folders.
 .storage
 .cloud
@@ -14,9 +37,9 @@
 deps
 private
 tts
-floorplans
+www/floorplans
 
-# Ensure individual files to be ignored
+# Ensure individual files to be ignored.
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml

@@ -1,0 +1,52 @@
+# < Insert Header >
+
+title: Tuin
+panel: true
+cards:
+  - type: picture-elements
+    image: /local/floorplans/garden.png
+    elements:
+      - type: state-label
+        entity: sensor.rotterdam_temperature
+        style:
+          top: 22%
+          left: 10%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold' 
+      - type: state-label
+        entity: sensor.rotterdam_humidity
+        style:
+          top: 25%
+          left: 10%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold' 
+      - type: image
+        entity: input_boolean.domo_garden_light
+        tap_action:
+          action: toggle
+        image: /local/custom_icons/light48_on.png
+        state_image:
+          'on': /local/custom_icons/light48_on.png
+          'off': /local/custom_icons/light48_off.png 
+        style:
+          top: 52%
+          left: 22.5% 
+          position: absolute
+          width: 2.5%                                                 
+      - type: image
+        entity: input_boolean.domo_water_ornament
+        tap_action:
+          action: toggle
+        image: /local/custom_icons/fountain48_on.png
+        state_image:
+          'on': /local/custom_icons/fountain48_on.png
+          'off': /local/custom_icons/fountain48_off.png 
+        style:
+          top: 52%
+          left: 10% 
+          position: absolute
+          width: 2.5%

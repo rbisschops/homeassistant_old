@@ -1,0 +1,108 @@
+# Package file for Home Assistant, used for the garden
+# Type: Home Assistant yaml file
+# Date: 10-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V1.0.0:  Production version 1.0.0
+# V1.0.1:  Minor updates in comments
+# V1.1.0:  Added HA-Bridge automation (moved from package_livingroom)
+
+###############################################################################
+#                               Hoemassistant settings
+###############################################################################
+homeassistant:
+
+###############################################################################
+#                              Entities
+###############################################################################
+
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+group:
+  garden_lights:
+    name: Tuinverlichting
+    entities:
+      - input_boolean.domo_garden_light
+      - automation.tuinverlichting_bij_zonsondergang
+      - automation.tuinverlichting_bij_thuiskomst
+
+###############################################################################
+#                               Automations
+###############################################################################
+automation:
+  ## Switch garden lights on an off from HA-Bridge
+  - alias: "Tuin verlichting - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_garden_light
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_garden_light', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_garden_light', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_garden_light  
+
+  ## Switch on gardenlights at sunset but only if someone is home
+  - alias: "Tuinverlichting bij zonsondergang"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '00:15:00'
+    condition:
+      condition: and
+      conditions: 
+        - condition: state
+          entity_id: binary_sensor.people_home
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+
+  ## Switch gardenlights at home coming but only when dark and before 23:00
+  - alias: "Tuinverlichting bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: binary_sensor.people_home
+      to: 'on'
+    condition:  
+      condition: and
+      conditions:     
+        - condition: sun
+          after: sunset
+          after_offset: "00:15:00"
+        - condition: time
+          before: '23:00:00'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################

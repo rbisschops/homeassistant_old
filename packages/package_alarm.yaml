@@ -1,0 +1,211 @@
+# Package file for Home Assistant, used for alarm sensors
+# Type: Home Assistant yaml file
+# Date: 10-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.3.0:  Added test switches for alarm sensors
+# V0.3.0:  Added refrigerator alarm and automations, renamed to package_alarm
+# V1.0.0:  Production version 1.0.0
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    # Binary sensors
+    binary_sensor.refrigerator_door:
+      friendly_name: Koelkast deur
+    binary_sensor.motion_sensor_office:
+      friendly_name: Bewegingssensor kantoor     
+    # sensors stats
+    sensor.door_window_sensor_stats:
+      friendly_name: Deur sensor
+    sensor.motion_sensor_office_stats:
+      friendly_name: Bewegingssensor kantoor
+
+
+###############################################################################
+#                              Entities
+###############################################################################
+
+input_boolean:
+  ## Generic alarm input switch
+  alarm:
+    name: Alarm
+  ## Test switches for doors and windows, will be replaced with sensors in the future
+  # Groundfloor
+  front_door:
+    name: Voordeur
+  front_window:
+    name: Voorraam
+  garden_door:
+    name: Tuindeur
+  hallway_livingroom_door:
+    name: Tussendeur woonkamer
+  hallway_storage_door:
+    name: Tussendeur berging
+  metering_cabinet_door:
+    name: Meterkast deur
+  storage_door:
+    name: Bergingdeur
+  toilet_door:
+    name: Toiletdeur
+  freezer:
+    name: Vriezerdeur
+  # First floor
+  bath_room_door:
+    name: Badkamer deur
+  bed_room_door:
+    name: Slaapkamer deur
+  hallway_door:
+    name: Tussendeur
+  office_door:
+    name: Kantoor deur
+  office_window:
+    name: Kantoor raam
+  side_room_window:
+    name: Kastenkamer raam
+  # Second floor
+  heating_room_door:
+    name: Ketelkast deur
+  top_floor_room:
+    name: Kamer Kim
+
+binary_sensor:
+  ## Door/window sensors (Xiaomi)
+  - platform: mqtt
+    name: refrigerator_door
+    state_topic: 'zigbee2mqtt/refrigerator_door'
+    availability_topic: 'zigbee2mqtt/bridge/state'
+    payload_on: false
+    payload_off: true
+    value_template: "{{ value_json.contact }}"
+    device_class: "door"
+  ## Motion sensors (Xiaomi)
+  - platform: mqtt
+    name: motion_sensor_office
+    state_topic: 'zigbee2mqtt/mijia_office_motion'
+    availability_topic: 'zigbee2mqtt/bridge/state'
+    payload_on: true
+    payload_off: false
+    value_template: "{{ value_json.occupancy }}"
+    device_class: "motion"
+sensor:
+  ## Door/Window sensor status (Xiaomi)
+  - platform: mqtt
+    name: door_window_sensor_stats
+    state_topic: 'zigbee2mqtt/door_window_sensor'
+    availability_topic: 'zigbee2mqtt/bridge/state'
+    device_class: "battery"
+    value_template: "{{ value_json.battery }}"
+    json_attributes: 
+      - "linkquality"
+      - "voltage"
+      - "action"
+      - "sensitivity"
+  ## Motion sensors status (Xiaomi)      
+  - platform: mqtt
+    name: motion_sensor_office_stats
+    state_topic: 'zigbee2mqtt/mijia_office_motion'
+    availability_topic: 'zigbee2mqtt/bridge/state'
+    device_class: "battery"
+    value_template: "{{ value_json.battery }}"
+    json_attributes: 
+      - "linkquality"
+      - "voltage"
+      - "action"
+      - "sensitivity"
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+group:
+  # Door/window sensors
+  door_window_sensors:
+    name: Deur/raam sensoren
+    entities:
+      - binary_sensor.door_window_sensor
+  motion_sensors:
+    name: Bewegingssensoren
+    entities:
+      - binary_sensor.motion_sensor_office
+  office_room_motion_sensors:
+    name: Bewegingssensoren kantoor
+    entities:
+      - binary_sensor.motion_sensor_office
+  alarm_sensors_stats:
+    name: status alarm sensoren
+    entities:
+      - sensor.motion_sensor_office_stats
+      - sensor.door_window_sensor_stats
+
+###############################################################################
+#                               Automations
+###############################################################################
+
+automation:
+  # Test if refigerator door is open for more then xx minutes
+  - alias: "Koelkast alarm"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.refrigerator_door
+        to: 'on'
+        for: '00:10:00'
+#      - platform: state
+#        entity_id:
+#          - <sensor.freezer>
+#        to: 'on'
+#        for: '00:10:00'
+    condition:
+
+    action:
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Alarm: '
+          value2: '{{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' meer dan 10 minuten geopend'
+          who: 'ralph'
+          prio: 2
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.alarm
+
+  # Test if refigerator door is open for more then xx minutes
+  - alias: "Alarm gereset"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.alarm
+        to: 'off'
+    condition:
+
+    action:
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Alarm op: '
+          value2: '{{ now().day }}-{{ now().month }}-{{ now().year }}'
+          value3: ' om {{ now().hour }}:{{ now().minute }} gereset'
+          who: 'ralph'
+          prio: -2
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################

@@ -1,0 +1,90 @@
+# Lovelace-UI file for Home Assistant, Weather view
+# Type: Home Assistant yaml file
+# Date: 01-02-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+
+title: Weer
+icon: 'mdi:weather-cloudy'
+cards:
+#  - type: weather-forecast
+#    title: Weer
+#    entity: weather.dark_sky
+  - type: weather-forecast
+    title: Weer
+    entity: weather.br_unknown_station
+
+  - type: vertical-stack
+    cards:
+      - type: entities
+        title: Vooruitzichten
+        show_header_toggle: false
+        entities:
+          - type: section
+            label: Morgen
+          - entity: sensor.rotterdam_symbol_1d
+            name: ' '
+          - entity: sensor.rotterdam_rainchance_1d
+            name: Regen
+          - entity: sensor.rotterdam_sunchance_1d
+            name: Zon
+
+          - type: section
+            label: Overmorgen
+          - entity: sensor.rotterdam_symbol_2d
+            name: ' '
+          - entity: sensor.rotterdam_rainchance_2d
+            name: Regen
+          - entity: sensor.rotterdam_sunchance_2d
+            name: Zon
+
+          - type: section
+            label: 3 dagen          
+          - entity: sensor.rotterdam_symbol_3d
+            name: ' '
+          - entity: sensor.rotterdam_rainchance_3d
+            name: Regen
+          - entity: sensor.rotterdam_sunchance_3d
+            name: Zon
+
+          - type: section
+            label: 4 dagen  
+          - entity: sensor.rotterdam_symbol_4d
+            name: ' '
+          - entity: sensor.rotterdam_rainchance_4d
+            name: Regen
+          - entity: sensor.rotterdam_sunchance_4d
+            name: Zon
+
+          - type: section
+            label: 5 dagen
+          - entity: sensor.rotterdam_symbol_5d
+            name: ' '
+          - entity: sensor.rotterdam_rainchance_5d
+            name: Regen
+          - entity: sensor.rotterdam_sunchance_5d
+            name: Zon
+  - type: vertical-stack
+    cards:
+      - type: picture-entity
+        name: Buienradar
+        entity: camera.buienradar
+        camera_imange: camera.buienradar
+        tap_action:
+          action: more-info
+        show_name: false  
+        show_state: false
+      - type: entities
+        title: Zon
+        show_header_toggle: false
+        entities:
+          - entity: sun.sun
+            name: Zon
+          - entity: sensor.sunrise
+            name: Zon op
+            icon: mdi:weather-sunset-up
+          - entity: sensor.sunset
+            name: Zon onder
+            icon: mdi:weather-sunset-down

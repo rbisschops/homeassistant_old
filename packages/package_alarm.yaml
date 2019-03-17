@@ -1,6 +1,7 @@
-# Package file for Home Assistant, used for alarm sensors
+# Package file for Home Assistant, used for all alarm sensors and
+# associated automations and scripts
 # Type: Home Assistant yaml file
-# Date: 10-03-2019
+# Date: 17-03-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -8,6 +9,7 @@
 # V0.3.0:  Added test switches for alarm sensors
 # V0.3.0:  Added refrigerator alarm and automations, renamed to package_alarm
 # V1.0.0:  Production version 1.0.0
+# V1.1.0:  Minor cleanup
 
 ###############################################################################
 #                              Homeassistant settings
@@ -163,8 +165,6 @@ automation:
 #          - <sensor.freezer>
 #        to: 'on'
 #        for: '00:10:00'
-    condition:
-
     action:
       - service: script.notify_prowl
         data_template:
@@ -185,8 +185,6 @@ automation:
         entity_id:
           - input_boolean.alarm
         to: 'off'
-    condition:
-
     action:
       - service: script.notify_prowl
         data_template:

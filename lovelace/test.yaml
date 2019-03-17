@@ -20,14 +20,17 @@ cards:
       show_name: false
       entities:
         - entity: input_boolean.domo_garden_light
-        - entity: input_boolean.domo_porch_light
-        - entity: input_boolean.domo_hallway_light
         - entity: input_boolean.domo_kitchen_cabinets
         - entity: input_boolean.domo_christmastree    
         - entity: input_boolean.domo_bar_light
         - entity: input_boolean.domo_virtual_heating
         - entity: input_boolean.domo_water_ornament        
         - entity: binary_sensor.habridge_bed_time
+        - type: section
+        - entity: binary_sensor.neo_coolcam_front_door
+        - entity: input_boolean.domo_porch_light
+        - entity: input_boolean.domo_hallway_light
+        - entity: timer.hallwaylight        
 
   - type: vertical-stack
     cards:

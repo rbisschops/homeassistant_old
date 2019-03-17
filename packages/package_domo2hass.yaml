@@ -12,6 +12,7 @@
 # V0.4.0:  Code cleaned, removed all code for environental sensors
 # V0.5.0:  Added code for receiving Domoticz data from switches 
 #          (lighting2 and Light/Switch types)
+# V0.5.1:  Removed domo entertainment switch
 
 ###############################################################################
 #                              Homeassistant settings
@@ -40,8 +41,6 @@ input_boolean:
     name: Virtuele verwarming
   domo_water_ornament:
     name: Waterbollen tuin
-#  domo_entertainment:  > moved to package_media_center.yaml 
-#    name: Entertainment
 
 ## Alternative switch to use as template copy. Not tested yet. Won't work as it is now 
 # switch:
@@ -75,7 +74,7 @@ automation:
     trigger:     
       platform: state
       entity_id: 
-        - input_boolean.domo_entertainment
+        # - input_boolean.domo_entertainment
         - input_boolean.domo_garden_light
         - input_boolean.domo_porch_light
         - input_boolean.domo_hallway_light

@@ -346,7 +346,7 @@ cards:
           width: 4%   
       # Doors and windows overlays
       - type: image
-        entity: input_boolean.front_door
+        entity: binary_sensor.neo_coolcam_front_door
         tap_action:
           action: none
         state_image:

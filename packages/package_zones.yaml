@@ -1,0 +1,68 @@
+# Package file for Home Assistant, used for zones
+# Type: Home Assistant yaml file
+# Date: 14-01-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V1.0.0:  Production versionn
+
+###############################################################################
+#                              Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    zone.home:
+      friendly_name: Thuis
+    zone.office:
+      friendly_name: Kantoor
+    zone.university:
+      friendly_name: Universiteit
+
+###############################################################################
+#                              Entities
+###############################################################################
+zone:
+  # Override for the default home zone
+  - name: Home
+    latitude: !secret latitude_home
+    longitude: !secret longitude_home
+    radius: 70
+    icon: mdi:home
+    
+  - name: Office
+    latitude: !secret latitude_office
+    longitude: !secret longitude_office
+    radius: 100
+    icon: mdi:domain
+
+  - name: University
+    latitude: !secret latitude_university
+    longitude: !secret longitude_university
+    radius: 300
+    icon: mdi:school
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+
+###############################################################################
+#                               Automations
+###############################################################################
+
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################

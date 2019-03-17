@@ -6,6 +6,7 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Added tradfri entertainment switch (replaces domo switch)  
+# V0.2.1:  Removed domo entertainment switch 
 
 ###############################################################################
 #                              Homeassistant settings
@@ -95,9 +96,9 @@ input_select:
     icon: mdi:remote      
 
 input_boolean:
-  # Switch for Media center operations
-  domo_entertainment:
-    name: Entertainment
+  # # Switch for Media center operations
+  # domo_entertainment:
+  #   name: Entertainment
   # Switch used for setting the recoder mode on   
   recording_mode:
     name: Recorder mode aan
@@ -329,12 +330,6 @@ automation:
         data_template:
           new_state: '{{ trigger.to_state.attributes.friendly_name }}'
           old_state: '{{ states.input_select.harmony_livingroom.state }}'
-      # - service_template: >-
-      #     {% if is_state('input_boolean.domo_entertainment', 'on') %}
-      #       script.media_from_on
-      #     {% elif is_state('input_boolean.domo_entertainment', 'off') %}
-      #       script.media_from_off
-      #     {% endif%}
       - service_template: >-
           {% if is_state('switch.tradfri_media_switch', 'on') %}
             script.media_from_on
@@ -418,8 +413,6 @@ script:
           entity_id: timer.media_center_delay
       - service: homeassistant.turn_on
         entity_id: switch.tradfri_media_switch 
-      # - service: homeassistant.turn_on
-      #   entity_id: input_boolean.domo_entertainment 
       - service: homeassistant.turn_on        
         entity_id: light.entertainment
       - delay: '00:00:30'

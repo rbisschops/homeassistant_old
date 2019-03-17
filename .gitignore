@@ -43,6 +43,7 @@ www/floorplans
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+zwave_device_config.yaml
 
 anneke.jpg
 kimberly.jpg

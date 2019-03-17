@@ -1,0 +1,155 @@
+# Package file for Home Assistant, used for getting HA-Bridge data via MQTT 
+# Type: Home Assistant yaml file
+# Date: 24-01-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Added binary sensors from livingroom lights
+# V0.3.0:  Added various entities to control from HA Bridge
+# V0.3.1:  Bug fixes
+#
+
+###############################################################################
+#                               Homeassistant settings
+###############################################################################
+homeassistant:
+  customize:
+    # Media devices  
+    binary_sensor.habridge_television:
+      friendly_name: Televisie
+
+###############################################################################
+#                              Entities
+###############################################################################
+binary_sensor:
+  # Media modes from HA Bridge
+  - platform: mqtt
+    name: habridge_television
+    state_topic: 'media_mode/television'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_smarttv
+    state_topic: 'media_mode/smarttv'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_netflix
+    state_topic: 'media_mode/netflix'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_spotify
+    state_topic: 'media_mode/spotify'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_mediaplayer
+    state_topic: 'media_mode/mediaplayer'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_appletv
+    state_topic: 'media_mode/appletv'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_radio
+    state_topic: 'media_mode/radio'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_music
+    state_topic: 'media_mode/music'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+
+  # Scenes from HA Bridge
+  - platform: mqtt
+    name: habridge_bed_time
+    state_topic: 'scene/bed_time'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_livingroom_lights_on
+    state_topic: 'scene/livingroom_lights_on'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_livingroom_lights_off
+    state_topic: 'scene/livingroom_lights_off'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+
+  # Sensors from HA Bridge for switching entities on and off
+  - platform: mqtt
+    name: habridge_bar_light
+    state_topic: 'switch/bar_light'
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_garden_light
+    state_topic: 'switch/garden_light'
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_water_ornament
+    state_topic: 'switch/water_ornament'
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_christmastree
+    state_topic: 'switch/christmastree'
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_hallway_light
+    state_topic: 'switch/hallway_light'
+    payload_on: 'on'
+    payload_off: 'off'
+  - platform: mqtt
+    name: habridge_porch_light
+    state_topic: 'switch/porch_light'
+    payload_on: 'on'
+    payload_off: 'off'
+
+###############################################################################
+#                               Groups
+###############################################################################
+group:
+  media_sensors_habridge:
+    name: Media states (HA-Bridge)
+    entities:
+      - binary_sensor.habridge_television
+
+###############################################################################
+#                              Automations
+###############################################################################
+
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################
+

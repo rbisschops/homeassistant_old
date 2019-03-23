@@ -7,6 +7,9 @@
 # V0.1.0:  First version
 # V0.2.0:  Added tradfri entertainment switch (replaces domo switch)  
 # V0.2.1:  Removed domo entertainment switch 
+# V0.2.2:  Updated friendly names
+# V0.2.3:  Added HA Bridge selectors and commands
+# V0.2.4:  Added switches for Netflix and SPotify (after Harmony update)
 
 ###############################################################################
 #                              Homeassistant settings
@@ -17,19 +20,51 @@ homeassistant:
     remote.bisschops:
       friendly_name: Harmony Hub
       entity_picture: /local/harmony_icon.jpg
+
     ## Media devices from HA Bridge 
-    light.television:
+    binary_sensor.habridge_television:
       friendly_name: Televisie
-    light.smart_tv:
+    binary_sensor.habridge_smarttv:
       friendly_name: Smart-TV
-    light.media_player:
+    binary_sensor.habridge_mediaplayer:
       friendly_name: Mediaplayer
-    light.apple_tv:
-      friendly_name: Apple-TV      
-    light.radio:
+    binary_sensor.habridge_appletv:
+      friendly_name: Apple-TV
+    binary_sensor.habridge_radio:
       friendly_name: Radio
-    light.streaming_music:
+    binary_sensor.habridge_music:
       friendly_name: Muziek
+    binary_sensor.habridge_netflix:
+      friendly_name: Netflix
+    binary_sensor.habridge_spotify:
+      friendly_name: Spotify
+
+    ## Media devices from Harmony
+    switch.poweroff:
+      friendly_name: PowerOff      
+    switch.television:
+      friendly_name: Televisie    
+    switch.mediaplayer:
+      friendly_name: Mediaplayer    
+    switch.appletv:
+      friendly_name: Apple-TV    
+    switch.radio:
+      friendly_name: Radio    
+    switch.music:
+      friendly_name: Muziek    
+    switch.dvd:
+      friendly_name: DVD    
+    switch.teletext:
+      friendly_name: Teletekst    
+    switch.smarttv:
+      friendly_name: Smart-TV
+    # Added in V0.2.4    
+    switch.netflix:
+      friendly_name: Netflix
+    switch.spotify:
+      friendly_name: Spotify
+
+    ## Media player switvh on delay  
     timer.media_center_delay:
       friendly_name: Inschakelvertraging
 
@@ -40,7 +75,7 @@ remote:
     host: !secret ip_harmony_hub
 
 ## Media players
-  # LG television
+#  LG television
 media_player:
   - platform: webostv
     host: !secret ip_lgtelevision
@@ -96,13 +131,17 @@ input_select:
     icon: mdi:remote      
 
 input_boolean:
-  # # Switch for Media center operations
-  # domo_entertainment:
-  #   name: Entertainment
   # Switch used for setting the recoder mode on   
+  # used for disabeling the media center switch of when a recording is programmed    
   recording_mode:
     name: Recorder mode aan
     icon: mdi:video
+  ## Enable buttons
+  # used for disabling the start of the media mode when lovelace buttons are changing
+  enable_buttons:
+    name: Buttons enabled
+  # Harmony mode selector inputs, 
+  # used for manual selection from lovelace interface 
   poweroff:
     name: PowerOff
   television:
@@ -124,7 +163,7 @@ input_boolean:
   netflix:
     name: Netflix
   spotify:
-    name: Spotify  
+    name: Spotify
 
 sensor:
   # Switch for Media center operations, sensor (Tradfri via Zigbee2MQTT)
@@ -145,10 +184,10 @@ switch:
     payload_on: "ON"
     value_template: "{{ value_json.state }}"
     command_topic: "zigbee2mqtt/tradfri_media_switch/set"
-  # Harmony Hub switches
+
+  # Switches synchronizing with the Harmony Hub. Operates reciproke 
   - platform: template
     switches:
-      # TELEVISION HARMONY ACTIVITY
       poweroff:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'PowerOff') }}"
         turn_on:
@@ -161,7 +200,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      # TELEVISION HARMONY ACTIVITY
       television:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Televisie') }}"
         turn_on:
@@ -174,7 +212,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      # MEDIA PLAYER HARMONY ACTIVITY
       mediaplayer:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Mediaplayer') }}"
         turn_on:
@@ -187,7 +224,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      # APPLE-TV HARMONY ACTIVITY
       appletv:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Apple-TV') }}"
         turn_on:
@@ -200,7 +236,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      # RADIO HARMONY ACTIVITY
       radio:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Radio') }}"
         turn_on:
@@ -213,7 +248,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''            
-      # MUSIC HARMONY ACTIVITY
       music:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Muziek') }}"
         turn_on:
@@ -226,7 +260,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: '' 
-     # DVD HARMONY ACTIVITY
       dvd:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'DVD') }}"
         turn_on:
@@ -239,7 +272,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-     # TELETEKST HARMONY ACTIVITY
       teletext:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Teletekst') }}"
         turn_on:
@@ -252,7 +284,6 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''                                        
-      # SMART-TV HARMONY ACTIVITY
       smarttv:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Smart-TV') }}"
         turn_on:
@@ -265,16 +296,42 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
+      # Added in V0.2.4       
+      netflix:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Netflix') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Netflix'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
+      spotify:
+        value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Spotify') }}"
+        turn_on:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: 'Spotify'
+        turn_off:
+          service: remote.turn_on
+          data:
+            entity_id: remote.bisschops
+            activity: ''
 
 ###############################################################################
 #                               Groups
 ###############################################################################
 group:
-  # Media center
+  # Group for remotes
   remote:
     name: Afstandsbediening
     entities:
       - remote.bisschops
+  # Group for manual selectors          
   input_media_modes:
     name: Media modes (inputs)
     entities:
@@ -289,23 +346,26 @@ group:
       - input_boolean.smarttv
       - input_boolean.netflix
       - input_boolean.spotify
+  # Group for HA Bridge sensors    
   habridge_media_modes:
     name: Media modes (HA Bridge)
     entities:
-      - light.television
-      - light.smart_tv
-      - light.media_player
-      - light.apple_tv
-      - light.radio
-      - light.streaming_music
-      - light.netflix
-      - light.spotify
+      - binary_sensor.habridge_television
+      - binary_sensor.habridge_smarttv
+      - binary_sensor.habridge_mediaplayer
+      - binary_sensor.habridge_appletv
+      - binary_sensor.habridge_radio
+      - binary_sensor.habridge_music
+      - binary_sensor.habridge_netflix
+      - binary_sensor.habridge_spotify
 
 ###############################################################################
 #                              Automations
 ###############################################################################
 automation:
-  - alias: "Start media acties vanuit inputs"
+  # Automation for Harmony mode selector inputs, 
+  # used for manual selection from lovelace interface
+  - alias: "Media acties lovelace buttons"
     hide_entity: false
     initial_state: 'on'
     trigger:
@@ -323,8 +383,6 @@ automation:
         - input_boolean.netflix
         - input_boolean.spotify        
       to: 'on'
-    condition:
-
     action:
       - service: script.media_mode
         data_template:
@@ -337,32 +395,61 @@ automation:
             script.media_from_off
           {% endif%}
 
-  - alias: "Start media mode acties vanuit HA-Bridge"
+  # Automation for Harmony mode selector from HA Bridge, 
+  # used for selection from HA Bridge (Alexa commands)
+  - alias: "Media acties HA-Bridge"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.television
-        - binary_sensor.mediaplayer
-        - binary_sensor.appletv
-        - binary_sensor.radio
-        - binary_sensor.music
-        - binary_sensor.dvd
-        - binary_sensor.teletext
-        - binary_sensor.smarttv
-        - binary_sensor.netflix
-        - binary_sensor.spotify   
+        - binary_sensor.habridge_television
+        - binary_sensor.habridge_mediaplayer
+        - binary_sensor.habridge_appletv
+        - binary_sensor.habridge_radio
+        - binary_sensor.habridge_music
+        - binary_sensor.habridge_smarttv
+        - binary_sensor.habridge_netflix
+        - binary_sensor.habridge_spotify  
       to: 'on'
-    condition:
-
     action:
-      - service: homeassistant.turn_on
+      - service: script.set_media_input
         data_template:
-          entity_id: >-
-            {% set name = '{{ trigger.to.state.name }}' %}
-            {% set entity = ["input_boolean",name]|join(".") %}
-            {{ entity }}
+          name: '{{ trigger.to_state.object_id }}'  
+      # - service: homeassistant.turn_on
+      #   data_template:        
+      #     entity_id: >-
+      #       {% set name = name|replace('habridge_','') %}
+      #       {% set entity = ["input_boolean",name]|join(".") %}
+      #       {{ entity }}
+
+  # Automation for Harmony mode selector from Harmony Hub, 
+  # used for selection from HA Bridge (Alexa commands)
+  - alias: "Media acties Harmony Hub"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - switch.poweroff
+        - switch.television
+        - switch.mediaplayer
+        - switch.appletv
+        - switch.radio
+        - switch.music
+        - switch.netflix
+        - switch.spotify
+      to: 'on'
+    action:
+      - service: script.set_media_input
+        data_template:
+          name: '{{ trigger.to_state.object_id }}'
+          type: 'harmony'   
+      # - service: homeassistant.turn_on
+      #   data_template:        
+      #     entity_id: >-
+      #       {% set entity = ["input_boolean",name]|join(".") %}
+      #       {{ entity }}
 
 ###############################################################################
 #                              Templates
@@ -373,6 +460,7 @@ automation:
 #                              Scripts
 ###############################################################################
 script:
+  ## Script for updating the state of the input buttons in Lovelace
   media_mode:  
     alias: Set media mode script
     sequence:
@@ -404,6 +492,16 @@ script:
             %}
             {% set entity = ["input_boolean",media_devices[old_state]]|join(".") %}
             {{ entity }}
+  
+  set_media_input:
+    alias: Set media mode vanuit ha bridge of harmony
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: >-
+            {% set name = name|replace('habridge_','') %}
+            {% set entity = ["input_boolean",name]|join(".") %}
+            {{ entity }}
 
   media_from_off:
     alias: Media start als media switch uit
@@ -413,8 +511,8 @@ script:
           entity_id: timer.media_center_delay
       - service: homeassistant.turn_on
         entity_id: switch.tradfri_media_switch 
-      - service: homeassistant.turn_on        
-        entity_id: light.entertainment
+      # - service: homeassistant.turn_on        
+      #   entity_id: light.entertainment
       - delay: '00:00:30'
       - service: remote.send_command
         data:
@@ -430,7 +528,6 @@ script:
   media_from_on:
     alias: Media start als media switch aan
     sequence:
-      # - delay: '00:00:02'
       - service: script.media_set_harmony
         data_template:
           current_state: '{{ states.input_select.harmony_livingroom.state }}'
@@ -465,7 +562,7 @@ script:
           {% elif current_state == "Netflix" %}
             script.media_mode_netflix 
           {% else %}
-            script.media_mode_dolby 
+            script.amplifier_mode_dolby
           {% endif %}
 
   media_mode_spotify:
@@ -478,6 +575,7 @@ script:
           device: Versterker
           command:
             - ModeStereo
+      - delay: '00:00:02'
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv
@@ -493,6 +591,7 @@ script:
           device: Versterker
           command:
             - ModeDolbyPLII
+      - delay: '00:00:02'            
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv

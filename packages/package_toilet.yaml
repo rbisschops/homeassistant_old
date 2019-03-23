@@ -1,0 +1,113 @@
+# Package file for Home Assistant, used for the toilet
+# Type: Home Assistant yaml file
+# Date: 21-03-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.1.1:  Updated automation
+
+###############################################################################
+#                               Homeassistant settings
+###############################################################################
+
+
+###############################################################################
+#                              Entities
+###############################################################################
+input_select:
+## Electrical toilet heating controlled by Z-Wave Thermostat
+## Used for manual control of the toilet heating 
+  toilet_heating:
+    name: Verwarming toilet
+    options:
+      - 'Uit'
+      - 'Eco'
+      - 'Verwarmen'  
+    initial: 'Uit'
+    icon: mdi:thermometer
+
+###############################################################################
+#                               Groups
+###############################################################################
+
+
+###############################################################################
+#                               Automations
+###############################################################################
+automation:
+  ## Switch toilet heating based on time for workdays 
+  - alias: "Toilet verwarming aan volgens schema - werkdagen"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: time
+      at: '06:30:00'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: 'on'
+            - condition: time
+              weekday: 
+                - sat  
+    action:
+      - service: climate.set_operation_mode
+        entity_id: climate.toilet_heating_heating
+        data:
+          operation_mode: Verwarmen
+
+  ## Switch toilet heating based on time for non-workingdays 
+  - alias: "Toilet verwarming aan volgens schema - niet werkdagen"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: time
+      at: '07:30:00'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: time
+          weekday:
+            - sun  
+    action:
+      - service: climate.set_operation_mode
+        entity_id: climate.toilet_heating_heating
+        data:
+          operation_mode: heat
+
+  ## Switch toilet heating based on time test automation 
+  - alias: "test climate"
+    hide_entity: false
+    initial_state: 'off' 
+    trigger:
+      platform: time
+      at: '07:30:00'
+    action:
+      - service: climate.set_operation_mode
+        entity_id: climate.toilet_heating_heating
+        data:
+          operation_mode: heat             
+
+###############################################################################
+#                              Templates
+###############################################################################
+
+
+###############################################################################
+#                              Scripts
+###############################################################################
+
+
+###############################################################################
+#                              Timers
+###############################################################################

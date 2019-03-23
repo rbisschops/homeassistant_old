@@ -1,6 +1,6 @@
 # Package file for Home Assistant, used for alarms 
 # Type: Home Assistant yaml file
-# Date: 27-02-2019
+# Date: 22-03-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -8,6 +8,8 @@
 # V0.2.0:  Added bed time automation and scripts
 # V0.2.1:  Changed bed time script
 # V0.2.2:  Changed domoticz entertainment switch to Tradfri
+# V0.3.0:  Moved input select toliet heating to package_toilet
+# V0.3.1:  Added Tradfri testswitch
 
 ###############################################################################
 #                               Homeassistant settings
@@ -25,23 +27,32 @@ input_boolean:
     icon: mdi:toggle-switch
     initial: off
 
-## Status of lighting in the house used for conditions to see if lighitng is on 
-## Several automations depend on this
-  # lighting_state:
-  #   name: Verlichtings status
-  #   icon: mdi:thermometer
-  #   initial: off
+## Definition of workdays with the workday sensor
+## Used in several automations
+binary_sensor:
+  - platform: workday
+    country: NL
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun]
 
-input_select:
-## Electrical toilet heating controlled by Z-Wave Thermostat 
-  toilet_heating:
-    name: Verwarming toilet
-    options:
-      - 'Heat'
-      - 'Heat Econ'
-      - 'Off'  
-    initial: 'Off'
-    icon: mdi:thermometer
+switch:
+  # Switch for test operations (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_test_switch
+    state_topic: "zigbee2mqtt/tradfri_test_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_off: "OFF"
+    payload_on: "ON"
+    value_template: "{{ value_json.state }}"
+    command_topic: "zigbee2mqtt/tradfri_test_switch/set"
+sensor:
+  # Switch for test operations, sensor (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_test_switch
+    state_topic: "zigbee2mqtt/tradfri_test_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"       
 
 ###############################################################################
 #                               Groups

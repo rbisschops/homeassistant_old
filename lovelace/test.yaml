@@ -26,6 +26,7 @@ cards:
         - entity: input_boolean.domo_virtual_heating
         - entity: input_boolean.domo_water_ornament        
         - entity: binary_sensor.habridge_bed_time
+        - entity: switch.tradfri_test_switch
         - type: section
         - entity: binary_sensor.neo_coolcam_front_door
         - entity: input_boolean.domo_porch_light

@@ -273,11 +273,11 @@ automation:
         - sensor.nc_voip
         - sensor.nc_domoticz_master
         - sensor.nc_domoticz_slave
-        - sensor.nc_homeassistant_pi
+        # - sensor.nc_homeassistant_pi
         - sensor.nc_harmonyhub
         - sensor.nc_hue_bridge
-        - sensor.nc_xiaomi_bridge
-        - sensor.nc_amazonecho
+        # - sensor.nc_xiaomi_bridge
+        # - sensor.nc_amazonecho
         - sensor.nc_printer
       from: 'on'
       to: 'off'
@@ -301,11 +301,11 @@ automation:
         - sensor.nc_voip
         - sensor.nc_domoticz_master
         - sensor.nc_domoticz_slave
-        - sensor.nc_homeassistant_pi
+        # - sensor.nc_homeassistant_pi
         - sensor.nc_harmonyhub
         - sensor.nc_hue_bridge
-        - sensor.nc_xiaomi_bridge
-        - sensor.nc_amazonecho
+        # - sensor.nc_xiaomi_bridge
+        # - sensor.nc_amazonecho
         - sensor.nc_printer
       from: 'off'
       to: 'on'

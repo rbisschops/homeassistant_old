@@ -8,16 +8,13 @@
 # V0.2.0:  Added binary sensors from livingroom lights
 # V0.3.0:  Added various entities to control from HA Bridge
 # V0.3.1:  Bug fixes
+# V0.3.2:  Added binary sensor for media PowerOff, removed friendly name Television, dupplicate
 #
 
 ###############################################################################
 #                               Homeassistant settings
 ###############################################################################
-homeassistant:
-  customize:
-    # Media devices  
-    binary_sensor.habridge_television:
-      friendly_name: Televisie
+
 
 ###############################################################################
 #                              Entities
@@ -69,6 +66,13 @@ binary_sensor:
   - platform: mqtt
     name: habridge_music
     state_topic: 'media_mode/music'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  # added in V0.3.2  
+  - platform: mqtt
+    name: habridge_music
+    state_topic: 'media_mode/poweroff'
     off_delay: 2
     payload_on: 'on'
     payload_off: 'off'

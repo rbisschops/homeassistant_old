@@ -24,7 +24,7 @@ homeassistant:
 ###############################################################################
 
 group:
-  garden_lights:
+  garden_lights1:
     name: Tuinverlichting
     entities:
       - input_boolean.domo_garden_light

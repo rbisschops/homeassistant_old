@@ -11,7 +11,7 @@
 # V0.3.2:  Added new sensors/switches
 # V0.3.3:  Changed ha bridge to domo automations to one script - experimental
 # V0.4.0:  Removed HA-Bridge automation for gardenlights (moved to package_garden)
-
+# V0.4.1:  Removed media modes for lighting
 
 ###############################################################################
 #                              Homeassistant settings
@@ -104,21 +104,6 @@ automation:
           {% elif is_state('input_boolean.livingroom_lights_status', 'off') %}
             script.livingroom_lights_off  
           {% endif%}      
-
-  # Switch livingroomlights to mode for watching television kind a modes
-  - alias: "Licht televisie kijken mode"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - input_select.livingroom_lights_mode
-    condition:  
-      - condition: state
-        entity_id: input_boolean.livingroom_lights_status
-        state: 'on'
-    action:
-      - service: script.livingroom_lights_adjust
 
   # Switch bar lights on an off from HA-Bridge
   - alias: "Bar lampen - voice"

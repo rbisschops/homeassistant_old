@@ -92,7 +92,7 @@ group:
 #                              Scripts
 ###############################################################################
 
-# Script for setting the Hue scene manual
+## Script for setting the Hue scene manual
 script:
   manual_set_hue_scene:
     alias: Set Hue scenes handmatig
@@ -102,6 +102,8 @@ script:
           group: '{{ states.input_select.hue_groups.state }}'
           name: '{{ states.input_select.hue_scenes.state }}'
 
+## Script for setting the Hue scene manual
+# used by multiple packages (media_center)
   set_hue_scene:
     alias: Send Hue scene naar Hue Bridge
     sequence: 

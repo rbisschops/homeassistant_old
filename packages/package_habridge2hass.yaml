@@ -71,7 +71,7 @@ binary_sensor:
     payload_off: 'off'
   # added in V0.3.2  
   - platform: mqtt
-    name: habridge_music
+    name: habridge_poweroff
     state_topic: 'media_mode/poweroff'
     off_delay: 2
     payload_on: 'on'

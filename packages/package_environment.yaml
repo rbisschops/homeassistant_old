@@ -12,7 +12,8 @@
 # V1.2.2:  Added groups for new sensors
 # V1.2.3:  Added new sensors
 # V1.3.0:  Added friendly names for remaining sensors
-# V1.3.1:  Fixed duplicate keys 
+# V1.3.1:  Fixed duplicate keys
+# V1.3.2:  Added new sensors 
 
 ###############################################################################
 #                              Homeassistant settings
@@ -38,6 +39,8 @@ homeassistant:
       friendly_name: Temperatuur Toilet
     sensor.room_temp_storage:
       friendly_name: Temperatuur Berging
+    sensor.room_temp_heating_room:
+      friendly_namne: Temperatuur Ketel ruimte  
   # Humidity sensors
     sensor.room_humidity_office:
       friendly_name: Rel. Vochtigheid Kantoor
@@ -53,6 +56,8 @@ homeassistant:
       friendly_name: Rel. Vochtigheid Toilet
     sensor.room_humidity_storage:
       friendly_name: Rel. Vochtigheid Berging
+    sensor.room_humidity_heating_room:
+      friendly_namne: Rel. Vochtigheid Ketel ruimte       
   # Pressure sensors
     sensor.room_pressure_office:
       friendly_name: Luchtdruk Kantoor   
@@ -68,6 +73,8 @@ homeassistant:
       friendly_name: Luchtdruk Toilet
     sensor.room_pressure_storage:
       friendly_name: Luchtdruk Berging  
+    sensor.room_pressure_heating_room:
+      friendly_namne: Luchtdruk Ketel ruimte  
 
 ###############################################################################
 #                              Entities
@@ -164,7 +171,19 @@ sensor:
     json_attributes: 
       - "linkquality"
       - "battery"
-      - "voltage"                              
+      - "voltage"  
+  # Added in V1.3.2   
+  - platform: "mqtt"
+    name: room_temp_heating_room
+    state_topic: "zigbee2mqtt/aqara_heating_room_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
   ## Inhouse environment sensors - humidity
   - platform: "mqtt"
     name: room_humidity_office
@@ -245,7 +264,19 @@ sensor:
     json_attributes: 
       - "linkquality"
       - "battery"
-      - "voltage"      
+      - "voltage"  
+  # Added in V1.3.2
+  - platform: "mqtt"
+    name: room_humidity_heating_room
+    state_topic: "zigbee2mqtt/aqara_heating_room_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"          
   ## Inhouse environment sensors - pressure
   - platform: "mqtt"
     name: room_pressure_office  
@@ -326,8 +357,20 @@ sensor:
     json_attributes: 
       - "linkquality"
       - "battery"
-      - "voltage"     
- 
+      - "voltage"
+  # Added in V1.3.2        
+  - platform: "mqtt"
+    name: room_pressure_heating_room
+    state_topic: "zigbee2mqtt/aqara_heating_room_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes: 
+      - "linkquality"
+      - "battery"
+      - "voltage"
+
 ###############################################################################
 #                               Groups
 ###############################################################################
@@ -349,6 +392,7 @@ group:
       - sensor.room_temp_livingroom
       - sensor.room_temp_toilet
       - sensor.room_temp_storage
+      - sensor.room_temp_heating_room      
   ## Humidity sensors
   humidity_sensors:
     name: Relatieve vochtigheid
@@ -360,6 +404,7 @@ group:
       - sensor.room_humidity_livingroom
       - sensor.room_humidity_toilet
       - sensor.room_humidity_storage
+      - sensor.room_humidity_heating_room       
   ## Pressure sensors
   pressure_sensors:
     name: Luchtdruk
@@ -371,6 +416,7 @@ group:
       - sensor.room_pressure_livingroom
       - sensor.room_pressure_toilet
       - sensor.room_pressure_storage
+      - sensor.room_pressure_heating_room       
   ## Indoor Environment - per room
   office_room_environment_sensors:
     name: Omgevings condities kantoor
@@ -416,6 +462,10 @@ group:
       - sensor.room_temp_storage
       - sensor.room_humidity_storage
       - sensor.room_pressure_storage
+  heating_room_environment_sensors:
+      - sensor.room_temp_heating_room 
+      - sensor.room_humidity_heating_room 
+      - sensor.room_pressure_heating_room        
 
 ###############################################################################
 #                               Automations

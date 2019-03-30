@@ -36,6 +36,7 @@ Many ideas. Too little time!
   * [Xiaomi Aqara bridge](https://www.aliexpress.com) The bridge is connected to Domoticz. As HASS is running inside a container, the bridge won't connect (I don't want HASS to run as host on Docker). Sensor values are exchanged through MQTT for now. When I have a better zigbee2mqtt controller (with better radio sensitivity), I will move all over to HASS and retire the bridge (and the privacy unfrienly Chinese app).
   * [Xiaomi Aqara sensors](https://www.aliexpress.com) I use motion sensors, door/window sensors, temp/hum/pressure sensors, a magic cube (nice gadget!), buttons. Some sensors are connected to HASS (through Zigbee2mqtt), others are still connected to the Aqara bridge.
   * [Philips Hue](https://www2.meethue.com) Philips Hue bulbs used in the house. Operated through the Hue Bridge as I use the scenes in the Bridge for setting the mood.
+  * [Tradfri](https://www.ikea.com) Cheap ZigBee compatible smart home devices. Currently I only use the Wireless control outlets for the more critical switches (replacement of Click-On-Click-Off units).   
 
 * MySensors platform:
   * [MySensors](https://www.mysensors.org/) The MySensors platform offers a strong solution for developing highly customized sensors and actors. I have developed a custom water meter sensor to read my dumb water meter values. Currently still connected to Domoticz.

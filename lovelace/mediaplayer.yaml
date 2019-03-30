@@ -1,11 +1,13 @@
 # Lovelace-UI file for Home Assistant, Media player view
 # Type: Home Assistant yaml file
-# Date: 15-03-2019
+# Date: 30-03-2019
 # Author: R.Bisschops
 #
 # Changelog:
 # V1.0.0:  First version
 # V1.1.0:  Added Tradfri switch to replace domo entertainment switch  
+# V1.2.0:  Added buttons for media center modes
+# V1.3.0:  Added conditional buttons for Radio and Television
 
 title: Media spelers
 icon: 'mdi:television'
@@ -144,7 +146,233 @@ cards:
           style:
             - font-size: 1.2em
             - font-weight: normal            
+
     ## Conditional buttons for Radio
+    # First row (empty as seperator)
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: blank-card
+    # 2nd row     
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Versterker
+                command: 'VolumeUp'
+            icon: mdi:volume-plus
+            size: 80% 
+            style:
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '1'
+            name: '1'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px               
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '2'
+            name: '2'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px    
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '3'
+            name: '3'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ChannelUp'
+            name: 'CH+'
+            style:
+              - font-size: 1.5em
+              - font-weight: normal
+              - height: 40px
+    # 3rd row
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Versterker
+                command: 'VolumeDown'
+            icon: mdi:volume-minus
+            size: 80%
+            style:
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '4'
+            name: '4'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '5'
+            name: '5'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '6'
+            name: '6'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ChannelDown'
+            name: 'CH-'
+            style:
+              - font-size: 1.5em
+              - font-weight: normal
+              - height: 40px
+    # 4th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -164,43 +392,9 @@ cards:
                 device: Versterker
                 command: 'Mute'
             icon: mdi:volume-mute
-            size: 40%  
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeDown'
-            icon: mdi:volume-minus
-            size: 40%   
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeUp'
-            icon: mdi:volume-plus
-            size: 40%  
+            size: 80%
+            style:
+              - height: 40px   
         - type: conditional
           conditions:
             - entity: switch.radio
@@ -216,9 +410,12 @@ cards:
               data: 
                 entity_id: remote.bisschops
                 device: Humax
-                command: 'ChannelDown'
-            icon: mdi:chevron-down
-            size: 40%  
+                command: '7'
+            name: '7'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
         - type: conditional
           conditions:
             - entity: switch.radio
@@ -234,9 +431,55 @@ cards:
               data: 
                 entity_id: remote.bisschops
                 device: Humax
-                command: 'ChannelUp'
-            icon: mdi:chevron-up
-            size: 40%  
+                command: '8'
+            name: '8'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '9'
+            name: '9'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ModeStereo'
+            name: 'Stereo'
+            style:
+              - font-size: 1.2em
+              - font-weight: normal
+              - height: 40px
+    # 5th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -255,10 +498,46 @@ cards:
                 entity_id: remote.bisschops
                 device: Humax
                 command: 'TvRadio'
-            name: TV/Radio
+            name: 'TV/ Radio'
             style:
               - font-size: 1.2em
               - font-weight: normal
+              - height: 40px  
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:    
+            type: custom:button-card
+            color_type: blank-card 
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '0'
+            name: '0'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px
+        - type: conditional
+          conditions:
+            - entity: switch.radio
+              state: 'on'
+          card:    
+            type: custom:button-card
+            color_type: blank-card 
         - type: conditional
           conditions:
             - entity: switch.radio
@@ -267,6 +546,62 @@ cards:
             type: custom:button-card
             color_type: card
             color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ModeDirect'
+            name: 'Direct'
+            style:
+              - font-size: 1.2em
+              - font-weight: normal
+              - height: 40px         
+
+    ## Conditional buttons for Televion
+    # First row (empty as seperator)
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: blank-card
+    # 2nd row     
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Versterker
+                command: 'VolumeUp'
+            icon: mdi:volume-plus
+            size: 80%
+            style:
+              - height: 40px    
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
             action: service
             service:
               domain: remote
@@ -277,11 +612,54 @@ cards:
                 command: '1'
             name: '1'
             style:
-              - font-size: 1.2em
+              - font-size: 2.0em
               - font-weight: normal
+              - height: 40px 
         - type: conditional
           conditions:
-            - entity: switch.radio
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '2'
+            name: '2'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '3'
+            name: '3'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
               state: 'on'
           card:
             type: custom:button-card
@@ -294,12 +672,391 @@ cards:
               data: 
                 entity_id: remote.bisschops
                 device: Humax
-                command: '2'
-            name: '2'
+                command: 'ChannelUp'
+            name: 'CH+'
+            style:
+              - font-size: 1.8em
+              - font-weight: normal
+              - height: 40px
+    # 3rd row
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Versterker
+                command: 'VolumeDown'
+            icon: mdi:volume-minus
+            size: 80%
+            style:
+              - height: 40px
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '4'
+            name: '4'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '5'
+            name: '5'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '6'
+            name: '6'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ChannelDown'
+            name: 'CH-'
+            style:
+              - font-size: 1.8em
+              - font-weight: normal
+              - height: 40px
+    # 4th row
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Versterker
+                command: 'Mute'
+            icon: mdi:volume-mute
+            size: 80%
+            style:
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '7'
+            name: '7'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '8'
+            name: '8'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '9'
+            name: '9'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ModeDolbyPLII'
+            name: 'Dolby PLII'
             style:
               - font-size: 1.2em
               - font-weight: normal
+              - height: 40px
+    # 5th row
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'TvRadio'
+            name: 'TV/ Radio'
+            style:
+              - font-size: 1.2em
+              - font-weight: normal
+              - height: 40px  
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:    
+            type: custom:button-card
+            color_type: blank-card 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(255, 131, 0)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: '0'
+            name: '0'
+            style:
+              - font-size: 2.0em
+              - font-weight: normal
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:    
+            type: custom:button-card
+            color_type: blank-card
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'ModeDolbyPLIICinema'
+            name: 'DTS'
+            style:
+              - font-size: 1.2em
+              - font-weight: normal
+              - height: 40px
+    # 6th row
+    - type: horizontal-stack
+      cards: 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'Rewind'
+            icon: mdi:rewind
+            size: 80%
+            style:
+              - height: 40px
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on' 
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'Pause'
+            icon: mdi:pause
+            size: 80%
+            style:
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'Play'
+            icon: mdi:play
+            size: 80%
+            style:
+              - height: 40px 
+        - type: conditional
+          conditions:
+            - entity: switch.television
+              state: 'on'
+          card:
+            type: custom:button-card
+            color_type: card
+            color: rgb(84, 84, 84)            
+            action: service
+            service:
+              domain: remote
+              action: send_command
+              data: 
+                entity_id: remote.bisschops
+                device: Humax
+                command: 'FastForward'
+            icon: mdi:fast-forward
+            size: 80%
+            style:
+              - height: 40px 
 
+  
   - type: vertical-stack
     cards:
     - type: markdown

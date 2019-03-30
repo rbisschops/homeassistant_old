@@ -60,6 +60,5 @@ cards:
         name: Tuinverlichting aan bij thuiskomst
       - entity: automation.tuinverlichting_bij_zonsondergang 
         name: Tuinverlichting aan bij zonsondergang
-      - entity: automation.start_media_acties_vanuit_inputs 
-        name: Media center scripts 
+
  

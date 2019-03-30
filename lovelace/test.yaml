@@ -56,8 +56,6 @@ cards:
           label: Woonkamer licht status
         - entity: input_boolean.livingroom_lights_status
         - entity: input_select.livingroom_lights_mode
-        - entity: script.livingroom_lights_on
-        - entity: script.livingroom_lights_off
         - entity: script.livingroom_lights_adjust
 
   - type: vertical-stack
@@ -86,4 +84,15 @@ cards:
       entities:
         - entity: input_boolean.heating_room_door
         - entity: input_boolean.top_floor_room
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Test Harmony Hub commands
+    - type: entities
+      show_state: false
+      show_name: false
+      entities:
+        - entity: input_boolean.test_hub_command
+        - entity: automation.test_acties_harmony_hub
 

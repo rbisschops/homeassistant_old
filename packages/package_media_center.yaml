@@ -12,6 +12,7 @@
 # V0.2.4:  Added switches for Netflix and Spotify (after Harmony update)
 # V0.3.0:  Added lighting setting for video modes
 # V0.3.1:  Added test input and automation for Harmony hub commands, remove later
+# V0.3.2:  Added setting the video mode input selector. Used for switching lights on in the right mode 
 
 ###############################################################################
 #                              Homeassistant settings
@@ -573,7 +574,7 @@ script:
       - service: script.media_set_harmony
         data_template:
           current_state: '{{ states.input_select.harmony_livingroom.state }}'
-      - delay: '00:00:30'
+      - delay: '00:00:10'
       - service: remote.send_command
         data:
           entity_id: remote.bisschops
@@ -634,6 +635,7 @@ script:
   media_mode_spotify:
     alias: Aanvullende media settings Spotify
     sequence:
+      - delay: '00:00:05'
       - service: 
           remote.send_command
         data:
@@ -641,11 +643,14 @@ script:
           device: Versterker
           command:
             - ModeStereo
-      - delay: '00:00:02'
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv
           source: Spotify Music - Luister gratis op LG TV
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Normaal"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
@@ -658,6 +663,7 @@ script:
   media_mode_netflix:
     alias: Aanvullende media settings Netflix
     sequence:
+      - delay: '00:00:05' 
       - service: 
           remote.send_command
         data:
@@ -665,11 +671,14 @@ script:
           device: Versterker
           command:
             - ModeDolbyPLII
-      - delay: '00:00:02'            
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv
           source: Netflix
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Video"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
@@ -689,13 +698,17 @@ script:
           device: Versterker
           command:
             - ModeStereo
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Normaal"             
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
       - service: script.set_hue_scene
         data_template:
           group: 'Woonkamer'
-          name: 'Verlichting aan'            
+          name: 'Verlichting aan'  
 
   ## Script for additional settings when Music mode is set 
   media_mode_music:
@@ -708,18 +721,26 @@ script:
           device: Versterker
           command:
             - ModeStereo
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Normaal"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
       - service: script.set_hue_scene
         data_template:
           group: 'Woonkamer'
-          name: 'Verlichting aan' 
+          name: 'Verlichting aan'
 
   ## Script for additional settings when Poweroff is set 
   media_mode_poweroff:
     alias: Aanvullende media settings PowerOff
     sequence:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Normaal"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
@@ -739,6 +760,10 @@ script:
           device: Versterker
           command:
             - ModeDolbyPLII
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Video"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'

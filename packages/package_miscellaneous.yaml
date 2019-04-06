@@ -11,6 +11,7 @@
 # V0.3.0:  Moved input select toliet heating to package_toilet
 # V0.3.1:  Added Tradfri testswitch
 # V0.3.2:  Minor code clean
+# V0.4.0:  Removed Tradfri testswitch
 
 ###############################################################################
 #                               Homeassistant settings
@@ -35,25 +36,6 @@ binary_sensor:
     country: NL
     workdays: [mon, tue, wed, thu, fri]
     excludes: [sat, sun]
-
-switch:
-  # Switch for test operations (Tradfri via Zigbee2MQTT)
-  - platform: "mqtt"
-    name: tradfri_test_switch
-    state_topic: "zigbee2mqtt/tradfri_test_switch"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_off: "OFF"
-    payload_on: "ON"
-    value_template: "{{ value_json.state }}"
-    command_topic: "zigbee2mqtt/tradfri_test_switch/set"
-sensor:
-  # Switch for test operations, sensor (Tradfri via Zigbee2MQTT)
-  - platform: "mqtt"
-    name: tradfri_test_switch
-    state_topic: "zigbee2mqtt/tradfri_test_switch"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "-"
-    value_template: "{{ value_json.linkquality }}"       
 
 ###############################################################################
 #                               Groups

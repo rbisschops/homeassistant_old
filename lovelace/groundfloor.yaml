@@ -6,6 +6,7 @@
 # Changelog:
 # V1.0.0:  First version
 # V1.1.0:  Added Tradfri switch to replace domo entertainment switch 
+# V1.2.0:  Added Tradfri switch to replace domo high kitchen cabinets
 
 title: Beneden
 panel: true
@@ -167,7 +168,7 @@ cards:
           position: absolute
           width: 2.5%
       - type: image
-        entity: input_boolean.domo_kitchen_cabinets
+        entity: switch.tradfri_high_cabinets_switch
         tap_action:
           action: toggle
         image: /local/custom_icons/light48_on.png

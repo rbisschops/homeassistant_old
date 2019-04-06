@@ -128,6 +128,23 @@ automation:
           state: >-
             {{ trigger.payload_json.nvalue }}    
 
+  # Switch Dome entity based on HA Bridge sensor
+  # - alias: "Domo entry - voice"
+  #   hide_entity: false
+  #   initial_state: 'on'
+  #   trigger:
+  #     platform: state
+  #     entity_id:
+  #       - binary_sensor.habridge_christmastree
+  #   action:
+  #     - service: script.switch_to_domo
+  #       data_template:
+  #         device: '{{ trigger.to_state.object_id }}'
+  #     - service: logbook.log
+  #       data_template:
+  #         name: Device value
+  #         message: '{{ trigger.to_state.object_id }}'
+
 ###############################################################################
 #                              Templates
 ###############################################################################
@@ -180,6 +197,7 @@ script:
              "switchcmd": new_state
             }|tojson }}
 
+  ## Convert Domoticz switch to Hass 
   domoticz_input:
     alias: Receive domoticz switch via MQTT
     sequence:
@@ -198,6 +216,21 @@ script:
              "command": payload,
              "source": device
             }|tojson }}           
+
+  # switch_to_domo:
+  #   alias: Convert to domoticz entity
+  #   sequence:
+  #     - service_template: >-
+  #         {% set device = device|replace("habridge_", "") %}
+  #         {% if is_state(["binary_sensor.habridge_",device]|join(), 'on') %}
+  #           homeassistant.turn_on
+  #         {% elif is_state(["binary_sensor.habridge_",device]|join(), 'off') %}
+  #           homeassistant.turn_off
+  #         {% endif%}
+  #       data_template:
+  #         entity_id: >-
+  #           {% set entity = ["input_boolean.domo_",device]|join() %}
+  #           {{ entity }}  
 
 ###############################################################################
 #                              Timers

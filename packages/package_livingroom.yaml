@@ -12,6 +12,8 @@
 # V0.3.3:  Changed ha bridge to domo automations to one script - experimental
 # V0.4.0:  Removed HA-Bridge automation for gardenlights (moved to package_garden)
 # V0.4.1:  Removed media modes for lighting
+# v0.4.2:  Moved Domoticz automations and scripts to domo2hass package
+# V0.5.0:  Added switch for kitchen high cabinets
 
 ###############################################################################
 #                              Homeassistant settings
@@ -21,6 +23,8 @@ homeassistant:
     # ZigBeee2MQTT Switches
     switch.tradfri_media_switch:
       friendly_name: Entertainment
+    switch.tradfri_high_cabinets_switch:
+      friendly_name: Verlichting hoge kasten  
     # Scripts        
     script.livingroom_lights_on:
       icon: mdi:lightbulb
@@ -53,6 +57,25 @@ input_select:
 input_boolean:
   livingroom_lights_status:
     name: Verlichting woonkamer
+
+switch:
+  # Switch for high cabinets (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_high_cabinets_switch
+    state_topic: "zigbee2mqtt/tradfri_high_cabinets_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_off: "OFF"
+    payload_on: "ON"
+    value_template: "{{ value_json.state }}"
+    command_topic: "zigbee2mqtt/tradfri_high_cabinets_switch/set"
+sensor:
+  # Switch for high cabinets, sensor (Tradfri via Zigbee2MQTT)
+  - platform: "mqtt"
+    name: tradfri_high_cabinets_switch
+    state_topic: "zigbee2mqtt/tradfri_high_cabinets_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"   
 
 ###############################################################################
 #                               Groups
@@ -190,48 +213,19 @@ automation:
           {% endif%}
         entity_id: input_boolean.domo_water_ornament
 
-  # Switch Dome entity based on HA Bridge sensor
-  # - alias: "Domo entry - voice"
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:
-  #     platform: state
-  #     entity_id:
-  #       - binary_sensor.habridge_christmastree
-  #   action:
-  #     - service: script.switch_to_domo
-  #       data_template:
-  #         device: '{{ trigger.to_state.object_id }}'
-  #     - service: logbook.log
-  #       data_template:
-  #         name: Device value
-  #         message: '{{ trigger.to_state.object_id }}'
-
 ###############################################################################
 #                              Scripts
 ###############################################################################
 script:
-  # switch_to_domo:
-  #   alias: Convert to domoticz entity
-  #   sequence:
-  #     - service_template: >-
-  #         {% set device = device|replace("habridge_", "") %}
-  #         {% if is_state(["binary_sensor.habridge_",device]|join(), 'on') %}
-  #           homeassistant.turn_on
-  #         {% elif is_state(["binary_sensor.habridge_",device]|join(), 'off') %}
-  #           homeassistant.turn_off
-  #         {% endif%}
-  #       data_template:
-  #         entity_id: >-
-  #           {% set entity = ["input_boolean.domo_",device]|join() %}
-  #           {{ entity }}
-  
   livingroom_lights_on:
     alias: Woonkamer licht aan script
     sequence:
       - service: homeassistant.turn_on
         entity_id: 
           - input_boolean.domo_kitchen_cabinets
+      - service: homeassistant.turn_on
+        entity_id: 
+          - switch.tradfri_high_cabinets_switch         
       - service: input_select.select_option
         data_template:
           entity_id: input_select.hue_scenes
@@ -256,6 +250,9 @@ script:
       - service: homeassistant.turn_off
         entity_id:
           - input_boolean.domo_kitchen_cabinets
+      - service: homeassistant.turn_off
+        entity_id:
+          - switch.tradfri_high_cabinets_switch
 
   livingroom_lights_adjust:
     alias: woonkamer licht aanpassen script

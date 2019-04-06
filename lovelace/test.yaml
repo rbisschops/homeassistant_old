@@ -14,23 +14,23 @@ cards:
     cards:
     - type: markdown
       content: >
-        ### Test schakelaars Domoticz control
+        ### Test schakelaars algemeen
     - type: entities
       show_state: false
       show_name: false
       entities:
-        - entity: input_boolean.domo_garden_light
-        - entity: input_boolean.domo_kitchen_cabinets
-        - entity: input_boolean.domo_christmastree    
-        - entity: input_boolean.domo_bar_light
+        - type: section
+          label: Domoticz devices
         - entity: input_boolean.domo_virtual_heating
         - entity: input_boolean.domo_water_ornament        
-        - entity: binary_sensor.habridge_bed_time
-        - entity: switch.tradfri_test_switch
         - type: section
+          label: HA-Bridge commands  
+        - entity: binary_sensor.habridge_bed_time
+        - type: section
+          label: Z-Wave devices
         - entity: binary_sensor.neo_coolcam_front_door
-        - entity: input_boolean.domo_porch_light
-        - entity: input_boolean.domo_hallway_light
+        - type: section
+          label: Timers        
         - entity: timer.hallwaylight        
 
   - type: vertical-stack
@@ -42,6 +42,8 @@ cards:
       show_state: false
       show_name: false
       entities:
+        - type: section
+          label: Virtuele schakelaars      
         - entity: input_boolean.front_door
         - entity: input_boolean.front_window
         - entity: input_boolean.garden_door
@@ -54,9 +56,9 @@ cards:
         - entity: input_boolean.freezer
         - type: section
           label: Woonkamer licht status
-        - entity: input_boolean.livingroom_lights_status
+        # - entity: input_boolean.livingroom_lights_status
         - entity: input_select.livingroom_lights_mode
-        - entity: script.livingroom_lights_adjust
+        # - entity: script.livingroom_lights_adjust
 
   - type: vertical-stack
     cards:
@@ -67,6 +69,8 @@ cards:
       show_state: false
       show_name: false
       entities:
+        - type: section
+          label: Virtuele schakelaars        
         - entity: input_boolean.bath_room_door
         - entity: input_boolean.bed_room_door
         - entity: input_boolean.hallway_door
@@ -82,6 +86,8 @@ cards:
       show_state: false
       show_name: false
       entities:
+        - type: section
+          label: Virtuele schakelaars      
         - entity: input_boolean.heating_room_door
         - entity: input_boolean.top_floor_room
   - type: vertical-stack

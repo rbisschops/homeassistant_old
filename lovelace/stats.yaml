@@ -6,7 +6,8 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Changed layout for presence
-#          Changed colors of non- critical network devices 
+#          Changed colors of non- critical network devices
+# V0.2.1:  Updated empty card in critcal network devices 
 
 title: Status
 icon: 'mdi:stethoscope'
@@ -156,11 +157,8 @@ cards:
             style:
               - font-size: 1.0em
               - font-weight: normal 
-          - type: "custom:button-card"
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info
+          - type: custom:button-card
+            color_type: blank-card  
   - type: vertical-stack
     cards:
       - type: markdown

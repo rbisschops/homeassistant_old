@@ -5,7 +5,7 @@
 #
 # Changelog:
 # V0.1.0:  First version
-#
+# V0.2.0:  Removed lighting settings (moved to lighting tab)
 
 title: Settings
 icon: 'mdi:settings'
@@ -27,20 +27,6 @@ cards:
       - entity: input_boolean.recording_mode
         name: Recorder mode
         icon: 'mdi:video'
-
-  - type: vertical-stack
-    cards:
-    - type: markdown
-      content: >
-        ### Verlichting woonkamer (handmatig)
-    - type: entities
-      show_state: false
-      show_name: false
-      entities:
-      - light.woonkamer
-      - input_select.hue_scenes
-      - input_select.hue_groups
-      - script.manual_set_hue_scene
 
   - type: vertical-stack
     cards:

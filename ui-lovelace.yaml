@@ -20,6 +20,7 @@ views:
   - !include lovelace/firstfloor.yaml
   - !include lovelace/secondfloor.yaml
   - !include lovelace/garden.yaml
+  - !include lovelace/lighting.yaml
   - !include lovelace/mediaplayer.yaml
   - !include lovelace/weather.yaml
   - !include lovelace/stats.yaml

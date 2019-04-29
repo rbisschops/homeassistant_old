@@ -6,7 +6,7 @@ I plan to move everything to a dedicated NUC in time. Docker should make this si
 
 I'm relatively new to Homeassistant coming from a Domoticz RPi environment. Homeassistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Homeassistant will be the main home automation application.   
 
-** I regularly update my configuration files as Homeassistant is still heavily under development. **
+**I regularly update my configuration files as Homeassistant is still heavily under development.**
 
 ## Things that I run on my Homeserver (all in Docker containers)
 

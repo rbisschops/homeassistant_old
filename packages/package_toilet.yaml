@@ -6,6 +6,9 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.1.1:  Updated automation
+# V0.2.0:  Added test input and services in automations, 
+#          for testing commented actual climate entity in all automations 
+# V0.2.1:  Added script for manual control of the toilet heating
 
 ###############################################################################
 #                               Homeassistant settings
@@ -17,15 +20,24 @@
 ###############################################################################
 input_select:
 ## Electrical toilet heating controlled by Z-Wave Thermostat
-## Used for manual control of the toilet heating 
+## Used for manual control of the toilet heating
   toilet_heating:
     name: Verwarming toilet
     options:
-      - 'Uit'
-      - 'Eco'
-      - 'Verwarmen'  
-    initial: 'Uit'
+      - 'heat'
+      - 'Energy Heat'
+      - 'off'  
+    initial: 'off'
     icon: mdi:thermometer
+  toilet_heating_dummy:
+    name: Verwarming toilet dummy
+    options:
+      - 'heat'
+      - 'Energy Heat'
+      - 'off'  
+    initial: 'off'
+    icon: mdi:thermometer
+
 
 ###############################################################################
 #                               Groups
@@ -47,21 +59,18 @@ automation:
       condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.holiday_mode
-          state: 'off'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: binary_sensor.workday_sensor
-              state: 'on'
-            - condition: time
-              weekday: 
-                - sat  
+          entity_id: binary_sensor.workday_sensor
+          state: 'on'
     action:
-      - service: climate.set_operation_mode
-        entity_id: climate.toilet_heating_heating
-        data:
-          operation_mode: Verwarmen
+      ## kick of the script for setting the heating mode
+      - service: script.set_toilet_heating_mode
+        data_template:
+          mode: 'heat'
+      ## Set the manual input selector to match current state
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: 'heat'
 
   ## Switch toilet heating based on time for non-workingdays 
   - alias: "Toilet verwarming aan volgens schema - niet werkdagen"
@@ -74,18 +83,20 @@ automation:
       condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.holiday_mode
+          entity_id: binary_sensor.workday_sensor
           state: 'off'
-        - condition: time
-          weekday:
-            - sun  
     action:
-      - service: climate.set_operation_mode
-        entity_id: climate.toilet_heating_heating
-        data:
-          operation_mode: heat
+      ## kick of the script for setting the heating mode
+      - service: script.set_toilet_heating_mode
+        data_template:
+          mode: 'heat'           
+      ## Set the manual input selector to match current state
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: 'heat'
 
-  ## Switch toilet heating based on time test automation 
+  ## Switch toilet heating based on time test automation (for testing only remove later)
   - alias: "test climate"
     hide_entity: false
     initial_state: 'off' 
@@ -93,10 +104,10 @@ automation:
       platform: time
       at: '07:30:00'
     action:
-      - service: climate.set_operation_mode
-        entity_id: climate.toilet_heating_heating
-        data:
-          operation_mode: heat             
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: 'heat' 
 
 ###############################################################################
 #                              Templates
@@ -106,7 +117,62 @@ automation:
 ###############################################################################
 #                              Scripts
 ###############################################################################
+## Script for setting the Hue scene manual
+script:
+  manual_set_toilet_heating:
+    alias: Stel toilet verwarming in
+    sequence: 
+      # - service: climate.set_operation_mode
+      #   entity_id: climate.toilet_heating_heating
+      #   data_template:
+      #     operation_mode: '{{ states.input_select.toilet_heating.state }}'
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating_dummy
+          option: '{{ states.input_select.toilet_heating.state }}'
 
+## Script for setting the heating mode in the toilet
+# used by multiple packages (this, miscellaneous)
+
+  set_toilet_heating_mode:
+    alias: Zend verwarmings mode naar toilet verwarming
+    sequence:
+      ## Test if the holiday mode is not set to on, otherwise quit
+      - condition: state
+        entity_id: input_boolean.holiday_mode
+        state: 'off'
+      ## Test if the toilet heating is not set to off, otherwise quit
+      - condition: template
+          # {% if (states.climate.toilet_heating_energy_heat.attributes["operation_mode"] != 'off') %}
+        value_template: >
+          {% if ( states.input_select.toilet_heating_dummy.state != 'off') %}
+            true
+          {% else %}
+            false
+          {% endif %}  
+      # - service: climate.set_operation_mode
+      #   data_template:
+      #     entity_id: climate.toilet_heating_heating
+      #     operation_mode: '{{ mode }}'
+
+      ## Set the dummy toilet heater selector for test, replace with code above after testing
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating_dummy
+          option: '{{ mode }}'
+
+      ## Test if manual selector is the not the same, otherwise set this one to match actual state
+      - condition: template
+        value_template: >
+          {% if ( states.input_select.toilet_heating.state != mode) %}
+            true
+          {% else %}
+            false
+          {% endif %}
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: '{{ mode }}'
 
 ###############################################################################
 #                              Timers

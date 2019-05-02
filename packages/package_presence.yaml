@@ -7,6 +7,7 @@
 # V0.1.0:  First version
 # V1.0.0:  Production version 1.0.0
 # V1.1.0:  Added hallway light based on trigger frontdoor sensor 
+# V1.2.0:  Fixed Bug #005
 
 ###############################################################################
 #                              Homeassistant settings
@@ -33,7 +34,7 @@ binary_sensor:
         friendly_name: Iemand thuis
         value_template: >-
           {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
-            or is_state('device_tracker.owntracks_kim_s7', 'home')
+            or is_state('device_tracker.owntracks_kimberly_s7', 'home')
             or is_state('device_tracker.owntracks_ralph_iphone7', 'home') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}    

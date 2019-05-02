@@ -8,6 +8,7 @@
 # V1.0.0:  Production version 1.0.0
 # V1.0.1:  Minor updates in comments
 # V1.1.0:  Added HA-Bridge automation (moved from package_livingroom)
+# V1.1.1:  Added entity to automation Tuinverlichting bij thuiskomst for testing (fix bug #006)  
 
 ###############################################################################
 #                               Hoemassistant settings
@@ -78,9 +79,11 @@ automation:
     hide_entity: false
     initial_state: 'on'
     trigger:
-      platform: state
-      entity_id: binary_sensor.people_home
-      to: 'on'
+      - platform: state
+        entity_id: 
+          - binary_sensor.people_home
+          - input_boolean.office_door
+        to: 'on'
     condition:  
       condition: and
       conditions:     

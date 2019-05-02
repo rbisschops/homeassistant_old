@@ -13,6 +13,8 @@
 # V0.5.0:  Added code for receiving Domoticz data from switches 
 #          (lighting2 and Light/Switch types)
 # V0.5.1:  Removed domo entertainment switch
+# V0.5.2:  Added sunscreen switch (first version)
+# V0.6.0:  Added automations and script for electricity meters
 
 ###############################################################################
 #                              Homeassistant settings
@@ -34,13 +36,15 @@ input_boolean:
     name: Verlichting hoge kasten
   domo_bar_light:
     name: Verlichting bar
-  domo_christmastree:             
+  domo_christmastree:
     name: Kerstboom
   # Other switches  
   domo_virtual_heating:
     name: Virtuele verwarming
   domo_water_ornament:
     name: Waterbollen tuin
+  domo_sunscreen:
+    name: Zonnescherm  
 
 ## Alternative switch to use as template copy. Not tested yet. Won't work as it is now 
 # switch:
@@ -73,7 +77,7 @@ automation:
     initial_state: 'on'  
     trigger:     
       platform: state
-      entity_id: 
+      entity_id:
         # - input_boolean.domo_entertainment
         - input_boolean.domo_garden_light
         - input_boolean.domo_porch_light
@@ -83,6 +87,7 @@ automation:
         - input_boolean.domo_bar_light
         - input_boolean.domo_virtual_heating
         - input_boolean.domo_water_ornament
+        - input_boolean.domo_sunscreen
     condition:
     action:
       - service: script.domoticz_switch
@@ -145,6 +150,32 @@ automation:
   #         name: Device value
   #         message: '{{ trigger.to_state.object_id }}'
 
+  ## Convert Domoticz Energy sensors to Hass
+  # Gas meter will sent svalue1
+  # Elektra meter will sent svalue1, svalue2, svalue5
+  # Water meter will sent    
+  - alias: Read domoticz Energy sensors via MQTT
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:
+      - platform: mqtt
+        topic: 'domoticz/out'
+    condition:
+      condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.dtype == "P1 Smart Meter" }}'
+      - condition: template
+        value_template: '{{ trigger.payload_json.name == "Elektra" }}'        
+    action: 
+      - service: script.domoticz_electricity
+        data_template:
+          device: '{{ trigger.payload_json.name }}'
+          high: '{{ trigger.payload_json.svalue1 }}' 
+          low: '{{ trigger.payload_json.svalue2 }}'
+          current: '{{ trigger.payload_json.svalue5 }}'
+
+
 ###############################################################################
 #                              Templates
 ###############################################################################
@@ -173,14 +204,14 @@ script:
             {% set domoticz_devices = 
               {
               "Buiten lamp": 20,
-              "Entertainment": 26,
+              "Kerstboom": 26,
               "Verlichting tuin": 28,
               "Verlichting halletje": 21,
               "Verlichting hoge kasten": 23,
-              "Kerstboom": 36,
               "Verlichting bar": 27,
               "Virtuele verwarming": 161,
-              "Waterbollen tuin": 29
+              "Waterbollen tuin": 29,
+              "Zonnescherm": 30
               } 
             %}
             {% set status =
@@ -231,6 +262,21 @@ script:
   #         entity_id: >-
   #           {% set entity = ["input_boolean.domo_",device]|join() %}
   #           {{ entity }}  
+
+  domoticz_electricity:
+    alias: Receive domoticz elektra readings via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: >-
+            'home/meter/electricity'
+          payload_template: >-
+            {{ {
+              "device": device,
+              "high": high,
+              "low": low,
+              "current": current
+            }|tojson }}
 
 ###############################################################################
 #                              Timers

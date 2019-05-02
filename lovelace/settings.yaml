@@ -46,5 +46,8 @@ cards:
         name: Tuinverlichting aan bij thuiskomst
       - entity: automation.tuinverlichting_bij_zonsondergang 
         name: Tuinverlichting aan bij zonsondergang
-
+      - entity: automation.toilet_verwarming_aan_volgens_schema_niet_werkdagen
+        name: Toilet verwarming aan volgens schema - niet werkdagen
+      - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
+        name: Toilet verwarming aan volgens schema - werkdagen
  

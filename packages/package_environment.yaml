@@ -14,6 +14,8 @@
 # V1.3.0:  Added friendly names for remaining sensors
 # V1.3.1:  Fixed duplicate keys
 # V1.3.2:  Added new sensors 
+# V1.3.3:  Minor correction toilet group name (typo)
+# V1.4.0:  Added energy sensors via MQTT
 
 ###############################################################################
 #                              Homeassistant settings
@@ -91,6 +93,11 @@ sensor:
         value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
         unit_of_measurement: 'AM'    
 
+  ## Energy sensors (not ready yet)
+  # - platform: "mqtt"
+  #   name: electricity_usage
+  #   state_topic: "home/meter/elektra"
+  
   ## Inhouse environment sensors - temperature
   - platform: "mqtt"
     name: room_temp_office
@@ -450,7 +457,7 @@ group:
       - sensor.room_temp_livingroom
       - sensor.room_humidity_livingroom
       - sensor.room_pressure_livingroom
-  toliet_environment_sensors:
+  toilet_environment_sensors:
     name: Omgevings condities toilet
     entities:
       - sensor.room_temp_toilet

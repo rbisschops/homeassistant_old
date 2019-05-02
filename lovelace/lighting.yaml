@@ -5,7 +5,8 @@
 #
 # Changelog:
 # V0.1.0:  First version
-#
+# V0.2.0:  Added toilet heating manual control
+# V0.2.1:  Changed UI layout 
 
 title: Settings
 icon: 'mdi:lightbulb-on-outline'
@@ -14,25 +15,59 @@ cards:
     cards:
     - type: markdown
       content: >
-        ### Verlichting beneden 
+        ### Woonkamer  
     - type: entities
       show_state: false
       show_name: false
       entities:
         - type: section
-          label: Woonkamer
+          label: Verlichting woonkamer
         - light.woonkamer
         - input_select.hue_scenes
         - input_select.hue_groups
         - script.manual_set_hue_scene
         - type: section
+          label: Woonkamer licht mode
+        - entity: input_select.livingroom_lights_mode
+        - type: section
+          label: Verlichting keuken        
         - entity: input_boolean.domo_kitchen_cabinets
         - entity: input_boolean.domo_bar_light
-        - entity: input_boolean.domo_christmastree   
         - type: section
-          label: Tuin          
+          label: Kerst verlichting        
+        - entity: input_boolean.domo_christmastree   
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Tuin 
+    - type: entities
+      show_state: false
+      show_name: false
+      entities:
+        - type: section
+          label: Verlichting tuin          
         - entity: input_boolean.domo_garden_light
         - type: section
-          label: Halletje en buiten         
+          label: Waterbollen
+        - entity: input_boolean.domo_water_ornament     
+        - type: section
+          label: Zonnescherm  
+        - entity: input_boolean.domo_sunscreen
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Halletje en voordeur 
+    - type: entities
+      show_state: false
+      show_name: false
+      entities:
+        - type: section
+          label: Verlichting         
         - entity: input_boolean.domo_porch_light
         - entity: input_boolean.domo_hallway_light
+        - type: section
+          label: Toilet verwarming
+        - input_select.toilet_heating
+        - script.manual_set_toilet_heating

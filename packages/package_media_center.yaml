@@ -130,7 +130,7 @@ input_select:
       - DVD
       - Teletekst
       - PowerOff 
-    initial: PowerOff
+    initial: Televisie
     icon: mdi:remote      
 
 input_boolean:

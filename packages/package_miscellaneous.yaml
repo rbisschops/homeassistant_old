@@ -12,6 +12,9 @@
 # V0.3.1:  Added Tradfri testswitch
 # V0.3.2:  Minor code clean
 # V0.4.0:  Removed Tradfri testswitch
+# V0.4.1:  Added condition recording mode in bedtime script 
+# V0.5.0:  Added test services in script for toilet heating
+# V0.5.1:  Added toilet heating settings for bed time 
 
 ###############################################################################
 #                               Homeassistant settings
@@ -34,8 +37,8 @@ input_boolean:
 binary_sensor:
   - platform: workday
     country: NL
-    workdays: [mon, tue, wed, thu, fri]
-    excludes: [sat, sun]
+    workdays: [mon, tue, wed, thu, fri, sat]
+    excludes: [sun]
 
 ###############################################################################
 #                               Groups
@@ -75,9 +78,17 @@ script:
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_virtual_heating        
       - service: homeassistant.turn_off
-        entity_id: switch.tradfri_media_switch
-      - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights_status
+      ## Service added for climate settings toilet  
+      # kick of the script for setting the heating mode
+      - service: script.set_toilet_heating_mode
+        data_template:
+          mode: 'Energy heat'
+      - condition: state
+        entity_id: input_boolean.recording_mode
+        state: 'off'
+      - service: homeassistant.turn_off
+        entity_id: switch.tradfri_media_switch
 
 ###############################################################################
 #                              Timers

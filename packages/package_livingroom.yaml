@@ -220,9 +220,9 @@ script:
   livingroom_lights_on:
     alias: Woonkamer licht aan script
     sequence:
-      - service: homeassistant.turn_on
-        entity_id: 
-          - input_boolean.domo_kitchen_cabinets
+      # - service: homeassistant.turn_on
+      #   entity_id: 
+      #     - input_boolean.domo_kitchen_cabinets
       - service: homeassistant.turn_on
         entity_id: 
           - switch.tradfri_high_cabinets_switch         
@@ -247,9 +247,9 @@ script:
         entity_id: 
           - light.woonkamer
       - delay: '00:01:00'
-      - service: homeassistant.turn_off
-        entity_id:
-          - input_boolean.domo_kitchen_cabinets
+      # - service: homeassistant.turn_off
+      #   entity_id:
+      #     - input_boolean.domo_kitchen_cabinets
       - service: homeassistant.turn_off
         entity_id:
           - switch.tradfri_high_cabinets_switch

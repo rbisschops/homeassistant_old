@@ -9,6 +9,7 @@
 # V0.2.0:  Added test input and services in automations, 
 #          for testing commented actual climate entity in all automations 
 # V0.2.1:  Added script for manual control of the toilet heating
+# V0.3.0:  updated automations and script for automated ontrol of the toilet heating  
 
 ###############################################################################
 #                               Homeassistant settings

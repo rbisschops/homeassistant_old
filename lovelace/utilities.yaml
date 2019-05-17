@@ -1,0 +1,70 @@
+# Lovelace-UI file for Home Assistant, Utilities view
+# Type: Home Assistant yaml file
+# Date: 11-05-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+
+title: Settings
+icon: 'mdi:flash'
+cards:
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Elektriciteit
+    - type: gauge
+      entity: sensor.utilities_electricity_current_usage
+      name: Huidig verbruik
+      icon: 'mdi:flash'
+      unit: 'W'
+      min: 0
+      max: 4000
+      severity:
+        green: 0
+        yellow: 3000
+        red: 3500
+    - type: gauge
+      entity: sensor.utilities_electricity_usage
+      name: Dag verbruik
+      icon: 'mdi:flash'
+      unit: 'kWh'
+      min: 0
+      max: 20
+      severity:
+        green: 0
+        yellow: 10
+        red: 15
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Gas
+    - type: gauge
+      entity: sensor.utilities_gas_usage
+      name: Dag verbruik
+      icon: 'mdi:flash'
+      unit: 'm3'
+      min: 0
+      max: 5
+      severity:
+        green: 0
+        yellow: 4
+        red: 3.5
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Water
+    - type: gauge
+      entity: sensor.utilities_water_usage
+      name: Dag verbruik
+      icon: 'mdi:flash'
+      unit: 'L'
+      min: 0
+      max: 500
+      severity:
+        green: 0
+        yellow: 300
+        red: 400       

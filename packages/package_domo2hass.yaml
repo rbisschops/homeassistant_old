@@ -1,6 +1,6 @@
 # Package file for Home Assistant, used for getting Domoticz data via MQTT 
 # Type: Home Assistant yaml file
-# Date: 10-03-2019
+# Date: 12-05-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -15,6 +15,7 @@
 # V0.5.1:  Removed domo entertainment switch
 # V0.5.2:  Added sunscreen switch (first version)
 # V0.6.0:  Added automations and script for electricity meters
+# V0.6.1:  Updated automation for storing E high and low values (swapped them)
 
 ###############################################################################
 #                              Homeassistant settings
@@ -114,7 +115,6 @@ automation:
           state: >-
             {{ trigger.payload_json.svalue1 }}   
 
-
   ## Convert Domoticz CoCo switch (type Lighting 2) to Hass 
   - alias: Read domoticz COCO switch via MQTT
     hide_entity: false
@@ -150,11 +150,11 @@ automation:
   #         name: Device value
   #         message: '{{ trigger.to_state.object_id }}'
 
-  ## Convert Domoticz Energy sensors to Hass
+  ## Convert Domoticz Energy meters to Hass
   # Gas meter will sent svalue1
   # Elektra meter will sent svalue1, svalue2, svalue5
   # Water meter will sent    
-  - alias: Read domoticz Energy sensors via MQTT
+  - alias: Domoticz Elektra waarden via MQTT
     hide_entity: false
     initial_state: 'on'  
     trigger:
@@ -171,10 +171,47 @@ automation:
       - service: script.domoticz_electricity
         data_template:
           device: '{{ trigger.payload_json.name }}'
-          high: '{{ trigger.payload_json.svalue1 }}' 
-          low: '{{ trigger.payload_json.svalue2 }}'
+          low: '{{ trigger.payload_json.svalue1 }}' 
+          high: '{{ trigger.payload_json.svalue2 }}'
           current: '{{ trigger.payload_json.svalue5 }}'
 
+  - alias: Domoticz Gas waarden via MQTT
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:
+      - platform: mqtt
+        topic: 'domoticz/out'
+    condition:
+      condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.dtype == "P1 Smart Meter" }}'
+      - condition: template
+        value_template: '{{ trigger.payload_json.name == "Gas" }}'        
+    action: 
+      - service: script.domoticz_gas
+        data_template:
+          device: '{{ trigger.payload_json.name }}'
+          usage: '{{ trigger.payload_json.svalue1 }}' 
+
+  - alias: Domoticz Water waarden via MQTT
+    hide_entity: false
+    initial_state: 'on'  
+    trigger:
+      - platform: mqtt
+        topic: 'domoticz/out'
+    condition:
+      condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.dtype == "RFXMeter" }}'
+      - condition: template
+        value_template: '{{ trigger.payload_json.name == "Water" }}'        
+    action: 
+      - service: script.domoticz_water
+        data_template:
+          device: '{{ trigger.payload_json.name }}'
+          usage: '{{ trigger.payload_json.svalue1 }}' 
 
 ###############################################################################
 #                              Templates
@@ -234,8 +271,7 @@ script:
     sequence:
       - service: mqtt.publish
         data_template:
-          topic: >-
-           'home/switch/100/switch'
+          topic: 'home/switch/100/switch'
           payload_template: >-
             {% set payload = "n/a" %}
             {% if state == "0" %}
@@ -268,14 +304,38 @@ script:
     sequence:
       - service: mqtt.publish
         data_template:
-          topic: >-
-            'home/meter/electricity'
+          topic: 'home/meter/electricity'
           payload_template: >-
             {{ {
               "device": device,
-              "high": high,
-              "low": low,
-              "current": current
+              "usage_high": high,
+              "usage_low": low,
+              "current_usage": current
+            }|tojson }}
+
+  domoticz_gas:
+    alias: Receive domoticz gas readings via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'home/meter/gas'
+          retain: true
+          payload_template: >-
+            {{ {
+              "device": device,
+              "usage": usage,
+            }|tojson }}
+
+  domoticz_water:
+    alias: Receive domoticz water readings via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'home/meter/water'
+          payload_template: >-
+            {{ {
+              "device": device,
+              "usage": usage,
             }|tojson }}
 
 ###############################################################################

@@ -14,7 +14,7 @@
 # V0.4.0:  Removed Tradfri testswitch
 # V0.4.1:  Added condition recording mode in bedtime script 
 # V0.5.0:  Added test services in script for toilet heating
-# V0.5.1:  Added toilet heating settings for bed time 
+# V0.5.1:  Added toilet heating settings to the the bed time script 
 
 ###############################################################################
 #                               Homeassistant settings
@@ -80,10 +80,9 @@ script:
       - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights_status
       ## Service added for climate settings toilet  
-      # kick of the script for setting the heating mode
       - service: script.set_toilet_heating_mode
         data_template:
-          mode: 'Energy heat'
+          mode: 'Energy Heat'
       - condition: state
         entity_id: input_boolean.recording_mode
         state: 'off'

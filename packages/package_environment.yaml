@@ -1,6 +1,6 @@
 # Package file for Home Assistant, used for environment
 # Type: Home Assistant yaml file
-# Date: 10-03-2019
+# Date: 03-05-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -15,7 +15,9 @@
 # V1.3.1:  Fixed duplicate keys
 # V1.3.2:  Added new sensors 
 # V1.3.3:  Minor correction toilet group name (typo)
-# V1.4.0:  Added energy sensors via MQTT
+# V1.4.0:  Added utilities sensors via MQTT
+# V1.4.1:  Replaced json_attributes with json_attributes_topic
+# V1.4.2:  Added additional utilities sensors
 
 ###############################################################################
 #                              Homeassistant settings
@@ -26,6 +28,14 @@ homeassistant:
     ### ENVIRONMENT
     sun.sun:
       friendly_name: Dag/Nacht
+
+    # Utilities sensors
+    sensor.utilities_electricity:
+      friendly_name: Elektriciteits meters
+    sensor.utilities_gas:
+      friendly_name: Gas meter
+    sensor.utilitises_water:
+      friendly_name: Water meter            
     # Temperature sensors
     sensor.room_temp_office:
       friendly_name: Temperatuur Kantoor
@@ -93,11 +103,69 @@ sensor:
         value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
         unit_of_measurement: 'AM'    
 
-  ## Energy sensors (not ready yet)
-  # - platform: "mqtt"
-  #   name: electricity_usage
-  #   state_topic: "home/meter/elektra"
-  
+  # Utilities sensors (not ready yet)
+  - platform: "mqtt"
+    name: utilities_electricity
+    state_topic: "home/meter/electricity"
+    value_template: "{{ value_json.device }}"
+    json_attributes_topic: "home/meter/electricity"
+  - platform: "mqtt"
+    name: utilities_gas
+    state_topic: "home/meter/gas"
+    value_template: "{{ value_json.device }}"
+    json_attributes_topic: "home/meter/gas"
+  - platform: "mqtt"
+    name: utilities_water
+    state_topic: "home/meter/water"
+    value_template: "{{ value_json.device }}"
+    json_attributes_topic: "home/meter/water"
+  - platform: "mqtt"
+    name: utilities_reference
+    state_topic: "home/meter/reference"
+    value_template: "{{ value_json.device }}"
+    json_attributes_topic: "home/meter/reference"
+
+
+  - platform: template
+    sensors:
+      utilities_electricity_current_usage:
+        value_template: '{% set value = states.sensor.utilities_electricity.attributes["current_usage"] %} {{ value }}'
+        unit_of_measurement: 'W'
+      utilities_electricity_low_usage:
+        value_template: >-
+          {% set previous = float (states.sensor.utilities_reference.attributes["e_usage_low"]) %}
+          {% set value = float (states.sensor.utilities_electricity.attributes["usage_low"]) %} 
+          {% set value = ((value-previous)/1000)|round(3, 'common') %}
+          {{ value }}
+        unit_of_measurement: 'kWh'      
+      utilities_electricity_high_usage:
+        value_template: >-
+          {% set previous = float (states.sensor.utilities_reference.attributes["e_usage_high"]) %}
+          {% set value = float (states.sensor.utilities_electricity.attributes["usage_high"]) %} 
+          {% set value = ((value-previous)/1000)|round(3, 'common') %}
+          {{ value }}
+        unit_of_measurement: 'kWh'
+      utilities_electricity_usage: 
+        value_template: >-
+          {% set previous1 = float (states.sensor.utilities_reference.attributes["e_usage_high"]) %}
+          {% set value1 = float (states.sensor.utilities_electricity.attributes["usage_high"]) %} 
+          {% set previous2 = float (states.sensor.utilities_reference.attributes["e_usage_low"]) %}
+          {% set value2 = float (states.sensor.utilities_electricity.attributes["usage_low"]) %} 
+          {% set value = (((value1-previous1)+(value2-previous2))/1000)|round(3, 'common') %}
+          {{ value }}
+        unit_of_measurement: 'kWh'      
+      utilities_gas_usage:
+        value_template: >-
+          {% set previous = float (states.sensor.utilities_reference.attributes["g_usage"]) %}
+          {% set value = float (states.sensor.utilities_gas.attributes["usage"]) %} 
+          {% set value = ((value-previous)/1000)|round(3, 'common') %}
+          {{ value }}           
+      utilities_water_usage:
+        value_template: >-
+          {% set previous = float (states.sensor.utilities_reference.attributes["w_usage"]) %}
+          {% set value = float (states.sensor.utilities_water.attributes["usage"]) %} 
+          {% set value = (value-previous)|round %}
+          {{ value }}   
   ## Inhouse environment sensors - temperature
   - platform: "mqtt"
     name: room_temp_office
@@ -106,10 +174,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_office_env"
   # Added in V1.2.0
   - platform: "mqtt"
     name: room_temp_bathroom
@@ -118,10 +183,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_bathroom_env"  
   - platform: "mqtt"
     name: room_temp_bedroom
     state_topic: "zigbee2mqtt/aqara_bedroom_env"
@@ -129,10 +191,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage" 
+    json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
   # Added in V1.2.1
   - platform: "mqtt"
     name: room_temp_kim
@@ -141,10 +200,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"  
+    json_attributes_topic: "zigbee2mqtt/aqara_kim_env" 
   # Added in V1.2.3    
   - platform: "mqtt"
     name: room_temp_livingroom
@@ -153,10 +209,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_livingroom_env"
   - platform: "mqtt"
     name: room_temp_toilet
     state_topic: "zigbee2mqtt/aqara_toilet_env"
@@ -164,10 +217,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_toilet_env"
   - platform: "mqtt"
     name: room_temp_storage
     state_topic: "zigbee2mqtt/aqara_storage_env"
@@ -175,10 +225,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"  
+    json_attributes_topic: "zigbee2mqtt/aqara_storage_env"  
   # Added in V1.3.2   
   - platform: "mqtt"
     name: room_temp_heating_room
@@ -187,10 +234,7 @@ sensor:
     unit_of_measurement: "°C"
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env" 
   ## Inhouse environment sensors - humidity
   - platform: "mqtt"
     name: room_humidity_office
@@ -199,10 +243,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_office_env"
   # Added in V1.2.0
   - platform: "mqtt"
     name: room_humidity_bathroom
@@ -211,10 +252,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_bathroom_env"
   - platform: "mqtt"
     name: room_humidity_bedroom
     state_topic: "zigbee2mqtt/aqara_bedroom_env"
@@ -222,10 +260,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"      
+    json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
   # Added in V1.2.1
   - platform: "mqtt"
     name: room_humidity_kim
@@ -234,10 +269,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic:  "zigbee2mqtt/aqara_kim_env"
   # Added in V1.2.3
   - platform: "mqtt"
     name: room_humidity_livingroom
@@ -246,10 +278,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_livingroom_env"
   - platform: "mqtt"
     name: room_humidity_toilet
     state_topic: "zigbee2mqtt/aqara_toilet_env"
@@ -257,10 +286,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_toilet_env"
   - platform: "mqtt"
     name: room_humidity_storage
     state_topic: "zigbee2mqtt/aqara_storage_env"
@@ -268,10 +294,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"  
+    json_attributes_topic: "zigbee2mqtt/aqara_storage_env"
   # Added in V1.3.2
   - platform: "mqtt"
     name: room_humidity_heating_room
@@ -280,10 +303,7 @@ sensor:
     unit_of_measurement: "%"
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"          
+    json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
   ## Inhouse environment sensors - pressure
   - platform: "mqtt"
     name: room_pressure_office  
@@ -292,10 +312,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_office_env"
   # Added in V1.2.0    
   - platform: "mqtt"
     name: room_pressure_bathroom
@@ -304,10 +321,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_bathroom_env"
   - platform: "mqtt"
     name: room_pressure_bedroom
     state_topic: "zigbee2mqtt/aqara_bedroom_env"
@@ -315,10 +329,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
   # Added in V1.2.1   
   - platform: "mqtt"
     name: room_pressure_kim
@@ -327,10 +338,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_kim_env"
   # Added in V1.2.3  
   - platform: "mqtt"
     name: room_pressure_livingroom
@@ -339,10 +347,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_livingroom_env"
   - platform: "mqtt"
     name: room_pressure_toilet
     state_topic: "zigbee2mqtt/aqara_toilet_env"
@@ -350,10 +355,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_toilet_env"
   - platform: "mqtt"
     name: room_pressure_storage
     state_topic: "zigbee2mqtt/aqara_storage_env"
@@ -361,10 +363,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_storage_env"
   # Added in V1.3.2        
   - platform: "mqtt"
     name: room_pressure_heating_room
@@ -373,10 +372,7 @@ sensor:
     unit_of_measurement: "hPa"
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
-    json_attributes: 
-      - "linkquality"
-      - "battery"
-      - "voltage"
+    json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
 
 ###############################################################################
 #                               Groups
@@ -477,7 +473,31 @@ group:
 ###############################################################################
 #                               Automations
 ###############################################################################
-
+automation:
+  - alias: 'update utilities referentie waarden'
+    hide_entity: false
+    initial_state: 'on' 
+    trigger:
+      # platform: time_pattern
+      # minutes: '/10'
+      platform: time
+      at: '00:00:00'
+    action:
+      - service: mqtt.publish
+        data_template:
+          topic: 'home/meter/reference'
+          retain: true
+          payload_template: >-
+            {% set e_usage_low = float(states.sensor.utilities_electricity.attributes["usage_low"]) %}
+            {% set e_usage_high = float(states.sensor.utilities_electricity.attributes["usage_high"]) %}
+            {% set g_usage = float(states.sensor.utilities_gas.attributes["usage"]) %}
+            {% set w_usage = float(states.sensor.utilities_water.attributes["usage"]) %}  
+            {{ {
+              "e_usage_low": e_usage_low,
+              "e_usage_high": e_usage_high,
+              "g_usage": g_usage,
+              "w_usage": w_usage
+            }|tojson }}        
 
 ###############################################################################
 #                              Templates

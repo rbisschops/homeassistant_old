@@ -1,7 +1,7 @@
 # Package file for Home Assistant, used for all alarm sensors and
 # associated automations and scripts
 # Type: Home Assistant yaml file
-# Date: 17-03-2019
+# Date: 03-05-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -10,6 +10,7 @@
 # V0.3.0:  Added refrigerator alarm and automations, renamed to package_alarm
 # V1.0.0:  Production version 1.0.0
 # V1.1.0:  Minor cleanup
+# V1.1.1:  Replaced json_attributes with json_attributes_topic
 
 ###############################################################################
 #                              Homeassistant settings
@@ -80,8 +81,8 @@ binary_sensor:
   ## Door/window sensors (Xiaomi)
   - platform: mqtt
     name: refrigerator_door
-    state_topic: 'zigbee2mqtt/refrigerator_door'
-    availability_topic: 'zigbee2mqtt/bridge/state'
+    state_topic: "zigbee2mqtt/refrigerator_door"
+    availability_topic: "zigbee2mqtt/bridge/state"
     payload_on: false
     payload_off: true
     value_template: "{{ value_json.contact }}"
@@ -89,8 +90,8 @@ binary_sensor:
   ## Motion sensors (Xiaomi)
   - platform: mqtt
     name: motion_sensor_office
-    state_topic: 'zigbee2mqtt/mijia_office_motion'
-    availability_topic: 'zigbee2mqtt/bridge/state'
+    state_topic: "zigbee2mqtt/mijia_office_motion"
+    availability_topic: "zigbee2mqtt/bridge/state"
     payload_on: true
     payload_off: false
     value_template: "{{ value_json.occupancy }}"
@@ -99,27 +100,19 @@ sensor:
   ## Door/Window sensor status (Xiaomi)
   - platform: mqtt
     name: door_window_sensor_stats
-    state_topic: 'zigbee2mqtt/door_window_sensor'
-    availability_topic: 'zigbee2mqtt/bridge/state'
+    state_topic: "zigbee2mqtt/door_window_sensor"
+    availability_topic: "zigbee2mqtt/bridge/state"
     device_class: "battery"
     value_template: "{{ value_json.battery }}"
-    json_attributes: 
-      - "linkquality"
-      - "voltage"
-      - "action"
-      - "sensitivity"
+    json_attributes_topic: "zigbee2mqtt/door_window_sensor"
   ## Motion sensors status (Xiaomi)      
   - platform: mqtt
     name: motion_sensor_office_stats
-    state_topic: 'zigbee2mqtt/mijia_office_motion'
-    availability_topic: 'zigbee2mqtt/bridge/state'
+    state_topic: "zigbee2mqtt/mijia_office_motion"
+    availability_topic: "zigbee2mqtt/bridge/state"
     device_class: "battery"
     value_template: "{{ value_json.battery }}"
-    json_attributes: 
-      - "linkquality"
-      - "voltage"
-      - "action"
-      - "sensitivity"
+    json_attributes_topic: "zigbee2mqtt/mijia_office_motion"
 
 ###############################################################################
 #                               Groups

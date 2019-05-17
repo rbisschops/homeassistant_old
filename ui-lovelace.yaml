@@ -5,7 +5,7 @@
 #
 # Changelog:
 # V0.1.0:  First version
-#
+# V0.2.0:  Added Utilities view
 
 resources:
   - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.3.0
@@ -23,6 +23,7 @@ views:
   - !include lovelace/lighting.yaml
   - !include lovelace/mediaplayer.yaml
   - !include lovelace/weather.yaml
+  - !include lovelace/utilities.yaml
   - !include lovelace/stats.yaml
   - !include lovelace/settings.yaml
   - !include lovelace/test.yaml

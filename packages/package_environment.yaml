@@ -125,7 +125,6 @@ sensor:
     value_template: "{{ value_json.device }}"
     json_attributes_topic: "home/meter/reference"
 
-
   - platform: template
     sensors:
       utilities_electricity_current_usage:
@@ -373,6 +372,24 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
+
+
+  # - platform: command_line
+  #   name: "Elektricteit Grafana"
+  #   command: "curl -s -H 'Authorization: Bearer eyJrIjoiVFdVWjVJcDZSUnBNajhXVFljb1drWmNCVnFUME9wYk4iLCJuIjoiSG9tZWFzc2lzdGFudCIsImlkIjoxfQ==' 'http://192.168.0.217:3000/render/d-solo/p7Aaxdyik/dashboard?refresh=10s&orgId=1&panelId=2&from=now-24h&to=now&width=1000&height=500&tz=Europe%2FAmsterdam'  > downloads/electricity.png"
+  #   scan_interval: 3000
+    # Example: curl -H "Authorization: Bearer eyJrIjoiVFdVWjVJcDZSUnBNajhXVFljb1drWmNCVnFUME9wYk4iLCJuIjoiSG9tZWFzc2lzdGFudCIsImlkIjoxfQ==" http://192.168.0.217:3000/api/dashboards/home
+
+camera:
+  # - platform: local_file
+  #   name: grafana_electricity
+  #   file_path: downloads/electricity.png 
+  - platform: generic
+    name: "Elektricteit Grafana"
+    still_image_url: 'http://192.168.0.217:3000/render/d-solo/p7Aaxdyik/dashboard?refresh=10s&orgId=1&panelId=2&from=now-24h&to=now&width=1000&height=500&tz=Europe%2FAmsterdam'
+    username: !secret grafana_user
+    password: !secret grafana_pass
+
 
 ###############################################################################
 #                               Groups

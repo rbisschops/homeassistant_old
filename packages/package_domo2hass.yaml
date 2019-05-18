@@ -16,6 +16,7 @@
 # V0.5.2:  Added sunscreen switch (first version)
 # V0.6.0:  Added automations and script for electricity meters
 # V0.6.1:  Updated automation for storing E high and low values (swapped them)
+# V0.6.2:  Added retain flag for mqtt utility sensors
 
 ###############################################################################
 #                              Homeassistant settings
@@ -305,6 +306,7 @@ script:
       - service: mqtt.publish
         data_template:
           topic: 'home/meter/electricity'
+          retain: true          
           payload_template: >-
             {{ {
               "device": device,
@@ -332,6 +334,7 @@ script:
       - service: mqtt.publish
         data_template:
           topic: 'home/meter/water'
+          retain: true          
           payload_template: >-
             {{ {
               "device": device,

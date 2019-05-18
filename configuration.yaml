@@ -10,6 +10,7 @@
 # V0.3.0:  New build per november 16th 2018
 # V0.4.0:  New build for homeserver
 # V0.5.0:  Major updates. moved several configs to packages
+# V0.6.0:  Added topics for Hass status to MQTT
 
 homeassistant:
   name: !secret ha_name
@@ -85,6 +86,12 @@ mqtt:
   broker: !secret ip_mqtt_broker_hs
   username: !secret userid_mqtt_broker
   password: !secret password_mqtt_broker
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'   
 
 ## Tracked history is kept for 10 days
 recorder:

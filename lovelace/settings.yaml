@@ -6,6 +6,7 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Removed lighting settings (moved to lighting tab)
+# V0.3.0:  Added Zigbee2mqtt settings
 
 title: Settings
 icon: 'mdi:settings'
@@ -50,4 +51,19 @@ cards:
         name: Toilet verwarming aan volgens schema - niet werkdagen
       - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
         name: Toilet verwarming aan volgens schema - werkdagen
- 
+
+  - type: vertical-stack
+    cards:
+    - type: markdown
+      content: >
+        ### Zigbee2mqtt instellingen
+    - type: entities
+      show_header_toggle: false
+      entities: 
+      - entity: input_select.zigbee2mqtt_log_level
+        name: Zigbee2mqtt log level 
+      - entity: input_boolean.zigbee_permit_join
+        name: Zigbee2mqtt permit join
+      - entity: timer.zigbee_permit_join
+        name: Resterende join tijd         
+        

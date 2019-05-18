@@ -5,6 +5,7 @@
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Added camera picture for utilities graphs (for evaluation) 
 
 title: Settings
 icon: 'mdi:flash'
@@ -36,29 +37,14 @@ cards:
         green: 0
         yellow: 10
         red: 15
-    # - type: custom:mini-graph-card
-    #   entities:
-    #   - sensor.utilities_electricity_usage
-    #   name: Elektriciteitsverbruik/uur 
-    #   unit: 'kWh' 
-    #   show:
-    #     graph: line    
-    #   points: hover
-    #   hour24: true 
-    #   line_width: 2
-    #   labels: true 
-    #   icon: mdi:flash
-    # - type: iframe
-    #   url: http://192.168.0.217:3000/d/p7Aaxdyik/dashboard?refresh=10s&orgId=1&panelId=2&fullscreen&from=1558093213922&to=1558114813922
-    #   aspect ratio: 100%
-    - type: picture-entity
-      name: Elektriciteit dag
-      entity: camera.elektricteit_grafana
-      camera_imange: camera.elektricteit_grafana
-      tap_action:
-        action: more-info
-      show_name: false  
-      show_state: false
+    # - type: picture-entity
+    #   name: Elektriciteit dag
+    #   entity: camera.elektricteit_grafana
+    #   camera_imange: camera.elektricteit_grafana
+    #   tap_action:
+    #     action: more-info
+    #   show_name: false  
+    #   show_state: false
 
   - type: vertical-stack
     cards:

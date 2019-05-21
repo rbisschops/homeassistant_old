@@ -21,7 +21,7 @@ cards:
       icon: 'mdi:flash'
       unit: 'W'
       min: 0
-      max: 4000
+      max: 5000
       severity:
         green: 0
         yellow: 3000

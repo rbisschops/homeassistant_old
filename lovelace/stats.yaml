@@ -8,6 +8,10 @@
 # V0.2.0:  Changed layout for presence
 #          Changed colors of non- critical network devices
 # V0.2.1:  Updated empty card in critcal network devices 
+# V0.4.0:  Changed some configs
+#          Removed obsolete devices
+#          Reshuffled layout
+# V0.4.1:  Changed UI layout  
 
 title: Status
 icon: 'mdi:stethoscope'
@@ -51,7 +55,7 @@ cards:
             color: auto
             color_off: rgb(255, 0, 0)      
             action: more_info   
-            name: Laser Printer
+            name: HP Printer
             style:
               - font-size: 1.0em
               - font-weight: normal
@@ -81,20 +85,18 @@ cards:
             style:
               - font-size: 1.0em
               - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_homeassistant_pi
-            icon: mdi:desktop-tower
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: HASS
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-      - type: horizontal-stack
-        cards:    
+          # - type: "custom:button-card"
+          #   entity: sensor.nc_homeassistant_pi
+          #   icon: mdi:desktop-tower
+          #   size: 30%
+          #   color_type: icon
+          #   color: auto
+          #   color_off: rgb(255, 0, 0)      
+          #   action: more_info   
+          #   name: HASS
+          #   style:
+          #     - font-size: 1.0em
+          #     - font-weight: normal
           - type: "custom:button-card"
             entity: sensor.nc_harmonyhub
             icon: mdi:router-wireless
@@ -107,6 +109,8 @@ cards:
             style:
               - font-size: 1.0em
               - font-weight: normal
+      - type: horizontal-stack
+        cards:    
           - type: "custom:button-card"
             entity: sensor.nc_hue_bridge
             icon: mdi:router-wireless
@@ -119,20 +123,18 @@ cards:
             style:
               - font-size: 1.0em
               - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_xiaomi_bridge
-            icon: mdi:router-wireless
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Xiaomi Bridge
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-      - type: horizontal-stack
-        cards:
+          # - type: "custom:button-card"
+          #   entity: sensor.nc_xiaomi_bridge
+          #   icon: mdi:router-wireless
+          #   size: 30%
+          #   color_type: icon
+          #   color: auto
+          #   color_off: rgb(255, 0, 0)      
+          #   action: more_info   
+          #   name: Xiaomi Bridge
+          #   style:
+          #     - font-size: 1.0em
+          #     - font-weight: normal
           - type: "custom:button-card"
             entity: sensor.nc_ha_bridge
             icon: mdi:desktop-tower
@@ -157,8 +159,11 @@ cards:
             style:
               - font-size: 1.0em
               - font-weight: normal 
-          - type: custom:button-card
-            color_type: blank-card  
+      # - type: horizontal-stack
+      #   cards:
+
+      #     - type: custom:button-card
+      #       color_type: blank-card  
   - type: vertical-stack
     cards:
       - type: markdown
@@ -344,40 +349,4 @@ cards:
             name: Droger
             style:
               - font-size: 1.0em
-              - font-weight: normal  
-  - type: vertical-stack
-    cards:
-      - type: entities
-        title: Aanwezigheid
-        show_header_toggle: false
-        entities:
-          - type: section
-            label: Iemand thuis
-          - entity: binary_sensor.people_home             
-          - type: section
-            label: Wifi
-          - entity: device_tracker.anneke_s7
-            name: ' '
-          - entity: device_tracker.kimberly_s7
-            name: ' ' 
-          - entity: device_tracker.ralph_iphone7
-            name: ' ' 
-          - type: section
-            label: Locatie
-          - entity: device_tracker.owntracks_anneke_s7
-            name: ' ' 
-          - entity: device_tracker.owntracks_kimberly_s7
-            name: ' ' 
-          - entity: device_tracker.owntracks_ralph_iphone7  
-            name: ' '
-  - type: vertical-stack
-    cards:
-    - type: markdown
-      content: >
-        ## Schakelaars
-    - type: entities
-      show_state: false
-      show_name: false
-      entities:
-        - entity: input_boolean.alarm
-          icon: mdi:alarm-light
+              - font-weight: normal

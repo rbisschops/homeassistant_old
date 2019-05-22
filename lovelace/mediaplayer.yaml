@@ -1059,12 +1059,11 @@ cards:
   
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Media Center
     - type: entities
       show_state: false
       show_name: false
+      show_header_toggle: false
+      title: Media Center
       entities:
         - type: section
           label: Afstandsbediening

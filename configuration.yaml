@@ -11,6 +11,7 @@
 # V0.4.0:  New build for homeserver
 # V0.5.0:  Major updates. moved several configs to packages
 # V0.6.0:  Added topics for Hass status to MQTT
+# V0.7.0:  Removed obsolete links
 
 homeassistant:
   name: !secret ha_name
@@ -121,11 +122,7 @@ updater:
 
 ### Configuations items (presence, Sensors, groups, automations and scripts)
 device_tracker: !include includes/device_trackers.yaml
-# input_boolean: !include_dir_merge_named includes/input_boolean
-# input_number: !include_dir_merge_named includes/input_number    >> leave commented for now!!
-# input_select: !include_dir_merge_named includes/input_select
 group: !include_dir_merge_named includes/groups
-scene: !include_dir_merge_named includes/scenes
 
 ### OLD STUFF, MIGRATE TO ABOVE ###
 

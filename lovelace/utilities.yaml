@@ -5,7 +5,8 @@
 #
 # Changelog:
 # V0.1.0:  First version
-# V0.2.0:  Added camera picture for utilities graphs (for evaluation) 
+# V0.2.0:  Added camera picture for utilities graphs (for evaluation)
+# V0.2.1:  Changed UI layout 
 
 title: Settings
 icon: 'mdi:flash'
@@ -14,7 +15,7 @@ cards:
     cards:
     - type: markdown
       content: >
-        ### Elektriciteit
+        ## Elektriciteit
     - type: gauge
       entity: sensor.utilities_electricity_current_usage
       name: Huidig verbruik
@@ -50,7 +51,7 @@ cards:
     cards:
     - type: markdown
       content: >
-        ### Gas
+        ## Gas
     - type: gauge
       entity: sensor.utilities_gas_usage
       name: Dag verbruik
@@ -66,7 +67,7 @@ cards:
     cards:
     - type: markdown
       content: >
-        ### Water
+        ## Water
     - type: gauge
       entity: sensor.utilities_water_usage
       name: Dag verbruik

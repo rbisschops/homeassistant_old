@@ -7,18 +7,21 @@
 # V0.1.0:  First version
 # V0.2.0:  Removed lighting settings (moved to lighting tab)
 # V0.3.0:  Added Zigbee2mqtt settings
+# V0.4.0:  Changed some configs
+# V0.4.1:  Changed UI layout
 
 title: Settings
 icon: 'mdi:settings'
 cards:
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Instellingen
     - type: entities
+      show_state: false
+      show_name: false
       show_header_toggle: false
+      title: Instellingen
       entities:
+      - type: section
       - entity: input_boolean.text_notifications
         name: Tekst notificaties
         icon: 'mdi:bell'
@@ -31,12 +34,13 @@ cards:
 
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Automatiseringen
     - type: entities
+      show_state: false
+      show_name: false
       show_header_toggle: false
+      title: Automatiseringen
       entities:
+      - type: section      
       - entity: automation.buitenlamp_bij_thuiskomst
         name: Buitenlamp bij thuiskomst
       - entity: automation.er_komt_iemand_thuis
@@ -54,16 +58,68 @@ cards:
 
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Zigbee2mqtt instellingen
     - type: entities
+      show_state: false
+      show_name: false
       show_header_toggle: false
+      title: Zigbee2mqtt instellingen
       entities: 
+      - type: section      
       - entity: input_select.zigbee2mqtt_log_level
         name: Zigbee2mqtt log level 
       - entity: input_boolean.zigbee_permit_join
         name: Zigbee2mqtt permit join
       - entity: timer.zigbee_permit_join
-        name: Resterende join tijd         
-        
+        name: Resterende join tijd
+
+  - type: vertical-stack
+    cards:
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      title: Alarm schakelaar
+      entities:
+      - type: section      
+      - entity: input_boolean.alarm
+        icon: mdi:alarm-light         
+
+  - type: vertical-stack
+    cards:
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      title: Verwarming toilet
+      entities:
+        - type: section
+          label: Toilet verwarming
+        - input_select.toilet_heating
+        - script.manual_set_toilet_heating
+  - type: vertical-stack
+    cards:
+      - type: entities
+        show_state: false
+        show_name: false
+        show_header_toggle: false
+        title: Aanwezigheid
+        entities:
+          - type: section
+            label: Iemand thuis
+          - entity: binary_sensor.people_home             
+          - type: section
+            label: Wifi
+          - entity: device_tracker.anneke_s7
+            name: ' '
+          - entity: device_tracker.kimberly_s7
+            name: ' ' 
+          - entity: device_tracker.ralph_iphone7
+            name: ' ' 
+          - type: section
+            label: Locatie
+          - entity: device_tracker.owntracks_anneke_s7
+            name: ' ' 
+          - entity: device_tracker.owntracks_kimberly_s7
+            name: ' ' 
+          - entity: device_tracker.owntracks_ralph_iphone7  
+            name: ' '          

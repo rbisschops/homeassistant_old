@@ -6,19 +6,19 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Added toilet heating manual control
-# V0.2.1:  Changed UI layout 
+# V0.2.1:  Changed UI layout
+# V0.2.2:  Added rooms for future use
 
 title: Settings
 icon: 'mdi:lightbulb-on-outline'
 cards:
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Woonkamer  
     - type: entities
       show_state: false
       show_name: false
+      show_header_toggle: false
+      title: Woonkamer
       entities:
         - type: section
           label: Verlichting woonkamer
@@ -38,12 +38,11 @@ cards:
         - entity: input_boolean.domo_christmastree   
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Tuin 
     - type: entities
       show_state: false
       show_name: false
+      show_header_toggle: false
+      title: Tuin
       entities:
         - type: section
           label: Verlichting tuin          
@@ -56,18 +55,63 @@ cards:
         - entity: input_boolean.domo_sunscreen
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ### Halletje en voordeur 
     - type: entities
       show_state: false
       show_name: false
+      show_header_toggle: false
+      title: Halletje
       entities:
         - type: section
           label: Verlichting         
         - entity: input_boolean.domo_porch_light
         - entity: input_boolean.domo_hallway_light
-        - type: section
-          label: Toilet verwarming
-        - input_select.toilet_heating
-        - script.manual_set_toilet_heating
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Slaapkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting         
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kantoor
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Badkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kastenkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kamer Kim
+  #     entities:
+  #       - type: section
+  #         label: Verlichting   

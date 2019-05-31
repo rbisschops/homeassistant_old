@@ -1,6 +1,6 @@
 # Package file for Home Assistant, used for the garden
 # Type: Home Assistant yaml file
-# Date: 10-03-2019
+# Date: 30-05-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -9,6 +9,7 @@
 # V1.0.1:  Minor updates in comments
 # V1.1.0:  Added HA-Bridge automation (moved from package_livingroom)
 # V1.1.1:  Added entity to automation Tuinverlichting bij thuiskomst for testing (fix bug #006)  
+# V1.1.2:  Commented after_offset to fix bug #006
 
 ###############################################################################
 #                               Hoemassistant settings
@@ -89,7 +90,7 @@ automation:
       conditions:     
         - condition: sun
           after: sunset
-          after_offset: "00:15:00"
+#          after_offset: "00:15:00"
         - condition: time
           before: '23:00:00'
     action:

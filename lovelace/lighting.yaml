@@ -31,7 +31,7 @@ cards:
         - entity: input_select.livingroom_lights_mode
         - type: section
           label: Verlichting keuken        
-        - entity: input_boolean.domo_kitchen_cabinets
+        - entity: switch.tradfri_high_cabinets_switch
         - entity: input_boolean.domo_bar_light
         - type: section
           label: Kerst verlichting        

@@ -13,7 +13,8 @@
 # V0.4.0:  Removed HA-Bridge automation for gardenlights (moved to package_garden)
 # V0.4.1:  Removed media modes for lighting
 # v0.4.2:  Moved Domoticz automations and scripts to domo2hass package
-# V0.5.0:  Added switch for kitchen high cabinets
+# V0.5.0:  Added Treadfri switch for kitchen high cabinets
+# V0.5.1:  Restored CoCo kitchen high cabinets switch
 
 ###############################################################################
 #                              Homeassistant settings
@@ -24,7 +25,7 @@ homeassistant:
     switch.tradfri_media_switch:
       friendly_name: Entertainment
     switch.tradfri_high_cabinets_switch:
-      friendly_name: Verlichting hoge kasten  
+      friendly_name: Verlichting hoge kasten (ZigBee)  
     # Scripts        
     script.livingroom_lights_on:
       icon: mdi:lightbulb
@@ -220,12 +221,12 @@ script:
   livingroom_lights_on:
     alias: Woonkamer licht aan script
     sequence:
-      # - service: homeassistant.turn_on
-      #   entity_id: 
-      #     - input_boolean.domo_kitchen_cabinets
       - service: homeassistant.turn_on
         entity_id: 
-          - switch.tradfri_high_cabinets_switch         
+          - input_boolean.domo_kitchen_cabinets
+      # - service: homeassistant.turn_on
+      #   entity_id: 
+      #     - switch.tradfri_high_cabinets_switch         
       - service: input_select.select_option
         data_template:
           entity_id: input_select.hue_scenes
@@ -247,12 +248,12 @@ script:
         entity_id: 
           - light.woonkamer
       - delay: '00:01:00'
-      # - service: homeassistant.turn_off
-      #   entity_id:
-      #     - input_boolean.domo_kitchen_cabinets
       - service: homeassistant.turn_off
         entity_id:
-          - switch.tradfri_high_cabinets_switch
+          - input_boolean.domo_kitchen_cabinets
+      # - service: homeassistant.turn_off
+      #   entity_id:
+      #     - switch.tradfri_high_cabinets_switch
 
   livingroom_lights_adjust:
     alias: woonkamer licht aanpassen script

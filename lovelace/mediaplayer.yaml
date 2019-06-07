@@ -8,13 +8,15 @@
 # V1.1.0:  Added Tradfri switch to replace domo entertainment switch  
 # V1.2.0:  Added buttons for media center modes
 # V1.3.0:  Added conditional buttons for Radio and Television
+# V1.3.1:  Added one empty row under media mode selector (unconditional), saves code
 
 title: Media spelers
 icon: 'mdi:television'
 cards:
-  # Entities card will take a list of entities and show their state
+  ## Selection part for media modes.
   - type: vertical-stack
     cards:
+    ## Mode selection, first row 
     - type: horizontal-stack
       cards:
         - type: custom:button-card
@@ -61,6 +63,7 @@ cards:
           style:
             - font-size: 1.2em
             - font-weight: normal
+    ## Mode selection, second row
     - type: horizontal-stack
       cards:
         - type: custom:button-card
@@ -107,8 +110,7 @@ cards:
           style:
             - font-size: 1.2em
             - font-weight: normal
-        # - type: custom:button-card
-        #   color_type: blank-card
+    ## Mode selection, third row
     - type: horizontal-stack
       cards:
         - type: custom:button-card
@@ -147,8 +149,13 @@ cards:
             - font-size: 1.2em
             - font-weight: normal            
 
-    ## Conditional buttons for Radio
-    # First row (empty as seperator)
+    ## Conditional buttons. 1st row (empty as seperator)
+    - type: horizontal-stack
+      cards: 
+        - type: custom:button-card
+          color_type: blank-card
+
+    ## Conditional buttons for Radio. 1st row (empty as seperator)
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -158,7 +165,7 @@ cards:
           card:
             type: custom:button-card
             color_type: blank-card
-    # 2nd row     
+    ## Conditional buttons for Radio. 2nd row     
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -265,7 +272,7 @@ cards:
               - font-size: 1.5em
               - font-weight: normal
               - height: 40px
-    # 3rd row
+    ## Conditional buttons for Radio. 3rd row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -372,7 +379,7 @@ cards:
               - font-size: 1.5em
               - font-weight: normal
               - height: 40px
-    # 4th row
+    ## Conditional buttons for Radio. 4th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -479,7 +486,7 @@ cards:
               - font-size: 1.2em
               - font-weight: normal
               - height: 40px
-    # 5th row
+    ## Conditional buttons for Radio. 5th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -560,8 +567,7 @@ cards:
               - font-weight: normal
               - height: 40px         
 
-    ## Conditional buttons for Televion
-    # First row (empty as seperator)
+    ## Conditional buttons for Televion. 1st row (empty as seperator)
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -571,7 +577,7 @@ cards:
           card:
             type: custom:button-card
             color_type: blank-card
-    # 2nd row     
+    ## Conditional buttons for Televion. 2nd row     
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -678,7 +684,7 @@ cards:
               - font-size: 1.8em
               - font-weight: normal
               - height: 40px
-    # 3rd row
+    ## Conditional buttons for Televion. 3rd row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -785,7 +791,7 @@ cards:
               - font-size: 1.8em
               - font-weight: normal
               - height: 40px
-    # 4th row
+    ## Conditional buttons for Televion. 4th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -892,7 +898,7 @@ cards:
               - font-size: 1.2em
               - font-weight: normal
               - height: 40px
-    # 5th row
+    ## Conditional buttons for Televion. 5th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -972,7 +978,7 @@ cards:
               - font-size: 1.2em
               - font-weight: normal
               - height: 40px
-    # 6th row
+    ## Conditional buttons for Televion. 6th row
     - type: horizontal-stack
       cards: 
         - type: conditional
@@ -1056,7 +1062,7 @@ cards:
             style:
               - height: 40px 
 
-  
+  ## Additional selectors and information stack  
   - type: vertical-stack
     cards:
     - type: entities

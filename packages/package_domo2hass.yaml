@@ -35,7 +35,7 @@ input_boolean:
   domo_hallway_light:
     name: Verlichting halletje
   domo_kitchen_cabinets:
-    name: Verlichting hoge kasten
+    name: Verlichting hoge kasten (KaKu)
   domo_bar_light:
     name: Verlichting bar
   domo_christmastree:
@@ -245,7 +245,7 @@ script:
               "Kerstboom": 26,
               "Verlichting tuin": 28,
               "Verlichting halletje": 21,
-              "Verlichting hoge kasten": 23,
+              "Verlichting hoge kasten (KaKu)": 23,
               "Verlichting bar": 27,
               "Virtuele verwarming": 161,
               "Waterbollen tuin": 29,

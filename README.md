@@ -75,4 +75,4 @@ Many ideas. Too little time!
 
 I develop most of my applications in [Microsoft Visual Studio Code](https://code.visualstudio.com/). VS code has some nice extensions for checking the YAML syntax.
 
-If you have questions on mycConfiguration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
+If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)

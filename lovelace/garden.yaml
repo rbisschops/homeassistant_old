@@ -5,6 +5,10 @@
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Added controls and status for the sunscreen
+
+## overlays for doors and other elements need to be on top in the code, otherwise
+## the other controlable elements are not accessible anymore in the fontend!!
 
 title: Tuin
 panel: true
@@ -12,6 +16,19 @@ cards:
   - type: picture-elements
     image: /local/floorplans/garden.png
     elements:
+      # Sunscreen overlay
+      - type: image
+        entity: input_boolean.domo_sunscreen
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/sunscreen.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      # Outdoor temperature & humidity
       - type: state-label
         entity: sensor.rotterdam_temperature
         style:
@@ -30,6 +47,7 @@ cards:
           font-size: 12px
           color: '#000000'
           font-weight: 'bold' 
+      # Controls for the garden     
       - type: image
         entity: input_boolean.domo_garden_light
         tap_action:
@@ -56,3 +74,43 @@ cards:
           left: 10% 
           position: absolute
           width: 2.5%
+      ## Sunscreen control buttons
+      - type: image
+        entity: input_boolean.domo_sunscreen
+        tap_action:
+          action: none
+        image: /local/custom_icons/left48_on.png
+        state_image:
+          'on': /local/custom_icons/left48_off.png
+          'off': /local/custom_icons/left48_on.png
+        style:
+          top: 85%
+          left: 30% 
+          position: absolute
+          width: 2.5%
+      - type: image
+        entity: input_boolean.domo_sunscreen
+        tap_action:
+          action: none
+        image: /local/custom_icons/stop48_on.png
+        state_image:
+          'on': /local/custom_icons/stop48_on.png
+          'off': /local/custom_icons/stop48_on.png 
+        style:
+          top: 85%
+          left: 33% 
+          position: absolute
+          width: 2.5%
+      - type: image
+        entity: input_boolean.domo_sunscreen
+        tap_action:
+          action: none
+        image: /local/custom_icons/right48_on.png
+        state_image:
+          'on': /local/custom_icons/right48_on.png
+          'off': /local/custom_icons/right48_off.png 
+        style:
+          top: 85%
+          left: 36% 
+          position: absolute
+          width: 2.5%      

@@ -5,6 +5,12 @@
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Moved overleays to the top in the code (see remarks)
+
+
+## Remarks:
+## overlays for doors and other elements need to be on top in the code, otherwise
+## the other controlable elements are not accessible anymore in the fontend!!
 
 title: 1e verdieping
 panel: true
@@ -12,6 +18,73 @@ cards:
   - type: picture-elements
     image: /local/floorplans/first_floor.png
     elements:
+      # Doors and windows overlays
+      - type: image
+        entity: input_boolean.bath_room_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/bath_room_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.bed_room_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/bed_room_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.hallway_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/hallway_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.office_door
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/office_door.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.office_window
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/office_window.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.side_room_window
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/side_room_window.png        
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)  
       # Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
@@ -95,70 +168,4 @@ cards:
           left: 52%
           --iron-icon-height: 35px
           --iron-icon-width: 35px
-      # Doors and windows overlays
-      - type: image
-        entity: input_boolean.bath_room_door
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/bath_room_door.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)
-      - type: image
-        entity: input_boolean.bed_room_door
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/bed_room_door.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)
-      - type: image
-        entity: input_boolean.hallway_door
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/hallway_door.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)
-      - type: image
-        entity: input_boolean.office_door
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/office_door.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)
-      - type: image
-        entity: input_boolean.office_window
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/office_window.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)
-      - type: image
-        entity: input_boolean.side_room_window
-        tap_action:
-          action: none
-        state_image:
-          'on': /local/floorplans/overlays/side_room_window.png        
-        style:
-          top: 0%
-          left: 0%
-          position: absolute
-          transform: translate(0%, 0%)       
+     

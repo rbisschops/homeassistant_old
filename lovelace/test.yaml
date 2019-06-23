@@ -7,6 +7,9 @@
 # V0.1.0:  First version
 # V0.2.0:  Moved some switches to other tabs
 # V0.2.1:  Changed UI layout
+# V0.2.2:  Added susncreen dummy switch
+# V0.2.1:  Added sunscreen manaul overide input boolean for test
+# V0.2.2:  Removed virtual heating from Domo (obsolete)
 
 title: Settings
 icon: 'mdi:test-tube'
@@ -20,17 +23,27 @@ cards:
       title: Test schakelaars algemeen
       entities:
         - type: section
-          label: Domoticz devices
-        - entity: input_boolean.domo_virtual_heating
-        - type: section
-          label: HA-Bridge commands  
+          label: HA-Bridge commands
         - entity: binary_sensor.habridge_bed_time
         - type: section
           label: Z-Wave devices
         - entity: binary_sensor.neo_coolcam_front_door
         - type: section
-          label: Timers        
-        - entity: timer.hallwaylight        
+          label: Timers
+        - entity: timer.hallwaylight
+
+  - type: vertical-stack
+    cards:
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      title: Test schakelaars tuin
+      entities:
+        - type: section
+          label: Virtuele schakelaars tuin             
+        - entity: input_boolean.sunscreen_test
+        - entity: input_boolean.sunscreen_manual
 
   - type: vertical-stack
     cards:

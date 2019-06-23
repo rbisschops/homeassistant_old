@@ -78,7 +78,8 @@ cards:
       - type: image
         entity: input_boolean.domo_sunscreen
         tap_action:
-          action: none
+          action: call-service
+          service: script.open_sunscreen          
         image: /local/custom_icons/left48_on.png
         state_image:
           'on': /local/custom_icons/left48_off.png
@@ -89,13 +90,13 @@ cards:
           position: absolute
           width: 2.5%
       - type: image
-        entity: input_boolean.domo_sunscreen
+        entity: input_boolean.sunscreen_pause
         tap_action:
-          action: none
-        image: /local/custom_icons/stop48_on.png
+          action: toggle
+        image: /local/custom_icons/play48_on.png
         state_image:
-          'on': /local/custom_icons/stop48_on.png
-          'off': /local/custom_icons/stop48_on.png 
+          'on': /local/custom_icons/play48_on.png
+          'off': /local/custom_icons/pause48_on.png 
         style:
           top: 85%
           left: 33% 
@@ -104,7 +105,8 @@ cards:
       - type: image
         entity: input_boolean.domo_sunscreen
         tap_action:
-          action: none
+          action: call-service
+          service: script.close_sunscreen
         image: /local/custom_icons/right48_on.png
         state_image:
           'on': /local/custom_icons/right48_on.png

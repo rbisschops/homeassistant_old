@@ -27,8 +27,11 @@
 !www/*.png
 !www/custom_cards
 !www/custom_cards/*.js
+!www/custom_cards/compact-custom-header
+!www/custom_cards/compact-custom-header/*.js
 !www/custom_icons
 !www/custom_icons/*.png
+
 
 # Ignore the folowing folders.
 .storage

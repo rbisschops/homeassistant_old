@@ -12,6 +12,19 @@ resources:
     type: module
   - url: /local/custom_cards/button-card.js?v=0.0.6 
     type: module
+  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js
+    type: module
+
+cch:
+  header: hide
+  menu: show
+  options: show
+  voice: show
+  notifications: clock
+  clock_format: '24'
+  clock_date: true
+  date_locale: nl-NL
+  disable: false
 
 title: Bisschops Mansion
 background: center / cover no-repeat url("/local/background2.jpg") fixed

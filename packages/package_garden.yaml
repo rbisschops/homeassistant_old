@@ -17,6 +17,7 @@
 # V1.2.2:  Udated automations auto zonnescherm (notification only for test)
 # V1.2.3:  Added sunscreen manaul overide input boolean
 #          Added live sunscreen to automations
+# V1.2.4:  Minor update sunscreen in automation
 
 ###############################################################################
 #                               Hoemassistant settings
@@ -193,7 +194,7 @@ automation:
         data_template:
           value1: 'Zonnescherm: '
           value2: 'Zonnescherm gaat dicht'
-          value3: ' {{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' het is tijd of regen verwacht'
           who: 'ralph'
           prio: -2         
       - service: homeassistant.turn_off

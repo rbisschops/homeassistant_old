@@ -152,6 +152,8 @@ automation:
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.domo_sunscreen
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.sunscreen_test  
       - service: script.notify_prowl
         data_template:
           value1: 'Zonnescherm: '
@@ -159,8 +161,6 @@ automation:
           value3: ' er komt geen regen'
           who: 'ralph'
           prio: -2   
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.sunscreen_test      
 
   ## Close sunscreen when rain is expected (percipitation > 0.0 or when its 19:30 
   #  when azimuth is over 200.0 is commented for now     
@@ -190,6 +190,8 @@ automation:
     action:
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_sunscreen
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.sunscreen_test
       - service: script.notify_prowl
         data_template:
           value1: 'Zonnescherm: '
@@ -197,11 +199,6 @@ automation:
           value3: ' het is tijd of regen verwacht'
           who: 'ralph'
           prio: -2         
-      - service: homeassistant.turn_off
-        entity_id: input_boolean.sunscreen_test
-
-
-
 
 ###############################################################################
 #                              Templates

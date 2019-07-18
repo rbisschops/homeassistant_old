@@ -22,6 +22,7 @@
 !includes/scripts
 !includes/sensors
 !includes/zones
+!themes
 !www
 !www/*.jpg
 !www/*.png
@@ -49,9 +50,12 @@ known_devices.yaml
 zwave_device_config.yaml
 
 anneke.jpg
-kimberly.jpg
-ralph.jpg
+anneke_*.png
 anneke48*.png
+kimberly.jpg
+kimberly_*.png
 kimberly48*.png
+ralph.jpg
+ralph_*.png
 ralph48*.png
 

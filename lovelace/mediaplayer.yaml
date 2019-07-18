@@ -10,7 +10,7 @@
 # V1.3.0:  Added conditional buttons for Radio and Television
 # V1.3.1:  Added one empty row under media mode selector (unconditional), saves code
 
-title: Media spelers
+title: Media
 icon: 'mdi:television'
 cards:
   ## Selection part for media modes.
@@ -31,7 +31,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.netflix         
+          entity: input_boolean.netflix
           icon: mdi:netflix
           size: 40%
           color_type: card
@@ -42,7 +42,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.spotify         
+          entity: input_boolean.spotify
           icon: mdi:spotify
           size: 40%
           color_type: card
@@ -53,7 +53,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.smarttv         
+          entity: input_boolean.smarttv
           icon: mdi:netflix
           size: 40%
           color_type: card
@@ -67,7 +67,7 @@ cards:
     - type: horizontal-stack
       cards:
         - type: custom:button-card
-          entity: input_boolean.mediaplayer          
+          entity: input_boolean.mediaplayer
           icon: mdi:movie
           size: 40%
           color_type: card
@@ -78,7 +78,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.appletv          
+          entity: input_boolean.appletv
           icon: mdi:apple
           size: 40%
           color_type: card
@@ -89,7 +89,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.radio          
+          entity: input_boolean.radio
           icon: mdi:radio
           size: 40%
           color_type: card
@@ -100,7 +100,7 @@ cards:
             - font-size: 1.2em
             - font-weight: normal
         - type: custom:button-card
-          entity: input_boolean.music          
+          entity: input_boolean.music
           icon: mdi:music
           size: 40%
           color_type: card

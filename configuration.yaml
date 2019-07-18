@@ -38,7 +38,9 @@ discovery:
     - philips_hue
 
 ## Enables the frontend
-frontend: !include frontend.yaml
+# frontend: !include frontend.yaml
+frontend:
+  themes: !include_dir_named themes
 
 ## Google assistant
 #google_assistant:

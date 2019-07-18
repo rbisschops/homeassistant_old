@@ -1,6 +1,6 @@
 # Lovelace-UI file for Home Assistant, Downstairs view
 # Type: Home Assistant yaml file
-# Date: 15-03-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -11,6 +11,7 @@
 # V1.2.2:  Replaced Trafri switch with domo high kitchen cabinets
 # V1.3.0:  Moved overleays to the top in the code (see remarks)
 # V1.4.0:  Changed layout and updated icons for lamps
+# V1.4.1:  Changed lamp icons
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -28,7 +29,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/refrigerator.png        
+          'on': /local/floorplans/overlays/refrigerator.png
         style:
           top: 0%
           left: 0%
@@ -39,19 +40,19 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/freezer.png        
+          'on': /local/floorplans/overlays/freezer.png
         style:
           top: 0%
           left: 0%
           position: absolute
-          transform: translate(0%, 0%)          
+          transform: translate(0%, 0%)
       ## Doors and windows overlays
       - type: image
         entity: binary_sensor.neo_coolcam_front_door
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/front_door.png        
+          'on': /local/floorplans/overlays/front_door.png
         style:
           top: 0%
           left: 0%
@@ -212,10 +213,10 @@ cards:
         entity: input_boolean.domo_porch_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png
         style:
           top: 49%
           left: 92%
@@ -226,10 +227,10 @@ cards:
         entity: input_boolean.domo_hallway_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 35%
           left: 71%
@@ -240,10 +241,10 @@ cards:
         entity: light.lage_kast_links
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 20%
           left: 11%
@@ -253,10 +254,10 @@ cards:
         entity: light.lage_kast_rechts
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 20%
           left: 26%   
@@ -266,10 +267,10 @@ cards:
         entity: light.staande_lamp_links
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 69%
           left: 11%
@@ -279,10 +280,10 @@ cards:
         entity: light.staande_lamp_rechts
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 69%
           left: 30%
@@ -293,10 +294,10 @@ cards:
         entity: input_boolean.domo_bar_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 58%
           left: 37%
@@ -308,10 +309,10 @@ cards:
         entity: input_boolean.domo_kitchen_cabinets
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 20%
           left: 58%
@@ -410,10 +411,10 @@ cards:
         entity: input_boolean.livingroom_lights_status
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_off.png
+        image: /local/custom_icons/lightbulb48_off.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
           top: 34%
           left: 32.5%

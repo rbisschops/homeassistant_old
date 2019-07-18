@@ -1,10 +1,11 @@
 # Lovelace-UI file for Home Assistant, Weather view
 # Type: Home Assistant yaml file
-# Date: 01-02-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Rain percipitation
 
 title: Weer
 icon: 'mdi:weather-cloudy'
@@ -88,3 +89,10 @@ cards:
           - entity: sensor.sunset
             name: Zon onder
             icon: mdi:weather-sunset-down
+      - type: entities
+        title: Regenverwachting
+        show_header_toggle: false
+        entities:
+          - entity: sensor.rotterdam_precipitation_forecast_total
+            name: Regen verwaching (60 min)
+            icon: mdi:weather-pouring

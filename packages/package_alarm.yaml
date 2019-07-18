@@ -1,7 +1,7 @@
 # Package file for Home Assistant, used for all alarm sensors and
 # associated automations and scripts
 # Type: Home Assistant yaml file
-# Date: 03-05-2019
+# Date: 13-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -11,6 +11,7 @@
 # V1.0.0:  Production version 1.0.0
 # V1.1.0:  Minor cleanup
 # V1.1.1:  Replaced json_attributes with json_attributes_topic
+# V1.2.0:  Added binary sensors for alarm states
 
 ###############################################################################
 #                              Homeassistant settings
@@ -22,7 +23,7 @@ homeassistant:
     binary_sensor.refrigerator_door:
       friendly_name: Koelkast deur
     binary_sensor.motion_sensor_office:
-      friendly_name: Bewegingssensor kantoor     
+      friendly_name: Bewegingssensor kantoor
     # sensors stats
     sensor.door_window_sensor_stats:
       friendly_name: Deur sensor
@@ -74,8 +75,12 @@ input_boolean:
   # Second floor
   heating_room_door:
     name: Ketelkast deur
-  top_floor_room:
+  top_floor_room: #rename!!
     name: Kamer Kim
+  bedroom_window_l:
+    name: Slaapkamer raam links
+  bedroom_window_r:
+    name: Slaapkamer raam rechts
 
 binary_sensor:
   ## Door/window sensors (Xiaomi)
@@ -87,6 +92,7 @@ binary_sensor:
     payload_off: true
     value_template: "{{ value_json.contact }}"
     device_class: "door"
+
   ## Motion sensors (Xiaomi)
   - platform: mqtt
     name: motion_sensor_office
@@ -96,6 +102,44 @@ binary_sensor:
     payload_off: false
     value_template: "{{ value_json.occupancy }}"
     device_class: "motion"
+
+  ## Binary sensor based on the state of input_boolean.alarm. Used for Home lovelace tab
+  - platform: template
+    sensors:
+      alarm:
+        friendly_name: Alarm
+        value_template: >-
+          {{ is_state('input_boolean.alarm', 'on')
+            or is_state('device_tracker.owntracks_kimberly_s7', 'off') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/alarm48_' ~ states.input_boolean.alarm.state ~ '.png' }}
+
+  ## Door open sensor (only outside doors are monitored)
+  - platform: template
+    sensors:
+      doors:
+        friendly_name: Deuren
+        value_template: >-
+          {{ is_state('input_boolean.front_door', 'on')
+            or is_state('input_boolean.storage_door', 'on')
+            or is_state('input_boolean.garden_door', 'on') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/door48_' ~ states.binary_sensor.doors.state ~ '.png' }}
+
+  ## Window open sensor
+  - platform: template
+    sensors:
+      windows:
+        friendly_name: Ramen
+        value_template: >-
+          {{ is_state('input_boolean.front_window', 'on')
+            or is_state('input_boolean.office_window', 'on')
+            or is_state('input_boolean.side_room_window', 'on')
+            or is_state('input_boolean.bedroom_window_l', 'on')
+            or is_state('input_boolean.bedroom_window_r', 'on') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/window48_' ~ states.binary_sensor.windows.state ~ '.png' }}
+
 sensor:
   ## Door/Window sensor status (Xiaomi)
   - platform: mqtt
@@ -105,6 +149,7 @@ sensor:
     device_class: "battery"
     value_template: "{{ value_json.battery }}"
     json_attributes_topic: "zigbee2mqtt/door_window_sensor"
+
   ## Motion sensors status (Xiaomi)      
   - platform: mqtt
     name: motion_sensor_office_stats

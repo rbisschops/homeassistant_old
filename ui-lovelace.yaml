@@ -29,14 +29,15 @@ cch:
 title: Bisschops Mansion
 background: center / cover no-repeat url("/local/background2.jpg") fixed
 views:
+  - !include lovelace/home.yaml
   - !include lovelace/groundfloor.yaml
   - !include lovelace/firstfloor.yaml
   - !include lovelace/secondfloor.yaml
   - !include lovelace/garden.yaml
-  - !include lovelace/lighting.yaml
   - !include lovelace/mediaplayer.yaml
   - !include lovelace/weather.yaml
   - !include lovelace/utilities.yaml
   - !include lovelace/stats.yaml
+  - !include lovelace/things.yaml
   - !include lovelace/settings.yaml
   - !include lovelace/test.yaml

@@ -1,12 +1,8 @@
-# Homeassistant
+Last update: July 21st, 2019
+
+# My homeserver
 
 Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Homeassistant on an old HP laptop for now. The laptop is running as a "homeserver". I am currently running Ubuntu 18.04 LTS on the laptop. Homeassistant as well as all supporting applications (and some additional non Homeassistant related applications) are running in Docker containers. 
-
-I plan to move everything to a dedicated NUC in time. Docker should make this simple. 
-
-I'm still learning Homeassistant as I'm coming from a Domoticz RPi based environment. Homeassistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Homeassistant will be the main home automation application.   
-
-**I regularly update my configuration files as my Homeassistant is still heavily under development.**
 
 ## Things that I run on my Homeserver (all in Docker containers)
 
@@ -20,6 +16,16 @@ I'm still learning Homeassistant as I'm coming from a Domoticz RPi based environ
 * [Unifi Controller](https://www.ui.com/), for managing my Ubiquiti Access points.
 * [Portainer](https://www.portainer.io/), makes managing my Docker containers easy.  
 
+I plan to move everything to a dedicated NUC in time. Docker should make this simple. 
+
+When I find the time I will write a blog or something alike about my homeserver.
+
+# Homeassistant
+
+I'm still learning Homeassistant as I'm coming from a Domoticz RPi based environment. Homeassistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Homeassistant will be the main home automation application.   
+
+**I regularly update my configuration files as my Homeassistant is still heavily under development.**
+
 ## Homeassistant setup
 
 ### Homeassistant configuration
@@ -28,7 +34,14 @@ After looking at a ton of configurations and playing around with them I decided 
 For example package_notification contains the applied notification components (prowl and pushsafer currently), the associated entities for example the input_boolean that controls if notifications are enabled) and scripts. Scripts are used by many other packages that require  notifications.   
 
 ### Lovelace UI
-I decided to fully go for Lovelace as the UI. As this is stable since the 0.87 release I moved everything over to Lovelace. When things are progressing I will upload some screenshots.
+I decided to fully go for Lovelace as the UI. As this is stable since the 0.87 release I moved everything over to Lovelace. [Isabella Gross Alström](https://github.com/isabellaalstrom) has a wonderfull UI that is one of the sources of insparation for me.
+I use a growing number of custom cards and helpers in my Lovelace. I will do some write up on these later but here are the ones I use now.
+* [compact-custom-header](https://github.com/maykar/compact-custom-header), card by Ryan Meek (maykar) for customizing the header of your UI. 
+* [decluttering-card](https://github.com/custom-cards/decluttering-card), card by Jérôme W (RomRider). This card signifcantly reduces the number of lines in your lovelace configuration. Helps structure your code.
+* [mini-graph-card](https://github.com/kalkih/mini-graph-card), nice graphs of your data can be created with this card. Good work delivered by Karl Kihlström (kalkih).
+* [button-card](https://github.com/custom-cards/button-card), customize your buttons with this card. Started by Alexandre Garcia this card now has many active contributors. 
+
+When things are progressing I will upload some screenshots of my UI.
 
 ## Devices and services that I use
 

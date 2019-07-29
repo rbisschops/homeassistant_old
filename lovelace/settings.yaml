@@ -10,19 +10,23 @@
 # V0.4.0:  Changed some configs
 # V0.4.1:  Changed UI layout
 # V0.5.0:  Changed layout of wifi and gps home buttons due to change of owntracks location  in HA 0.95
+# V0.6.0:  Major UI changes based on Decluttering card
 
 title: Settings
 icon: 'mdi:settings'
+background: "#e3e3e3"
 cards:
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Instellingen
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Instellingen
       entities:
-      - type: section
       - entity: input_boolean.text_notifications
         name: Tekst notificaties
         icon: 'mdi:bell'
@@ -35,13 +39,15 @@ cards:
 
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Automatiseringen
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Automatiseringen
       entities:
-      - type: section      
       - entity: automation.buitenlamp_bij_thuiskomst
         name: Buitenlamp bij thuiskomst
       - entity: automation.er_komt_iemand_thuis
@@ -59,13 +65,15 @@ cards:
 
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Zigbee2mqtt instellingen
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Zigbee2mqtt instellingen
       entities: 
-      - type: section      
       - entity: input_select.zigbee2mqtt_log_level
         name: Zigbee2mqtt log level 
       - entity: input_boolean.zigbee_permit_join

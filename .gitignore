@@ -48,7 +48,7 @@ ip_bans.yaml
 secrets.yaml
 known_devices.yaml
 zwave_device_config.yaml
-
+google_calendars.yaml
 anneke.jpg
 anneke_*.png
 anneke48*.png

@@ -7,15 +7,18 @@
 # V0.1.0:  First version
 # V0.2.0:  Added camera picture for utilities graphs (for evaluation)
 # V0.2.1:  Changed UI layout 
+# V0.3.0:  Major UI changes based on Decluttering card
 
 title: Verbruik
 icon: 'mdi:flash'
+background: "#e3e3e3"
 cards:
   - type: vertical-stack
     cards:
-    - type: markdown
-      content: >
-        ## Elektriciteit
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Elektriciteit
     - type: gauge
       entity: sensor.utilities_electricity_current_usage
       name: Huidig verbruik
@@ -27,6 +30,10 @@ cards:
         green: 0
         yellow: 3000
         red: 3500
+      style: |
+        div.gauge-a {
+          background-color: #E0E0E0;  
+        }
     - type: gauge
       entity: sensor.utilities_electricity_usage
       name: Dag verbruik
@@ -38,6 +45,10 @@ cards:
         green: 0
         yellow: 10
         red: 15
+      style: |
+        div.gauge-a {
+          background-color: #E0E0E0;  
+        }
     # - type: picture-entity
     #   name: Elektriciteit dag
     #   entity: camera.elektricteit_grafana
@@ -47,11 +58,12 @@ cards:
     #   show_name: false  
     #   show_state: false
 
-  - type: vertical-stack
-    cards:
-    - type: markdown
-      content: >
-        ## Gas
+  # - type: vertical-stack
+  #   cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Gas
     - type: gauge
       entity: sensor.utilities_gas_usage
       name: Dag verbruik
@@ -63,11 +75,16 @@ cards:
         green: 0
         yellow: 4
         red: 3.5
-  - type: vertical-stack
-    cards:
-    - type: markdown
-      content: >
-        ## Water
+      style: |
+        div.gauge-a {
+          background-color: #E0E0E0;  
+  #       }
+  # - type: vertical-stack
+    # cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Water
     - type: gauge
       entity: sensor.utilities_water_usage
       name: Dag verbruik
@@ -78,4 +95,8 @@ cards:
       severity:
         green: 0
         yellow: 300
-        red: 400       
+        red: 400
+      style: |
+        div.gauge-a {
+          background-color: #E0E0E0;  
+        }

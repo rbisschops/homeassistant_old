@@ -19,6 +19,7 @@
 # V1.4.1:  Replaced json_attributes with json_attributes_topic
 # V1.4.2:  Added additional utilities sensors
 # V1.4.3:  Added env sensors 2nd floor hallway
+# V1.5.0:  Added season sensor
 
 ###############################################################################
 #                              Homeassistant settings
@@ -109,6 +110,10 @@ sensor:
       sunrise:
         value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
         unit_of_measurement: 'AM'    
+
+  ## Season sensor (astronomical)
+  - platform: season
+    type: astronomical
 
   # Utilities sensors (not ready yet)
   - platform: "mqtt"

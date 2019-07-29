@@ -9,10 +9,10 @@
 # Changelog:
 # V1.0.0:  First version
 
-# Card-Specific Modifications
-ha-card-border-radius: "10px" # Rounded corners on cards. NOTE: may not work with custom cards.
+###############################################################################
+#                              Colors
+###############################################################################
 
-# Main colors that can be changed
 primary-color: "#389638"
 disabled-text-color: "#545454"
 divider-color: "rgba(255, 255, 255, 0.12)"
@@ -48,3 +48,14 @@ paper-toggle-button-checked-button-color: "var(--primary-color)"
 paper-toggle-button-checked-bar-color: "var(--light-primary-color)"
 paper-toggle-button-unchecked-bar-color: "var(--primary-text-color)"
 sidebar-icon-color: "var(--paper-item-icon-color)"
+
+###############################################################################
+#                              Fonts
+###############################################################################
+
+
+###############################################################################
+#                              Card specific modifications
+###############################################################################
+
+ha-card-border-radius: "10px" # Rounded corners on cards. NOTE: may not work with custom cards.

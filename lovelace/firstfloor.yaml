@@ -7,6 +7,7 @@
 # V0.1.0:  First version
 # V0.2.0:  Moved overleays to the top in the code (see remarks)
 # V0.3.0:  Changed layout
+# V0.3.1:  Minor color updates
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -93,7 +94,8 @@ cards:
           top: 83%
           left: 25%
           font-size: 100%
-          font-weight: 'bold'          
+          font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
         prefix: 'Relatieve luchtvochtigheid: '
@@ -102,6 +104,7 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold' 
+#          color: var(--text-primary-color)
       # Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_bathroom
@@ -120,7 +123,7 @@ cards:
           position: absolute
           font-size: 12px
           color: '#000000'
-          font-weight: 'bold'             
+          font-weight: 'bold'
       - type: state-label
         entity: sensor.room_temp_office
         style:

@@ -12,6 +12,7 @@
 # V1.3.0:  Moved overleays to the top in the code (see remarks)
 # V1.4.0:  Changed layout and updated icons for lamps
 # V1.4.1:  Changed lamp icons
+# V1.4.2:  Minor color updates
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -63,7 +64,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/storage_door.png        
+          'on': /local/floorplans/overlays/storage_door.png
         style:
           top: 0%
           left: 0%
@@ -74,7 +75,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/garden_door.png        
+          'on': /local/floorplans/overlays/garden_door.png
         style:
           top: 0%
           left: 0%
@@ -85,7 +86,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/front_window.png        
+          'on': /local/floorplans/overlays/front_window.png
         style:
           top: 0%
           left: 0%
@@ -96,7 +97,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/hallway_livingroom_door.png        
+          'on': /local/floorplans/overlays/hallway_livingroom_door.png
         style:
           top: 0%
           left: 0%
@@ -107,7 +108,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/hallway_storage_door.png        
+          'on': /local/floorplans/overlays/hallway_storage_door.png
         style:
           top: 0%
           left: 0%
@@ -118,7 +119,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/metering_cabinet_door.png        
+          'on': /local/floorplans/overlays/metering_cabinet_door.png
         style:
           top: 0%
           left: 0%
@@ -129,7 +130,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/toilet_door.png        
+          'on': /local/floorplans/overlays/toilet_door.png
         style:
           top: 0%
           left: 0%
@@ -145,6 +146,7 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
         prefix: 'Relatieve luchtvochtigheid: '
@@ -153,6 +155,7 @@ cards:
           left: 25%
           font-size: 100%   
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       # Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_livingroom
@@ -197,7 +200,7 @@ cards:
           left: 73%
           position: absolute
           font-size: 12px
-          color: '#FFFFFF'
+#          color: '#FFFFFF'
           font-weight: 'bold'
       - type: state-label
         entity: sensor.room_humidity_toilet
@@ -206,7 +209,7 @@ cards:
           left: 73%
           position: absolute
           font-size: 12px
-          color: '#FFFFFF'
+#          color: '#FFFFFF'
           font-weight: 'bold'
       # Porch light
       - type: image
@@ -363,15 +366,15 @@ cards:
           left: 48%
           position: absolute
           transform: translate(0%, -50%)
-          width: 3%              
+          width: 3%
       - type: image
-        entity: device_tracker.owntracks_anneke_s7
+        entity: binary_sensor.anneke_home
         tap_action:
           action: none
         image: /local/custom_icons/anneke48_off.png
         state_image:
-          'home': /local/custom_icons/anneke48_on.png
-          'not_home': /local/custom_icons/anneke48_off.png 
+          'on': /local/custom_icons/anneke48_on.png
+          'off': /local/custom_icons/anneke48_off.png 
         style:
           top: 7%
           left: 52%
@@ -379,13 +382,13 @@ cards:
           transform: translate(0%, -50%)
           width: 3%   
       - type: image
-        entity: device_tracker.owntracks_kimberly_s7
+        entity: binary_sensor.kimberly_home
         tap_action:
           action: none
         image: /local/custom_icons/kimberly48_off.png
         state_image:
-          'home': /local/custom_icons/kimberly48_on.png
-          'not_home': /local/custom_icons/kimberly48_off.png 
+          'on': /local/custom_icons/kimberly48_on.png
+          'off': /local/custom_icons/kimberly48_off.png 
         style:
           top: 7%
           left: 56%
@@ -393,13 +396,13 @@ cards:
           transform: translate(0%, -50%)   
           width: 3%          
       - type: image
-        entity: device_tracker.owntracks_ralph_iphone7
+        entity: binary_sensor.ralph_home
         tap_action:
           action: none
         image: /local/custom_icons/ralph48_off.png
         state_image:
-          'home': /local/custom_icons/ralph48_on.png
-          'not_home': /local/custom_icons/ralph48_off.png 
+          'on': /local/custom_icons/ralph48_on.png
+          'off': /local/custom_icons/ralph48_off.png 
         style:
           top: 7%
           left: 60%

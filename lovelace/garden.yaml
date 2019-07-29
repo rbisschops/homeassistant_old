@@ -8,6 +8,7 @@
 # V0.2.0:  Added controls and status for the sunscreen
 # V0.3.0:  Changed layout and updated icons for lamps
 # V0.3.1:  Added sunscreen manual button
+# V0.3.2:  Minor color update
 
 ## overlays for doors and other elements need to be on top in the code, otherwise
 ## the other controlable elements are not accessible anymore in the fontend!!
@@ -39,6 +40,7 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
         prefix: 'Relatieve luchtvochtigheid: '
@@ -47,7 +49,8 @@ cards:
           left: 25%
           font-size: 100%   
           font-weight: 'bold'
-      # Controls for the garden     
+#          color: var(--text-primary-color)
+      # Controls for the garden
       - type: image
         entity: input_boolean.domo_garden_light
         tap_action:

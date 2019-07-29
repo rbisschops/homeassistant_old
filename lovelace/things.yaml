@@ -10,36 +10,43 @@
 # V0.2.2:  Added rooms for future use
 # V0.2.3:  Added input_boolean.sunscreen_manual (moved)
 #          Removed switch.tradfri_high_cabinets_switch (moved)
+# V0.3.0:  Major UI changes based on Decluttering card
 
 title: Entities
 icon: 'mdi:cogs'
+background: "#e3e3e3"
 cards:
 
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Alarm schakelaar
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Alarm schakelaar
       entities:
       - type: section
       - entity: input_boolean.alarm
         icon: mdi:alarm-light
-
   - type: vertical-stack
     cards:
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Aanwezigheid
       - type: entities
         show_state: false
         show_name: false
         show_header_toggle: false
-        title: Aanwezigheid
         entities:
-          - type: section
-            label: Iemand thuis
           - entity: binary_sensor.people_home
-          - type: section
-            label: Wifi
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: WiFi
       - type: horizontal-stack
         cards:
           - type: picture-entity
@@ -60,13 +67,10 @@ cards:
             show_name: false
             state_image:
               'home': /local/ralph_on.png
-      - type: entities
-        show_state: false
-        show_name: false
-        show_header_toggle: false
-        entities:
-          - type: section
-            label: Locatie
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Locatie
       - type: horizontal-stack
         cards:
           - type: picture-entity
@@ -90,61 +94,117 @@ cards:
 
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Woonkamer
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting woonkamer
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Woonkamer
       entities:
-        - type: section
-          label: Verlichting woonkamer
         - light.woonkamer
         - input_select.hue_scenes
         - input_select.hue_groups
         - script.manual_set_hue_scene
-        - type: section
-          label: Woonkamer licht mode
-        - entity: input_select.livingroom_lights_mode
-        - type: section
-          label: Verlichting keuken
-
-        - entity: input_boolean.domo_kitchen_cabinets
-        - entity: input_boolean.domo_bar_light
-        - type: section
-          label: Kerst verlichting
-        - entity: input_boolean.domo_christmastree   
-  - type: vertical-stack
-    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Woonkamer licht mode
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Tuin
       entities:
-        - type: section
-          label: Verlichting tuin
+        - entity: input_select.livingroom_lights_mode
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting keuken
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_kitchen_cabinets
+        - entity: input_boolean.domo_bar_light
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Kerst verlichting
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_christmastree   
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Tuin
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting tuin
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
         - entity: input_boolean.domo_garden_light
-        - type: section
-          label: Waterbollen
-        - entity: input_boolean.domo_water_ornament     
-        - type: section
-          label: Zonnescherm  
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Waterbollen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_water_ornament
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Zonnescherm
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
         - entity: input_boolean.domo_sunscreen
         - entity: input_boolean.sunscreen_manual
   - type: vertical-stack
     cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Uitbouw
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
-      title: Uitbouw
       entities:
-        - type: section
-          label: Verlichting
         - entity: input_boolean.domo_porch_light
         - entity: input_boolean.domo_hallway_light
-        - type: section
-          label: Toilet verwarming
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Toilet verwarming
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
         - input_select.toilet_heating
         - script.manual_set_toilet_heating      
   

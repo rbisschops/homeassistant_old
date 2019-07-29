@@ -5,27 +5,37 @@
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Added waste bin icons
 
 title: Home
 icon: 'mdi:home'
+theme: nest
+
+#background: center / cover no-repeat url("/local/background_grey.jpg") fixed
+background: "#e3e3e3"
 cards:
   - type: vertical-stack
     cards:
       - type: glance
+        show_state: false
         entities:
         - entity: binary_sensor.alarm
         - entity: binary_sensor.doors
         - entity: binary_sensor.windows
-
-  # - type: vertical-stack
-  #   cards:
       - type: glance
+        show_state: false
+        show_name: true
+        entities:
+        - entity: binary_sensor.gft
+        - entity: binary_sensor.pmd
+      - type: glance
+        show_state: false
+        show_name: false
         entities:
         - entity: binary_sensor.people_home
         - entity: binary_sensor.anneke_home
         - entity: binary_sensor.kimberly_home
         - entity: binary_sensor.ralph_home
-
   - type: vertical-stack
     cards:
       - type: weather-forecast

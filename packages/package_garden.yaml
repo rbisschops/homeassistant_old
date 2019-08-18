@@ -1,50 +1,52 @@
-# Package file for Home Assistant, used for the garden
-# Type: Home Assistant yaml file
-# Date: 19-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V1.0.0:  Production version 1.0.0
-# V1.0.1:  Minor updates in comments
-# V1.1.0:  Added HA-Bridge automation (moved from package_livingroom)
-# V1.1.1:  Added entity to automation Tuinverlichting bij thuiskomst for testing (fix bug #006)  
-# V1.1.2:  Commented after_offset to fix bug #006
-# V1.2.0:  Added script for stopping the sunscreen
-# V1.2.1:  Added sunscreen input_boolean for state monitoring of sunscreen stop actions
-#          Replaced sunscreen stop script with pauze automation triggered by input_boolean
-#          Added automations for auto zonnescherm (notification only for test)
-# V1.2.2:  Udated automations auto zonnescherm (notification only for test)
-# V1.2.3:  Added sunscreen manaul overide input boolean
-#          Added live sunscreen to automations
-# V1.2.4:  Minor update sunscreen in automation
-# V1.2.5:  Added automation for percipitation returning to <0.01
-# V1.2.6:  Changed eleavation trigger to 16 (was 17)
-# V1.3.0:  Fix for #0034
+## Package file for Home Assistant, used for the garden
+## Type: Home Assistant yaml file
+## Date: 01-08-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V1.0.0:  Production version 1.0.0
+## V1.0.1:  Minor updates in comments
+## V1.1.0:  Added HA-Bridge automation (moved from package_livingroom)
+## V1.1.1:  Added entity to automation Tuinverlichting bij thuiskomst for testing (fix bug #006)  
+## V1.1.2:  Commented after_offset to fix bug #006
+## V1.2.0:  Added script for stopping the sunscreen
+## V1.2.1:  Added sunscreen input_boolean for state monitoring of sunscreen stop actions
+##          Replaced sunscreen stop script with pauze automation triggered by input_boolean
+##          Added automations for auto zonnescherm (notification only for test)
+## V1.2.2:  Udated automations auto zonnescherm (notification only for test)
+## V1.2.3:  Added sunscreen manaul overide input boolean
+##          Added live sunscreen to automations
+## V1.2.4:  Minor update sunscreen in automation
+## V1.2.5:  Added automation for percipitation returning to <0.01
+## V1.2.6:  Changed eleavation trigger to 16 (was 17)
+## V1.3.0:  Fix for #0034
+## V1.3.1:  Code cleanup and code structure
 
 ###############################################################################
-#                               Hoemassistant settings
+##  Homeassistant settings
 ###############################################################################
 homeassistant:
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_boolean:
-  # Pause state toggle for sunscreen lovelace
+  ## Pause state toggle for sunscreen lovelace
   sunscreen_pause:
     name: Pauze zonnescherm
+  ## Test switch for sunscreen. Removed when all automations work ok
   sunscreen_test:
     name: Test zonnescherm
+  ## Manual mode switch for the sunscreen 
   sunscreen_manual:
     name: Zonnescherm handmatig  
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
-
 group:
-  garden_lights1:
+  garden_lights:
     name: Tuinverlichting
     entities:
       - input_boolean.domo_garden_light
@@ -52,10 +54,10 @@ group:
       - automation.tuinverlichting_bij_thuiskomst
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
-  ## Switch garden lights on an off from HA-Bridge
+  ## Switch garden lights on and off from HA-Bridge
   - alias: "Tuin verlichting - voice"
     hide_entity: false
     initial_state: 'on'
@@ -190,8 +192,8 @@ automation:
           who: 'ralph'
           prio: -2
 
-  ## Close sunscreen when rain is expected (percipitation > 0.0 or when its 19:30 
-  #  when azimuth is over 200.0 is commented for now     
+  ## Close sunscreen when rain is expected (percipitation > 0.0 or when its 19:30 or when azimuth is over 200.0
+  ## Azimuth is trigger commented for now
   - alias: "Zonnescherm in"
     hide_entity: false
     initial_state: 'on'
@@ -226,12 +228,12 @@ automation:
           prio: -2
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 script:
   open_sunscreen:
@@ -241,6 +243,7 @@ script:
         entity_id: input_boolean.domo_sunscreen
       - service: homeassistant.turn_on
         entity_id: input_boolean.sunscreen_test
+
   close_sunscreen:
     alias: Zonnescherm in
     sequence:
@@ -248,6 +251,7 @@ script:
         entity_id: input_boolean.domo_sunscreen
       - service: homeassistant.turn_off
         entity_id: input_boolean.sunscreen_test
+
   # pause_sunscreen:
   #   alias: Pauzeer zonnescherm op huidige positie
   #   sequence:
@@ -257,5 +261,5 @@ script:
   #         new_state: '{{ states.input_boolean.domo_sunscreen.state }}'
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################

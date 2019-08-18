@@ -1,21 +1,21 @@
-# Package file for Home Assistant, used for network monitoring
-# Type: Home Assistant yaml file
-# Date: 19-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added automations for notification
-# V1.0.0:  Production version 1.0.0
-
+## Package file for Home Assistant, used for network monitoring
+## Type: Home Assistant yaml file
+## Date: 19-01-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added automations for notification
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Added MySensors Gateway
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 homeassistant:
   customize:
-    # Internet statistics 
+    ## Internet statistics 
     sensor.nc_uptime:
       friedly_name: Uptime
     sensor.nc_speedtest_download:
@@ -24,7 +24,7 @@ homeassistant:
       icon: 'mdi:speedometer'
     sensor.nc_speedtest_ping:
       icon: 'mdi:speedometer'
-    # crtical network devices
+    ## Crtical network devices
     sensor.nc_amazonecho:
       icon: 'mdi:microphone'
     sensor.nc_diskstation:
@@ -32,6 +32,8 @@ homeassistant:
     sensor.nc_domoticz_master:
       icon: 'mdi:desktop-tower'
     sensor.nc_domoticz_slave:
+      icon: 'mdi:desktop-tower'
+    sensor.nc_mysensors_gateway:
       icon: 'mdi:desktop-tower'
     sensor.nc_ha_bridge:
       icon: 'mdi:router-wireless'
@@ -47,7 +49,7 @@ homeassistant:
       icon: 'mdi:phone-voip'
     sensor.nc_xiaomi_bridge:
       icon: 'mdi:router-wireless'
-    # other network devices (only when tracked)
+    ## Other network devices (only when tracked)
     sensor.nc_appletv:
       icon: 'mdi:apple'
     sensor.nc_bosch_dryer:
@@ -82,13 +84,13 @@ speedtestdotnet:
     - upload
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 sensor:
   - platform: uptime
   - platform: template
     sensors:
-    # crtical network devices
+    ## Crtical network devices
       nc_amazonecho:
         friendly_name: 'Amazon echo dot (living room)'
         entity_id:
@@ -109,6 +111,11 @@ sensor:
         entity_id:
           - device_tracker.raspberrypi_2
         value_template: "{{ 'on' if is_state('device_tracker.raspberrypi_2', 'home') else 'off' }}"
+      nc_mysensors_gateway:
+        friendly_name: 'MySensors Gateway'
+        entity_id:
+          - device_tracker.raspberrypi_3
+        value_template: "{{ 'on' if is_state('device_tracker.raspberrypi_3', 'home') else 'off' }}"
       nc_ha_bridge:
         friendly_name: 'HA Bridge'  
         entity_id:
@@ -144,7 +151,7 @@ sensor:
         entity_id:
           - device_tracker.lumigatewayv3_miio78461469
         value_template: "{{ 'on' if is_state('device_tracker.lumigatewayv3_miio78461469', 'home') else 'off' }}"
-    # other network devices (only when tracked)
+    ## Other network devices (only when tracked)
       nc_appletv:
         friendly_name: 'Apple TV'
         entity_id:
@@ -207,7 +214,7 @@ sensor:
         value_template: "{{ 'on' if is_state('device_tracker.a300', 'home') else 'off' }}"  
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
   all_network_devices:
@@ -224,6 +231,7 @@ group:
       - device_tracker.raspberrypi
       - device_tracker.habridge
       - device_tracker.raspberrypi_2
+      - device_tracker.raspberrypi_3
       - device_tracker.philipshue
       - device_tracker.amazonacac5ec30
       - device_tracker.hassio
@@ -251,6 +259,7 @@ group:
       - sensor.nc_voip
       - sensor.nc_domoticz_master
       - sensor.nc_domoticz_slave
+      - sensor.nc_mysensors_gateway
       - sensor.nc_homeassistant_pi
       - sensor.nc_harmonyhub
       - sensor.nc_hue_bridge
@@ -259,10 +268,10 @@ group:
       - sensor.nc_printer
 
 ###############################################################################
-#                              Automations
+##  Automations
 ###############################################################################
 automation:
-  # Sent alert when a critical network device is offline
+  ## Sent alert when a critical network device is offline
   - alias: "Netwerk alarm aan"
     hide_entity: false
     initial_state: 'on'
@@ -273,6 +282,7 @@ automation:
         - sensor.nc_voip
         - sensor.nc_domoticz_master
         - sensor.nc_domoticz_slave
+        - sensor.nc_mysensors_gateway
         # - sensor.nc_homeassistant_pi
         - sensor.nc_harmonyhub
         - sensor.nc_hue_bridge
@@ -291,6 +301,7 @@ automation:
           value3: ' is offline!'
           who: 'ralph'
           prio: 2
+  ## Sent alert when a critical network device is online
   - alias: "Netwerk alarm uit"
     hide_entity: false
     initial_state: 'on'
@@ -301,6 +312,7 @@ automation:
         - sensor.nc_voip
         - sensor.nc_domoticz_master
         - sensor.nc_domoticz_slave
+        - sensor.nc_mysensors_gateway
         # - sensor.nc_homeassistant_pi
         - sensor.nc_harmonyhub
         - sensor.nc_hue_bridge
@@ -321,16 +333,16 @@ automation:
           prio: -2
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 

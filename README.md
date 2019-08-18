@@ -1,10 +1,10 @@
-Last update: July 21st, 2019
+Last update: August 18th, 2019
 
-# My homeserver
+# My Home server
 
-Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Homeassistant on an old HP laptop for now. The laptop is running as a "homeserver". I am currently running Ubuntu 18.04 LTS on the laptop. Homeassistant as well as all supporting applications (and some additional non Homeassistant related applications) are running in Docker containers. 
+Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Home Assistant on an old HP laptop for now. The laptop is running as a "Home server". I am currently running Ubuntu 18.04 LTS on the laptop. Home Assistant as well as all supporting applications (and some additional non Home Assistant related applications) are running in Docker containers. 
 
-## Things that I run on my Homeserver (all in Docker containers)
+## Things that I run on my Home server (all in Docker containers)
 
 * [Home Assistant](https://home-assistant.io/)
 * [Zigbee2MQTT](https://koenkk.github.io/zigbee2mqtt/), great development for getting rid of most of the propietary bridges. I use it for all my ZigBee devices except for Hue.
@@ -18,28 +18,29 @@ Here's my [Home Assistant](https://home-assistant.io/) configuration. I have ins
 
 I plan to move everything to a dedicated NUC in time. Docker should make this simple. 
 
-When I find the time I will write a blog or something alike about my homeserver.
+When I find the time I will write a blog or something alike about my Home server.
 
-# Homeassistant
+# Home Assistant
 
-I'm still learning Homeassistant as I'm coming from a Domoticz RPi based environment. Homeassistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Homeassistant will be the main home automation application.   
+I'm still learning Home Assistant as I'm coming from a Domoticz RPi based environment. Home Assistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Home Assistant will be the main home automation application.   
 
-**I regularly update my configuration files as my Homeassistant is still heavily under development.**
+**I regularly update my configuration files as my Home Assistant is still heavily under development.**
 
-## Homeassistant setup
+## Home Assistant setup
 
-### Homeassistant configuration
+### Home Assistant configuration
 After looking at a ton of configurations and playing around with them I decided to go for packages. All my configurations are now in packages grouped as logical collections of components, entities automations etc.
 
 For example package_notification contains the applied notification components (prowl and pushsafer currently), the associated entities for example the input_boolean that controls if notifications are enabled) and scripts. Scripts are used by many other packages that require  notifications.   
 
 ### Lovelace UI
-I decided to fully go for Lovelace as the UI. As this is stable since the 0.87 release I moved everything over to Lovelace. [Isabella Gross Alström](https://github.com/isabellaalstrom) has a wonderfull UI that is one of the sources of insparation for me.
+I decided to fully go for Lovelace as the UI. As this is stable since the 0.87 release I moved everything over to Lovelace. [Isabella Gross Alström](https://github.com/isabellaalstrom) has a wonderfull UI that is one of the sources of inspiration for me.
 I use a growing number of custom cards and helpers in my Lovelace. I will do some write up on these later but here are the ones I use now.
 * [compact-custom-header](https://github.com/maykar/compact-custom-header), card by Ryan Meek (maykar) for customizing the header of your UI. 
 * [decluttering-card](https://github.com/custom-cards/decluttering-card), card by Jérôme W (RomRider). This card signifcantly reduces the number of lines in your lovelace configuration. Helps structure your code.
 * [mini-graph-card](https://github.com/kalkih/mini-graph-card), nice graphs of your data can be created with this card. Good work delivered by Karl Kihlström (kalkih).
-* [button-card](https://github.com/custom-cards/button-card), customize your buttons with this card. Started by Alexandre Garcia this card now has many active contributors. 
+* [button-card](https://github.com/custom-cards/button-card), customize your buttons with this card. Started by Alexandre Garcia this card now has many active contributors.
+* [card-mod](https://github.com/thomasloven/lovelace-card-mod), Adds CSS styles to (almost) any lovelace card. Powerful custom card by Thomas Lovén (thomasloven) 
 
 When things are progressing I will upload some screenshots of my UI.
 
@@ -52,32 +53,33 @@ When things are progressing I will upload some screenshots of my UI.
   * [Fibaro smoke sensors](https://www.fibaro.com/en/) The best looking smoke detectors on the market (IMHO).
 
 * Zigbee:
-  * [Xiaomi Aqara bridge](https://www.aliexpress.com) The bridge is connected to Domoticz. As Homeassistant is running inside a container, the bridge won't connect (I don't want Homeassistant to run as host on Docker). Sensor values are exchanged through MQTT for now. When I have a better zigbee2mqtt controller (with better radio sensitivity), I will move all over to Homeassistant and retire the bridge (and the privacy unfrienly Chinese app).
-  * [Xiaomi Aqara sensors](https://www.aliexpress.com) I use motion sensors, door/window sensors, temp/hum/pressure sensors, a magic cube (nice gadget!) and some buttons. All sensors are connected to Homeassistant (through Zigbee2mqtt), the Aqara bridge is retired.
+  * [Xiaomi Aqara bridge](https://www.aliexpress.com) The bridge is connected to Domoticz. As Home Assistant is running inside a container, the bridge won't connect (I don't want Home Assistant to run as host on Docker). Sensor values are exchanged through MQTT for now. When I have a better zigbee2mqtt controller (with better radio sensitivity), I will move all over to Home Assistant and retire the bridge (and the privacy unfrienly Chinese app).
+  * [Xiaomi Aqara sensors](https://www.aliexpress.com) I use motion sensors, door/window sensors, temp/hum/pressure sensors, a magic cube (nice gadget!) and some buttons. All sensors are connected to Home Assistant (through Zigbee2mqtt)
   * [Philips Hue](https://www2.meethue.com) Philips Hue bulbs used in the house. Operated through the Hue Bridge as I use the scenes in the Bridge for setting the ambiance.
-  * [Tradfri](https://www.ikea.com) Cheap ZigBee compatible smart home devices. Currently I only use the Wireless control outlets for the more critical switches (replacement of Click-On-Click-Off units).   
+  * [Tradfri](https://www.ikea.com) Cheap ZigBee compatible smart home devices. Currently I only use Wireless control outlets for the more critical switches (replacement of Click-On-Click-Off units). I'm not convinced with the quality and the performance.
+  * The Aqara bridge is retired. 
 
 * MySensors platform:
-  * [MySensors](https://www.mysensors.org/) The MySensors platform offers a strong solution for developing highly customized sensors and actors. I have developed a custom water meter sensor to read my dumb water meter values. Currently still connected to Domoticz since all my history is logged there as well.
+  * [MySensors](https://www.mysensors.org/) The MySensors platform offers a strong solution for developing highly customized sensors and actors. I run a Raspberry Pi as gateway and use NRF24 radio modules. I have developed a [custom water meter sensor](https://www.openhardware.io/view/15/Itron-Aquadis-watermeter-sensor-V10) to read my dumb water meter values. Currently still connected to Domoticz since all my history is logged there as well.
 
 * MQTT:
   * [OwnTracks](https://home-assistant.io/components/device_tracker.owntracks/) Presence detection is an important part of the home automation. OwnTracks is used for Geolocation over MQTT.
-  * Interfacing to Homeassistant and used for controlling devices that rely on presence.
+  * Interfacing to Home Assistant and used for controlling devices that rely on presence.
 
-* Wi-Fi and network:
-  * [Netgear Nighthawk](https://www.netgear.nl/home/products/networking/wifi-routers/R7000.aspx), the center of all the networking activities in the house. Connects to all devices that require wired networking and to the Wi-Fi AP's. Several unmanaged switches are used to connect the devices in the rooms. The Nighthawk submits the status information of all connected devices to Homeassistant. This way I can track if everything is still online. Connected mobile phones are tracked for additional presence detection. 
+* WiFi and network:
+  * [Netgear Nighthawk](https://www.netgear.nl/home/products/networking/wifi-routers/R7000.aspx), the center of all the networking activities in the house. Connects to all devices that require wired networking and to the WiFi AP's. Several unmanaged switches are used to connect the devices in the rooms. The Nighthawk submits the status information of all connected devices to Home Assistant. This way I can track if everything is still online. Connected mobile phones are tracked for additional presence detection. 
   * [Unifi AP AC Lite](https://www.ui.com/unifi/unifi-ap-ac-lite/), the access points I use in the house to support full Wi-Fi coverage for the mobile and Wi-Fi connected devices.
 
 * Voice control:
-  * [Amazon Echo Dot 2nd gen.](https://amazon.com), Echo dot 2nd generation used for voice control. Currently this runs through HA-Bridge, an emulated Hue application running on a RPi. Will be exchanged with Homeassistant native Amazon Alexa support in the future.
-  * [Google Home Mini](https://store.google.com/product/google_home_mini), currently not in use. But successfully tested with Homeassistant.
+  * [Amazon Echo Dot 2nd gen.](https://amazon.com), Echo dot 2nd generation used for voice control. Currently this runs through HA-Bridge, an emulated Hue application running on a RPi. Will be exchanged with Home Assistant native Amazon Alexa support in the future.
+  * [Google Home Mini](https://store.google.com/product/google_home_mini), currently not in use. But successfully tested with Home Assistant.
 
 * Media devices:
-  * [LG Television](https://www.lg.com), my LG television running LG WebOS is controlled by Homeassistant mainly for choosing the correct mode like Netflix or Spotify.
-  * [Popcorn Hour](https://www.cloudmedia.com/), a classic in my house, the Popcorn A300. Mainly controlled with the Harmony Hub, but some initial settings are set by Homeassistant at startup.
-  * [Denon AV3808](https://www.denon.com), also a classic, but with network connect powerful for internet radio and streaming music, control over Homeassistant in on the wish list.
+  * [LG Television](https://www.lg.com), my LG television running LG WebOS is controlled by Home Assistant mainly for choosing the correct mode like Netflix or Spotify.
+  * [Popcorn Hour](https://www.cloudmedia.com/), a classic in my house, the Popcorn A300. Mainly controlled with the Harmony Hub, but some initial settings are set by Home Assistant at startup.
+  * [Denon AV3808](https://www.denon.com), also a classic, but with network connect powerful for internet radio and streaming music, control over Home Assistant in on the wish list.
   * [Apple TV](https://www.apple.com), not much used anymore these days as the LG can do most of it.
-  * [Harmony Hub](https://www.logitech.com), the Harmony Hub, despite Logitech's poor way of supporting interoperability, a powerful device for controlling the media devices. Integrated with Homeassistant. I spent a lot of time in getting it running in  Homeassistant. Still some lose ends but I'm getting there.
+  * [Harmony Hub](https://www.logitech.com), the Harmony Hub, despite Logitech's poor way of supporting interoperability, a powerful device for controlling the media devices. Integrated with Home Assistant. I spent a lot of time in getting it running in  Home Assistant. Still some lose ends but I'm getting there.
 
   
 ## Things planned

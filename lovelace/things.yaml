@@ -28,7 +28,6 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-      - type: section
       - entity: input_boolean.alarm
         icon: mdi:alarm-light
   - type: vertical-stack

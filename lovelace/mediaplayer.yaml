@@ -9,9 +9,11 @@
 # V1.2.0:  Added buttons for media center modes
 # V1.3.0:  Added conditional buttons for Radio and Television
 # V1.3.1:  Added one empty row under media mode selector (unconditional), saves code
+# V1.4.0:  Implemented decluttering-card for buttons
 
-title: Media spelers
+title: Media
 icon: 'mdi:television'
+background: "#e3e3e3"
 cards:
   ## Selection part for media modes.
   - type: vertical-stack
@@ -19,135 +21,80 @@ cards:
     ## Mode selection, first row 
     - type: horizontal-stack
       cards:
-        - type: custom:button-card
-          entity: input_boolean.television
-          icon: mdi:television
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Televisie
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.netflix         
-          icon: mdi:netflix
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Netflix
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.spotify         
-          icon: mdi:spotify
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Spotify
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.smarttv         
-          icon: mdi:netflix
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Smart-TV
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.television 
+            - name: Televisie 
+            - icon: television
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.netflix 
+            - name: Netflix 
+            - icon: netflix
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.spotify 
+            - name: Spotify 
+            - icon: spotify
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.smarttv
+            - name: Smart-TV 
+            - icon: television
     ## Mode selection, second row
     - type: horizontal-stack
       cards:
-        - type: custom:button-card
-          entity: input_boolean.mediaplayer          
-          icon: mdi:movie
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Mediaspeler
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.appletv          
-          icon: mdi:apple
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Apple-TV
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.radio          
-          icon: mdi:radio
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Radio
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.music          
-          icon: mdi:music
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Muziek
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.mediaplayer 
+            - name: Mediaspeler 
+            - icon: movie
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.appletv 
+            - name: Apple-TV 
+            - icon: apple
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.radio 
+            - name: Radio 
+            - icon: radio
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.music
+            - name: Muziek 
+            - icon: music
     ## Mode selection, third row
     - type: horizontal-stack
       cards:
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables:
+            - entity: input_boolean.dvd
+            - name: DVD
+            - icon: movie
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables:
+            - entity: input_boolean.teletext
+            - name: Teletext
+            - icon: comment-text-outline
         - type: custom:button-card
-          entity: input_boolean.dvd          
-          icon: mdi:movie
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: DVD
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          entity: input_boolean.teletext          
-          icon: mdi:comment-text-outline
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Teletext
-          style:
-            - font-size: 1.2em
-            - font-weight: normal
-        - type: custom:button-card
-          color_type: blank-card            
-        - type: custom:button-card
-          entity: input_boolean.poweroff          
-          icon: mdi:power
-          size: 40%
-          color_type: card
-          color: rgb(255, 131, 0)
-          action: toggle
-          name: Uit
-          style:
-            - font-size: 1.2em
-            - font-weight: normal            
+          color_type: blank-card
+        - type: custom:decluttering-card
+          template: media_button_large
+          variables: 
+            - entity: input_boolean.poweroff
+            - name: Uit
+            - icon: power
 
     ## Conditional buttons. 1st row (empty as seperator)
     - type: horizontal-stack
@@ -155,912 +102,391 @@ cards:
         - type: custom:button-card
           color_type: blank-card
 
-    ## Conditional buttons for Radio. 1st row (empty as seperator)
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: blank-card
-    ## Conditional buttons for Radio. 2nd row     
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeUp'
-            icon: mdi:volume-plus
-            size: 80% 
-            style:
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '1'
-            name: '1'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px               
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '2'
-            name: '2'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px    
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '3'
-            name: '3'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ChannelUp'
-            name: 'CH+'
-            style:
-              - font-size: 1.5em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Radio. 3rd row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeDown'
-            icon: mdi:volume-minus
-            size: 80%
-            style:
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '4'
-            name: '4'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '5'
-            name: '5'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '6'
-            name: '6'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ChannelDown'
-            name: 'CH-'
-            style:
-              - font-size: 1.5em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Radio. 4th row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'Mute'
-            icon: mdi:volume-mute
-            size: 80%
-            style:
-              - height: 40px   
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '7'
-            name: '7'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '8'
-            name: '8'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '9'
-            name: '9'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ModeStereo'
-            name: 'Stereo'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Radio. 5th row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'TvRadio'
-            name: 'TV/ Radio'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px  
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:    
-            type: custom:button-card
-            color_type: blank-card 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '0'
-            name: '0'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:    
-            type: custom:button-card
-            color_type: blank-card 
-        - type: conditional
-          conditions:
-            - entity: switch.radio
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ModeDirect'
-            name: 'Direct'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px         
+    ## Conditional buttons for Television
+    - type: conditional
+      conditions:
+        - entity: 'switch.television'
+          state: 'on' 
+      card:
+        type: vertical-stack
+        cards:
+          ## Conditional buttons for television. 1st row (empty as seperator)
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 2nd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-plus
+                  - device: Versterker
+                  - command: VolumeUp
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 1 
+                  - device: Humax
+                  - command: 1
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 2
+                  - device: Humax
+                  - command: 2
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 3
+                  - device: Humax
+                  - command: 3
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: television
+                  - name: CH+
+                  - device: Humax
+                  - command: ChannelUp
+          ## Conditional buttons for Televion. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 4 
+                  - device: Humax
+                  - command: 4
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 5
+                  - device: Humax
+                  - command: 5
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 6
+                  - device: Humax
+                  - command: 6
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: television
+                  - name: CH1
+                  - device: Humax
+                  - command: ChannelDown
+          ## Conditional buttons for Televion. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 7 
+                  - device: Humax
+                  - command: 7
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 8
+                  - device: Humax
+                  - command: 8
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 9
+                  - device: Humax
+                  - command: 9
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Dolby PLII
+                  - device: Versterker
+                  - command: ModeDolbyPLII
+          ## Conditional buttons for Televion. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: TV/Radio
+                  - device: Humax
+                  - command: TvRadio
+              - type: conditional
+                conditions:
+                  - entity: switch.television
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: '0'
+                  - device: Humax
+                  - command: 0
+              - type: conditional
+                conditions:
+                  - entity: switch.television
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: DTS
+                  - device: Versterker
+                  - command: ModeDolbyPLIICinema
+          ## Conditional buttons for Televion. 6th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: rewind
+                  - device: Humax
+                  - command: Rewind
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: pause
+                  - device: Humax
+                  - command: Pause
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: play
+                  - device: Humax
+                  - command: Play
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: fast-forward
+                  - device: Humax
+                  - command: FastForward
 
-    ## Conditional buttons for Televion. 1st row (empty as seperator)
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: blank-card
-    ## Conditional buttons for Televion. 2nd row     
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeUp'
-            icon: mdi:volume-plus
-            size: 80%
-            style:
-              - height: 40px    
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '1'
-            name: '1'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '2'
-            name: '2'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '3'
-            name: '3'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ChannelUp'
-            name: 'CH+'
-            style:
-              - font-size: 1.8em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Televion. 3rd row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'VolumeDown'
-            icon: mdi:volume-minus
-            size: 80%
-            style:
-              - height: 40px
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '4'
-            name: '4'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '5'
-            name: '5'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '6'
-            name: '6'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ChannelDown'
-            name: 'CH-'
-            style:
-              - font-size: 1.8em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Televion. 4th row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Versterker
-                command: 'Mute'
-            icon: mdi:volume-mute
-            size: 80%
-            style:
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '7'
-            name: '7'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '8'
-            name: '8'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '9'
-            name: '9'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ModeDolbyPLII'
-            name: 'Dolby PLII'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Televion. 5th row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'TvRadio'
-            name: 'TV/ Radio'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px  
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:    
-            type: custom:button-card
-            color_type: blank-card 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(255, 131, 0)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: '0'
-            name: '0'
-            style:
-              - font-size: 2.0em
-              - font-weight: normal
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:    
-            type: custom:button-card
-            color_type: blank-card
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'ModeDolbyPLIICinema'
-            name: 'DTS'
-            style:
-              - font-size: 1.2em
-              - font-weight: normal
-              - height: 40px
-    ## Conditional buttons for Televion. 6th row
-    - type: horizontal-stack
-      cards: 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'Rewind'
-            icon: mdi:rewind
-            size: 80%
-            style:
-              - height: 40px
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on' 
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'Pause'
-            icon: mdi:pause
-            size: 80%
-            style:
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'Play'
-            icon: mdi:play
-            size: 80%
-            style:
-              - height: 40px 
-        - type: conditional
-          conditions:
-            - entity: switch.television
-              state: 'on'
-          card:
-            type: custom:button-card
-            color_type: card
-            color: rgb(84, 84, 84)            
-            action: service
-            service:
-              domain: remote
-              action: send_command
-              data: 
-                entity_id: remote.bisschops
-                device: Humax
-                command: 'FastForward'
-            icon: mdi:fast-forward
-            size: 80%
-            style:
-              - height: 40px 
+    ## Conditional buttons for Netflix
+    - type: conditional
+      conditions:
+        - entity: 'switch.netflix'
+          state: 'on' 
+      card:
+        type: vertical-stack
+        cards:
+          ## Conditional buttons for television. 1st row (empty as seperator)
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 2nd row
+
+          ## Conditional buttons for Televion. 3rd row
+
+          ## Conditional buttons for Televion. 4th row
+
+          ## Conditional buttons for Televion. 5th row
+
+          ## Conditional buttons for Televion. 6th row
+
+    ## Conditional buttons for Radio
+    - type: conditional
+      conditions:
+        - entity: 'switch.radio'
+          state: 'on' 
+      card:
+        type: vertical-stack
+        cards:
+          ## Conditional buttons for radio. 1st row (empty as seperator)
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Radio. 2nd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: radio
+                  - icon: volume-plus
+                  - device: Versterker
+                  - command: VolumeUp
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 1 
+                  - device: Humax
+                  - command: 1
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 2
+                  - device: Humax
+                  - command: 2
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 3
+                  - device: Humax
+                  - command: 3
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: radio
+                  - name: CH+
+                  - device: Humax
+                  - command: ChannelUp
+          ## Conditional buttons for Radio. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: radio
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 4 
+                  - device: Humax
+                  - command: 4
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 5
+                  - device: Humax
+                  - command: 5
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 6
+                  - device: Humax
+                  - command: 6
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: radio
+                  - name: CH1
+                  - device: Humax
+                  - command: ChannelDown
+          ## Conditional buttons for Radio. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: radio
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 7 
+                  - device: Humax
+                  - command: 7
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 8
+                  - device: Humax
+                  - command: 8
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: 9
+                  - device: Humax
+                  - command: 9
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: radio
+                  - name: Stereo
+                  - device: Versterker
+                  - command: ModeStereo
+          ## Conditional buttons for Radio. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: radio
+                  - name: TV/Radio
+                  - device: Humax
+                  - command: TvRadio
+              - type: conditional
+                conditions:
+                  - entity: switch.radio
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: radio
+                  - name: '0'
+                  - device: Humax
+                  - command: 0
+              - type: conditional
+                conditions:
+                  - entity: switch.radio
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: radio
+                  - name: Direct
+                  - device: Versterker
+                  - command: ModeDirect
 
   ## Additional selectors and information stack  
   - type: vertical-stack
@@ -1095,3 +521,82 @@ cards:
         - entity: switch.music
         - entity: switch.poweroff
 
+###############################################################
+# Code kept for reference:
+        # - type: custom:button-card
+        #   entity: input_boolean.television
+        #   icon: mdi:television
+        #   size: 40%
+        #   color_type: card
+        #   color: rgb(255, 131, 0)
+        #   action: toggle
+        #   name: Televisie
+        #   style:
+        #     - font-size: 1.2em
+        #     - font-weight: normal
+        #     - border-radius: 10px
+
+        # - type: conditional
+        #   conditions:
+        #     - entity: switch.radio
+        #       state: 'on'
+        #   card:
+        #     type: custom:button-card
+        #     color_type: card
+        #     color: rgb(84, 84, 84)            
+        #     action: service
+        #     service:
+        #       domain: remote
+        #       action: send_command
+        #       data: 
+        #         entity_id: remote.bisschops
+        #         device: Versterker
+        #         command: 'VolumeUp'
+        #     icon: mdi:volume-plus
+        #     size: 80% 
+        #     style:
+        #       - height: 40px
+
+        # - type: conditional
+        #   conditions:
+        #     - entity: switch.radio
+        #       state: 'on'
+        #   card:
+        #     type: custom:button-card
+        #     color_type: card
+        #     color: rgb(255, 131, 0)            
+        #     action: service
+        #     service:
+        #       domain: remote
+        #       action: send_command
+        #       data: 
+        #         entity_id: remote.bisschops
+        #         device: Humax
+        #         command: '1'
+        #     name: '1'
+        #     style:
+        #       - font-size: 2.0em
+        #       - font-weight: normal
+        #       - height: 40px
+
+        # - type: conditional
+        #   conditions:
+        #     - entity: switch.radio
+        #       state: 'on'
+        #   card:
+        #     type: custom:button-card
+        #     color_type: card
+        #     color: rgb(84, 84, 84)            
+        #     action: service
+        #     service:
+        #       domain: remote
+        #       action: send_command
+        #       data: 
+        #         entity_id: remote.bisschops
+        #         device: Humax
+        #         command: 'ChannelUp'
+        #     name: 'CH+'
+        #     style:
+        #       - font-size: 1.5em
+        #       - font-weight: normal
+        #       - height: 40px

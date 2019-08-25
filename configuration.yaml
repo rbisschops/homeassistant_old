@@ -1,17 +1,22 @@
-# Core configuration file for Home Assistant  
-# Type: Home Assistant yaml file
-# Date: 19-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.1.1:  Minor comment updates
-# V0.2.0:  Splited of zones into zones.yaml file
-# V0.3.0:  New build per november 16th 2018
-# V0.4.0:  New build for homeserver
-# V0.5.0:  Major updates. moved several configs to packages
-# V0.6.0:  Added topics for Hass status to MQTT
-# V0.7.0:  Removed obsolete links
+## Core configuration file for Home Assistant  
+## Type: Home Assistant yaml file
+## Date: 01-08-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Minor comment updates
+## V0.2.0:  Splited of zones into zones.yaml file
+## V0.3.0:  New build per november 16th 2018
+## V0.4.0:  New build for homeserver
+## V0.5.0:  Major updates. moved several configs to packages
+## V0.6.0:  Added topics for Hass status to MQTT
+## V0.7.0:  Removed obsolete links
+## V0.8.0:  Changed to using theme files instead of frontend file
+## V0.9.0:  Added google (calender) credentials
+## V0.10.0: Added MySensors Gateway
+## V0.10.1: Added logger
+## V0.10.2: Changed logger to warning for MySensors
 
 homeassistant:
   name: !secret ha_name
@@ -20,7 +25,7 @@ homeassistant:
   elevation: !secret elevation_home
   unit_system: metric
   time_zone: !secret system_time_zone
-  # Custom packages
+## Custom packages
   packages: !include_dir_named packages/
 
 ## Cloud
@@ -38,10 +43,16 @@ discovery:
     - philips_hue
 
 ## Enables the frontend
-frontend: !include frontend.yaml
+frontend:
+  themes: !include_dir_named themes
+
+## Google
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_secret
 
 ## Google assistant
-#google_assistant:
+# google_assistant:
 #  project_id: !secret ga_project_name
 #  api_key: !secret ga_api_key
 #  exposed_domains:
@@ -60,7 +71,7 @@ frontend: !include frontend.yaml
 history:
 
 ## Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-#http:
+# http:
 #  api_password: !secret http_password
 #  base_url: https://rbisschops.duckdns.org:8123
 #  ssl_certificate: /ssl/fullchain.pem
@@ -70,10 +81,17 @@ history:
 # introduction:
 
 ## enable iOS component
-#ios:
+# ios:
 
 ## View all events in a logbook
 logbook:
+
+## Logger
+logger:
+  default: warning
+  logs:
+    homeassistant.components.mysensors: warning
+    mysensors: warning
 
 ## Lovelace UI
 lovelace:
@@ -92,7 +110,19 @@ mqtt:
     payload: 'online'
   will_message:
     topic: 'hass/status'
-    payload: 'offline'   
+    payload: 'offline'
+
+## MySensors gateway
+mysensors:
+  gateways:
+    - device: !secret ip_mysensors
+      # persistence_file: 'mysensors.json'
+      nodes:
+        2:
+          name: Watermeter (MYS)
+        4:
+          name: 'Light sensor (test)'
+  version: 2.3
 
 ## Tracked history is kept for 10 days
 recorder:
@@ -106,32 +136,33 @@ system_health:
 
 ## Text to speech
 tts:
-  - platform: google
+  - platform: google_translate
+    service_name: google_say
 
 updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
+## Optional, allows Home Assistant developers to focus on popular components.
   # include_used_components: true
 
 ## Xiaomi Gateways
-#xiaomi_aqara:
+# xiaomi_aqara:
 #  discovery_retry: 5
 #  gateways:
 #    - mac: !secret mac_bridge_xiaomi >> leave commented for now!!
 #      host: !secret ip_xiaomi_aquara
 #      key: !secret xiaomi_aquara_key
 
-### Configuations items (presence, Sensors, groups, automations and scripts)
+## Configuations items (presence, Sensors, groups, automations and scripts)
 device_tracker: !include includes/device_trackers.yaml
 group: !include_dir_merge_named includes/groups
 
-### OLD STUFF, MIGRATE TO ABOVE ###
+## OLD STUFF, MIGRATE TO ABOVE ###
 
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+## Uncomment this if you are using SSL/TLS, running in Docker container, etc.
 # http:
 #   base_url: example.duckdns.org:8123
 
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+## Checks for available updates
+## Note: This component will send some information about your system to
+## the developers to assist with development of Home Assistant.
+## For more information, please see:
+## https://home-assistant.io/blog/2016/10/25/explaining-the-updater/

@@ -1,6 +1,6 @@
 # Lovelace-UI file for Home Assistant, Downstairs view
 # Type: Home Assistant yaml file
-# Date: 15-03-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -10,6 +10,9 @@
 # V1.2.1:  Minor layout update
 # V1.2.2:  Replaced Trafri switch with domo high kitchen cabinets
 # V1.3.0:  Moved overleays to the top in the code (see remarks)
+# V1.4.0:  Changed layout and updated icons for lamps
+# V1.4.1:  Changed lamp icons
+# V1.4.2:  Minor color updates
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -27,7 +30,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/refrigerator.png        
+          'on': /local/floorplans/overlays/refrigerator.png
         style:
           top: 0%
           left: 0%
@@ -38,19 +41,19 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/freezer.png        
+          'on': /local/floorplans/overlays/freezer.png
         style:
           top: 0%
           left: 0%
           position: absolute
-          transform: translate(0%, 0%)          
+          transform: translate(0%, 0%)
       ## Doors and windows overlays
       - type: image
         entity: binary_sensor.neo_coolcam_front_door
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/front_door.png        
+          'on': /local/floorplans/overlays/front_door.png
         style:
           top: 0%
           left: 0%
@@ -61,7 +64,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/storage_door.png        
+          'on': /local/floorplans/overlays/storage_door.png
         style:
           top: 0%
           left: 0%
@@ -72,7 +75,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/garden_door.png        
+          'on': /local/floorplans/overlays/garden_door.png
         style:
           top: 0%
           left: 0%
@@ -83,7 +86,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/front_window.png        
+          'on': /local/floorplans/overlays/front_window.png
         style:
           top: 0%
           left: 0%
@@ -94,7 +97,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/hallway_livingroom_door.png        
+          'on': /local/floorplans/overlays/hallway_livingroom_door.png
         style:
           top: 0%
           left: 0%
@@ -105,7 +108,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/hallway_storage_door.png        
+          'on': /local/floorplans/overlays/hallway_storage_door.png
         style:
           top: 0%
           left: 0%
@@ -116,7 +119,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/metering_cabinet_door.png        
+          'on': /local/floorplans/overlays/metering_cabinet_door.png
         style:
           top: 0%
           left: 0%
@@ -127,7 +130,7 @@ cards:
         tap_action:
           action: none
         state_image:
-          'on': /local/floorplans/overlays/toilet_door.png        
+          'on': /local/floorplans/overlays/toilet_door.png
         style:
           top: 0%
           left: 0%
@@ -137,34 +140,36 @@ cards:
       # Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
-        prefix: 'Buiten temperatuur '
+        prefix: 'Buiten temperatuur: '
         style:
-          top: 80%
-          left: 85%
-          font-size: 120%
+          top: 83%
+          left: 25%
+          font-size: 100%
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
-        prefix: 'Relatieve luchtvochtigheid '
+        prefix: 'Relatieve luchtvochtigheid: '
         style:
-          top: 86%
-          left: 85%
-          font-size: 120%   
+          top: 89%
+          left: 25%
+          font-size: 100%   
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       # Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_livingroom
         style:
-          top: 35%
+          top: 33%
           left: 25%
           position: absolute
-          font-size: 12px   
-          color: '#000000'   
-          font-weight: 'bold'             
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
       - type: state-label
         entity: sensor.room_humidity_livingroom
         style:
-          top: 39%
+          top: 37%
           left: 25%
           position: absolute
           font-size: 12px
@@ -173,7 +178,7 @@ cards:
       - type: state-label
         entity: sensor.room_temp_storage
         style:
-          top: 33%
+          top: 25%
           left: 86%
           position: absolute
           font-size: 12px
@@ -182,7 +187,7 @@ cards:
       - type: state-label
         entity: sensor.room_humidity_storage
         style:
-          top: 37%
+          top: 29%
           left: 86%
           position: absolute
           font-size: 12px
@@ -191,73 +196,73 @@ cards:
       - type: state-label
         entity: sensor.room_temp_toilet
         style:
-          top: 26%
+          top: 7%
           left: 73%
           position: absolute
-          font-size: 12px           
-          color: '#000000'           
+          font-size: 12px
+#          color: '#FFFFFF'
           font-weight: 'bold'
       - type: state-label
         entity: sensor.room_humidity_toilet
         style:
-          top: 30%
+          top: 11%
           left: 73%
           position: absolute
-          font-size: 12px           
-          color: '#000000'           
-          font-weight: 'bold'  
-      # Porch light             
+          font-size: 12px
+#          color: '#FFFFFF'
+          font-weight: 'bold'
+      # Porch light
       - type: image
         entity: input_boolean.domo_porch_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png
         style:
-          top: 59%
+          top: 49%
           left: 92%
           position: absolute
-          width: 2.5% 
-      # Hallway light    
+          width: 2.5%
+      # Hallway light
       - type: image
         entity: input_boolean.domo_hallway_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 42%
+          top: 35%
           left: 71%
           position: absolute
-          width: 2.5%       
+          width: 2.5%
       # Livingroom lights 
       - type: image
         entity: light.lage_kast_links
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 22%
-          left: 11%     
+          top: 20%
+          left: 11%
           position: absolute
-          width: 2.5%         
+          width: 2.5%
       - type: image
         entity: light.lage_kast_rechts
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 22%
+          top: 20%
           left: 26%   
           position: absolute
           width: 2.5%   
@@ -265,12 +270,12 @@ cards:
         entity: light.staande_lamp_links
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 87%
+          top: 69%
           left: 11%
           position: absolute
           width: 2.5%
@@ -278,42 +283,45 @@ cards:
         entity: light.staande_lamp_rechts
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 87%
+          top: 69%
           left: 30%
           position: absolute
           width: 2.5%
+      # Bar lights 
+      - type: image
+        entity: input_boolean.domo_bar_light
+        tap_action:
+          action: toggle
+        image: /local/custom_icons/lightbulb48_on.png
+        state_image:
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
+        style:
+          top: 58%
+          left: 37%
+          position: absolute
+          width: 2.5%
+      # High cabinet lights 
       - type: image
         # entity: switch.tradfri_high_cabinets_switch
         entity: input_boolean.domo_kitchen_cabinets
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/lightbulb48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 22%
+          top: 20%
           left: 58%
           position: absolute
           width: 2.5%
-      - type: image
-        entity: input_boolean.domo_bar_light
-        tap_action:
-          action: toggle
-        image: /local/custom_icons/light48_on.png
-        state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
-        style:
-          top: 70%
-          left: 35%
-          position: absolute
-          width: 2.5%          
+
 
       # Home states
       - type: image
@@ -326,7 +334,7 @@ cards:
           'off': /local/custom_icons/suitecase48_off.png
         style:
           top: 7%
-          left: 4.5%
+          left: 8%
           position: absolute
           transform: translate(0%, -50%)
           width: 3% 
@@ -340,7 +348,7 @@ cards:
           'off': /local/custom_icons/recorder48_off.png
         style:
           top: 7%
-          left: 8.5%
+          left: 13%
           position: absolute
           transform: translate(0%, -50%)
           width: 3%              
@@ -355,49 +363,49 @@ cards:
           'off': /local/custom_icons/people48_off.png 
         style:
           top: 7%
-          left: 12.5%
+          left: 48%
           position: absolute
           transform: translate(0%, -50%)
-          width: 3%              
+          width: 3%
       - type: image
-        entity: device_tracker.owntracks_anneke_s7
+        entity: binary_sensor.anneke_home
         tap_action:
           action: none
         image: /local/custom_icons/anneke48_off.png
         state_image:
-          'home': /local/custom_icons/anneke48_on.png
-          'not_home': /local/custom_icons/anneke48_off.png 
+          'on': /local/custom_icons/anneke48_on.png
+          'off': /local/custom_icons/anneke48_off.png 
         style:
           top: 7%
-          left: 16.5%
+          left: 52%
           position: absolute
           transform: translate(0%, -50%)
           width: 3%   
       - type: image
-        entity: device_tracker.owntracks_kimberly_s7
+        entity: binary_sensor.kimberly_home
         tap_action:
           action: none
         image: /local/custom_icons/kimberly48_off.png
         state_image:
-          'home': /local/custom_icons/kimberly48_on.png
-          'not_home': /local/custom_icons/kimberly48_off.png 
+          'on': /local/custom_icons/kimberly48_on.png
+          'off': /local/custom_icons/kimberly48_off.png 
         style:
           top: 7%
-          left: 20.5%
+          left: 56%
           position: absolute
           transform: translate(0%, -50%)   
           width: 3%          
       - type: image
-        entity: device_tracker.owntracks_ralph_iphone7
+        entity: binary_sensor.ralph_home
         tap_action:
           action: none
         image: /local/custom_icons/ralph48_off.png
         state_image:
-          'home': /local/custom_icons/ralph48_on.png
-          'not_home': /local/custom_icons/ralph48_off.png 
+          'on': /local/custom_icons/ralph48_on.png
+          'off': /local/custom_icons/ralph48_off.png 
         style:
           top: 7%
-          left: 24.5%
+          left: 60%
           position: absolute
           transform: translate(0%, -50%)
           width: 3%
@@ -406,16 +414,16 @@ cards:
         entity: input_boolean.livingroom_lights_status
         tap_action:
           action: toggle
-        image: /local/custom_icons/customlight48_off.png
+        image: /local/custom_icons/lightbulb48_off.png
         state_image:
-          'on': /local/custom_icons/customlight48_on.png
-          'off': /local/custom_icons/customlight48_off.png 
+          'on': /local/custom_icons/lightbulb48_on.png
+          'off': /local/custom_icons/lightbulb48_off.png 
         style:
-          top: 7%
+          top: 34%
           left: 32.5%
           position: absolute
           transform: translate(0%, -50%)
-          width: 3%             
+          width: 3%
       # Media center status
       - type: image
         entity: switch.tradfri_media_switch
@@ -426,10 +434,10 @@ cards:
           'on': /local/custom_icons/mediacenter48_on.png
           'off': /local/custom_icons/mediacenter48_off.png 
         style:
-          top: 22%
+          top: 20%
           left: 18.5%
           position: absolute
-          width: 2% 
+          width: 2.5% 
 
       # Alarms
       - type: image
@@ -440,7 +448,7 @@ cards:
           'on': /local/custom_icons/alarm48_on.png
           'off': /local/custom_icons/blanc48_off.png
         style:
-          top: 42%
-          left: 36%
+          top: 34%
+          left: 45%
           position: absolute
           width: 4%

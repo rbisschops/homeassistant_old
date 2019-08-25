@@ -22,13 +22,17 @@
 !includes/scripts
 !includes/sensors
 !includes/zones
+!themes
 !www
 !www/*.jpg
 !www/*.png
 !www/custom_cards
 !www/custom_cards/*.js
+!www/custom_cards/compact-custom-header
+!www/custom_cards/compact-custom-header/*.js
 !www/custom_icons
 !www/custom_icons/*.png
+
 
 # Ignore the folowing folders.
 .storage
@@ -44,11 +48,14 @@ ip_bans.yaml
 secrets.yaml
 known_devices.yaml
 zwave_device_config.yaml
-
+google_calendars.yaml
 anneke.jpg
-kimberly.jpg
-ralph.jpg
+anneke_*.png
 anneke48*.png
+kimberly.jpg
+kimberly_*.png
 kimberly48*.png
+ralph.jpg
+ralph_*.png
 ralph48*.png
 

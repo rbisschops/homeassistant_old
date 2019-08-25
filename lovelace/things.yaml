@@ -1,0 +1,259 @@
+# Lovelace-UI file for Home Assistant, Lighting view
+# Type: Home Assistant yaml file
+# Date: 12-07-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+# V0.2.0:  Added toilet heating manual control
+# V0.2.1:  Changed UI layout
+# V0.2.2:  Added rooms for future use
+# V0.2.3:  Added input_boolean.sunscreen_manual (moved)
+#          Removed switch.tradfri_high_cabinets_switch (moved)
+# V0.3.0:  Major UI changes based on Decluttering card
+
+title: Entities
+icon: 'mdi:cogs'
+background: "#e3e3e3"
+cards:
+
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Alarm schakelaar
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: input_boolean.alarm
+        icon: mdi:alarm-light
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Aanwezigheid
+      - type: entities
+        show_state: false
+        show_name: false
+        show_header_toggle: false
+        entities:
+          - entity: binary_sensor.people_home
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: WiFi
+      - type: horizontal-stack
+        cards:
+          - type: picture-entity
+            entity: device_tracker.anneke_s7
+            image: /local/anneke_off.png
+            show_name: false
+            state_image:
+              'home': /local/anneke_on.png
+          - type: picture-entity
+            entity: device_tracker.kimberly_s7
+            image: /local/kimberly_off.png
+            show_name: false
+            state_image:
+              'home': /local/kimberly_on.png
+          - type: picture-entity
+            entity: device_tracker.ralph_iphone7
+            image: /local/ralph_off.png
+            show_name: false
+            state_image:
+              'home': /local/ralph_on.png
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Locatie
+      - type: horizontal-stack
+        cards:
+          - type: picture-entity
+            entity: device_tracker.owntracks_anneke_s7
+            image: /local/anneke_off.png
+            show_name: false
+            state_image:
+              'home': /local/anneke_on.png
+          - type: picture-entity
+            entity: device_tracker.owntracks_kimberly_s7
+            image: /local/kimberly_off.png
+            show_name: false
+            state_image:
+              'home': /local/kimberly_on.png
+          - type: picture-entity
+            entity: device_tracker.owntracks_ralph_iphone7
+            image: /local/ralph_off.png
+            show_name: false
+            state_image:
+              'home': /local/ralph_on.png
+
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Woonkamer
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting woonkamer
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - light.woonkamer
+        - input_select.hue_scenes
+        - input_select.hue_groups
+        - script.manual_set_hue_scene
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Woonkamer licht mode
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_select.livingroom_lights_mode
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting keuken
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_kitchen_cabinets
+        - entity: input_boolean.domo_bar_light
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Kerst verlichting
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_christmastree   
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Tuin
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting tuin
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_garden_light
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Waterbollen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_water_ornament
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Zonnescherm
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_sunscreen
+        - entity: input_boolean.sunscreen_manual
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Uitbouw
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: input_boolean.domo_porch_light
+        - entity: input_boolean.domo_hallway_light
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Toilet verwarming
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - input_select.toilet_heating
+        - script.manual_set_toilet_heating      
+  
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Slaapkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting         
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kantoor
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Badkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kastenkamer
+  #     entities:
+  #       - type: section
+  #         label: Verlichting
+  # - type: vertical-stack
+  #   cards:
+  #   - type: entities
+  #     show_state: false
+  #     show_name: false
+  #     show_header_toggle: false
+  #     title: Kamer Kim
+  #     entities:
+  #       - type: section
+  #         label: Verlichting

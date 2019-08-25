@@ -6,6 +6,9 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Moved overleays to the top in the code (see remarks)
+# V.02.1:  Added hallway env sensor 2nd floor
+# V0.3.0:  Changed layout
+# v0.3.1:  Minor color update
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -43,25 +46,27 @@ cards:
       # Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
-        prefix: 'Buiten temperatuur '
+        prefix: 'Buiten temperatuur: '
         style:
-          top: 80%
-          left: 85%
-          font-size: 120%
-          font-weight: 'bold'          
+          top: 83%
+          left: 25%
+          font-size: 100%
+          font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
-        prefix: 'Relatieve luchtvochtigheid '
+        prefix: 'Relatieve luchtvochtigheid: '
         style:
-          top: 85%
-          left: 85%
-          font-size: 120%  
+          top: 89%
+          left: 25%
+          font-size: 100%  
           font-weight: 'bold'
+#          color: var(--text-primary-color)
       # Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_kim
         style:
-          top: 70%
+          top: 52%
           left: 30%
           position: absolute
           font-size: 12px
@@ -70,7 +75,7 @@ cards:
       - type: state-label
         entity: sensor.room_humidity_kim
         style:
-          top: 73%
+          top: 56%
           left: 30%
           position: absolute
           font-size: 12px
@@ -79,7 +84,7 @@ cards:
       - type: state-label
         entity: sensor.room_temp_heating_room
         style:
-          top: 35%
+          top: 26%
           left: 50%
           position: absolute
           font-size: 12px
@@ -88,8 +93,26 @@ cards:
       - type: state-label
         entity: sensor.room_humidity_heating_room
         style:
-          top: 38%
+          top: 30%
           left: 50%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
+      - type: state-label
+        entity: sensor.room_temp_hallway_floor2
+        style:
+          top: 30%
+          left: 33%
+          position: absolute
+          font-size: 12px
+          color: '#000000'
+          font-weight: 'bold'
+      - type: state-label
+        entity: sensor.room_humidity_hallway_floor2
+        style:
+          top: 34%
+          left: 33%
           position: absolute
           font-size: 12px
           color: '#000000'

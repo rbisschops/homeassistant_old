@@ -1,6 +1,6 @@
 # Lovelace-UI file for Home Assistant, Lighting view
 # Type: Home Assistant yaml file
-# Date: 01-04-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
@@ -8,9 +8,11 @@
 # V0.2.0:  Added toilet heating manual control
 # V0.2.1:  Changed UI layout
 # V0.2.2:  Added rooms for future use
+# V0.2.3:  Added input_boolean.sunscreen_manual (moved)
+#          Removed switch.tradfri_high_cabinets_switch (moved)
 
 title: Settings
-icon: 'mdi:lightbulb-on-outline'
+icon: 'mdi:cogs
 cards:
   - type: vertical-stack
     cards:
@@ -31,7 +33,7 @@ cards:
         - entity: input_select.livingroom_lights_mode
         - type: section
           label: Verlichting keuken        
-        - entity: switch.tradfri_high_cabinets_switch
+
         - entity: input_boolean.domo_kitchen_cabinets
         - entity: input_boolean.domo_bar_light
         - type: section
@@ -54,6 +56,7 @@ cards:
         - type: section
           label: Zonnescherm  
         - entity: input_boolean.domo_sunscreen
+        - entity: input_boolean.sunscreen_manual
   - type: vertical-stack
     cards:
     - type: entities

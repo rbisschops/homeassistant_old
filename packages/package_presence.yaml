@@ -8,6 +8,7 @@
 # V1.0.0:  Production version 1.0.0
 # V1.1.0:  Added hallway light based on trigger frontdoor sensor 
 # V1.2.0:  Fixed Bug #005
+# V1.2.1:  Fixed wrong status presence sensor
 
 ###############################################################################
 #                              Homeassistant settings
@@ -18,7 +19,7 @@ homeassistant:
     timer.porchlight:
       friendly_name: Buitenlamp
     timer.hallwaylight:
-      friendly_name: Halletje  
+      friendly_name: Halletje
 
 ## Settings for owntracks
 owntracks:
@@ -28,6 +29,7 @@ owntracks:
 #                              Entities
 ###############################################################################
 binary_sensor:
+  ## Anyone home sensor
   - platform: template
     sensors:
       people_home:
@@ -37,7 +39,37 @@ binary_sensor:
             or is_state('device_tracker.owntracks_kimberly_s7', 'home')
             or is_state('device_tracker.owntracks_ralph_iphone7', 'home') }}
         entity_picture_template: >-
-          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}    
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+  ## Anneke home sensor
+  - platform: template
+    sensors:
+      anneke_home:
+        friendly_name: Anneke thuis
+        value_template: >-
+          {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
+            or is_state('device_tracker.anneke_s7', 'home') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/anneke48_' ~ states.binary_sensor.anneke_home.state ~ '.png' }}
+  ## kimberly home sensor
+  - platform: template
+    sensors:
+      kimberly_home:
+        friendly_name: Kimberly thuis
+        value_template: >-
+          {{ is_state('device_tracker.owntracks_kimberly_s7', 'home')
+            or is_state('device_tracker.kimberly_s7', 'home') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/kimberly48_' ~ states.binary_sensor.kimberly_home.state ~ '.png' }}
+  ## Ralph home sensor
+  - platform: template
+    sensors:
+      ralph_home:
+        friendly_name: Ralph thuis
+        value_template: >-
+          {{ is_state('device_tracker.owntracks_ralph_iphone7', 'home')
+            or is_state('device_tracker.ralph_iphone7', 'home') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/ralph48_' ~ states.binary_sensor.ralph_home.state ~ '.png' }}
 
 ###############################################################################
 #                               Groups

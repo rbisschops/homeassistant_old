@@ -1,11 +1,14 @@
 # Lovelace-UI file for Home Assistant, Firstfloor view
 # Type: Home Assistant yaml file
-# Date: 30-05-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Added controls and status for the sunscreen
+# V0.3.0:  Changed layout and updated icons for lamps
+# V0.3.1:  Added sunscreen manual button
+# V0.3.2:  Minor color update
 
 ## overlays for doors and other elements need to be on top in the code, otherwise
 ## the other controlable elements are not accessible anymore in the fontend!!
@@ -31,33 +34,33 @@ cards:
       # Outdoor temperature & humidity
       - type: state-label
         entity: sensor.rotterdam_temperature
+        prefix: 'Buiten temperatuur: '
         style:
-          top: 22%
-          left: 10%
-          position: absolute
-          font-size: 12px
-          color: '#000000'
-          font-weight: 'bold' 
+          top: 83%
+          left: 25%
+          font-size: 100%
+          font-weight: 'bold'
+#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
+        prefix: 'Relatieve luchtvochtigheid: '
         style:
-          top: 25%
-          left: 10%
-          position: absolute
-          font-size: 12px
-          color: '#000000'
-          font-weight: 'bold' 
-      # Controls for the garden     
+          top: 89%
+          left: 25%
+          font-size: 100%   
+          font-weight: 'bold'
+#          color: var(--text-primary-color)
+      # Controls for the garden
       - type: image
         entity: input_boolean.domo_garden_light
         tap_action:
           action: toggle
-        image: /local/custom_icons/light48_on.png
+        image: /local/custom_icons/customlight48_on.png
         state_image:
-          'on': /local/custom_icons/light48_on.png
-          'off': /local/custom_icons/light48_off.png 
+          'on': /local/custom_icons/customlight48_on.png
+          'off': /local/custom_icons/customlight48_off.png
         style:
-          top: 52%
+          top: 42%
           left: 22.5% 
           position: absolute
           width: 2.5%                                                 
@@ -70,7 +73,7 @@ cards:
           'on': /local/custom_icons/fountain48_on.png
           'off': /local/custom_icons/fountain48_off.png 
         style:
-          top: 52%
+          top: 42%
           left: 10% 
           position: absolute
           width: 2.5%
@@ -85,8 +88,8 @@ cards:
           'on': /local/custom_icons/left48_off.png
           'off': /local/custom_icons/left48_on.png
         style:
-          top: 85%
-          left: 30% 
+          top: 20%
+          left: 46% 
           position: absolute
           width: 2.5%
       - type: image
@@ -98,8 +101,8 @@ cards:
           'on': /local/custom_icons/play48_on.png
           'off': /local/custom_icons/pause48_on.png 
         style:
-          top: 85%
-          left: 33% 
+          top: 27%
+          left: 46% 
           position: absolute
           width: 2.5%
       - type: image
@@ -112,7 +115,20 @@ cards:
           'on': /local/custom_icons/right48_on.png
           'off': /local/custom_icons/right48_off.png 
         style:
-          top: 85%
-          left: 36% 
+          top: 34%
+          left: 46% 
+          position: absolute
+          width: 2.5%
+      - type: image
+        entity: input_boolean.sunscreen_manual
+        tap_action:
+          action:  toggle
+        image: /local/custom_icons/manual48_on.png
+        state_image:
+          'on': /local/custom_icons/manual48_on.png
+          'off': /local/custom_icons/manual48_off.png 
+        style:
+          top: 41%
+          left: 46% 
           position: absolute
           width: 2.5%      

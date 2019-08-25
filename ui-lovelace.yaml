@@ -6,24 +6,272 @@
 # Changelog:
 # V0.1.0:  First version
 # V0.2.0:  Added Utilities view
+# V0.3.0:  Added Decluttering-card V0.2.0
+#          Updated button card to V1.11.1
+#          Added templates for buttn card
+# V0.3.1:  Fix for #0033, button-card action behaviour
+
+###############################################################################
+#                         Additional resources used
+###############################################################################
 
 resources:
   - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.3.0
     type: module
-  - url: /local/custom_cards/button-card.js?v=0.0.6 
+  - url: /local/custom_cards/button-card.js?v=1.11.1
+    type: module
+  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js
+    type: module
+  - url: /local/custom_cards/decluttering-card.js?v=0.2.0
+    type: module
+  - url: /local/custom_cards/card-mod.js?v=0.2
     type: module
 
+###############################################################################
+#                      Custom compact header settings
+#             https://github.com/maykar/compact-custom-header
+###############################################################################
+
+cch:
+  header: hide
+  menu: show
+  options: show
+  voice: show
+  notifications: clock
+  clock_format: '24'
+  clock_date: true
+  date_locale: nl-NL
+  disable: false
+
+###############################################################################
+#                      Custom button card templates
+#             https://github.com/custom-cards/button-card
+###############################################################################
+
+button_card_templates:
+  media_button_large:
+    styles:
+      card:
+        - border-radius: 10px
+        - color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: normal
+  media_button_small_icon:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(84, 84, 84)
+  media_button_small_text_1:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(237, 125, 29)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 2.0em
+        - font-weight: normal
+  media_button_small_text_2:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.5em
+        - font-weight: bold
+  media_button_small_text_3:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: bold
+  stats_button_card_small_icon:
+    styles:
+      card:
+        - height: 70px
+      name:
+        - font-size: 1.0em
+        - font-weight: normal
+
+###############################################################################
+#                           Settings for Declustering-card
+#               https://github.com/custom-cards/decluttering-card
+###############################################################################
+
+decluttering_templates:
+  custom_markdown_card:
+    card:
+      type: markdown
+      content: >
+        ### [[title]]
+      style: |
+        ha-card {
+          background: none;
+          box-shadow: 0px 0px;
+        }
+        ha-markdown.markdown.no-header {
+          padding: 0;
+        }
+  custom_markdown_card_small:
+    card:
+      type: markdown
+      content: >
+        [[title]]
+      style: |
+        ha-card {
+          background: none;
+          box-shadow: 0px 0px;
+          font-size: 0.9em;
+          font-weight: bold
+        }
+        ha-markdown.markdown.no-header {
+          padding: 0;
+        }
+
+  media_button_large:
+    card:
+      type: custom:button-card
+      template:  media_button_large
+      entity: '[[entity]]'
+      icon: 'mdi:[[icon]]'
+      size: 40%
+      show_state: false
+      tap_action:
+        action: toggle
+      name: '[[name]]'
+      state:
+        - value: 'off'
+          styles:
+            card:
+              - color: rgb(84, 84, 84)
+        - value: 'on'
+          styles:
+            card:
+              - color: rgb(237, 125, 29)
+            icon:
+              - color: rgb(237, 125, 29)
+  media_button_small_icon:
+    card:
+      type: custom:button-card
+      template: media_button_small_icon
+      icon: 'mdi:[[icon]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_1:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_1
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_2:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_2
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_3:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_3
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  stats_critical_small_icon:
+    card:
+      type: custom:button-card
+      entity: 'sensor.nc_[[sensor]]'
+      template: stats_button_card_small_icon
+      name: '[[name]]'
+      tap_action:
+        action: more-info
+      icon: 'mdi:[[icon]]'
+      state:
+        - value: 'off'
+          styles:
+            card:
+              - color: rgb(216, 0, 0)
+            icon:
+              - color: rgb(216, 0, 0)
+        - value: 'on'
+          styles:
+            card:
+              - color: rgb(56, 150, 56)
+            icon:
+              - color: rgb(56, 150, 56)
+  stats_normal_small_icon:
+    card:
+      type: custom:button-card
+      entity: 'sensor.nc_[[sensor]]'
+      template: stats_button_card_small_icon
+      name: '[[name]]'
+      tap_action:
+        action: more-info
+      icon: 'mdi:[[icon]]'
+      state:
+        - value: 'off'
+          styles:
+            card:
+              - color: rgb(160, 160, 160)
+            icon:
+              - color: rgb(160, 160, 160)
+        - value: 'on'
+          styles:
+            card:
+              - color: rgb(56, 150, 56)
+            icon:
+              - color: rgb(56, 150, 56)
+
+###############################################################################
+#                              Main Lovemace settings
+###############################################################################
+
 title: Bisschops Mansion
-background: center / cover no-repeat url("/local/background2.jpg") fixed
+# background: center / cover no-repeat url("/local/background2.jpg") fixed
 views:
+  - !include lovelace/home.yaml
   - !include lovelace/groundfloor.yaml
   - !include lovelace/firstfloor.yaml
   - !include lovelace/secondfloor.yaml
   - !include lovelace/garden.yaml
-  - !include lovelace/lighting.yaml
   - !include lovelace/mediaplayer.yaml
   - !include lovelace/weather.yaml
   - !include lovelace/utilities.yaml
   - !include lovelace/stats.yaml
+  - !include lovelace/things.yaml
   - !include lovelace/settings.yaml
   - !include lovelace/test.yaml

@@ -1,13 +1,16 @@
 # Lovelace-UI file for Home Assistant, Weather view
 # Type: Home Assistant yaml file
-# Date: 01-02-2019
+# Date: 12-07-2019
 # Author: R.Bisschops
 #
 # Changelog:
 # V0.1.0:  First version
+# V0.2.0:  Rain percipitation
+# V0.3.0:  Major UI changes based on Decluttering card
 
 title: Weer
 icon: 'mdi:weather-cloudy'
+background: "#e3e3e3"
 cards:
 #  - type: weather-forecast
 #    title: Weer
@@ -18,48 +21,69 @@ cards:
 
   - type: vertical-stack
     cards:
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Vooruitzichten
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Morgen
       - type: entities
-        title: Vooruitzichten
         show_header_toggle: false
         entities:
-          - type: section
-            label: Morgen
           - entity: sensor.rotterdam_symbol_1d
             name: ' '
           - entity: sensor.rotterdam_rainchance_1d
             name: Regen
           - entity: sensor.rotterdam_sunchance_1d
             name: Zon
-
-          - type: section
-            label: Overmorgen
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Overmorgen
+      - type: entities
+        show_header_toggle: false
+        entities:
           - entity: sensor.rotterdam_symbol_2d
             name: ' '
           - entity: sensor.rotterdam_rainchance_2d
             name: Regen
           - entity: sensor.rotterdam_sunchance_2d
             name: Zon
-
-          - type: section
-            label: 3 dagen          
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: 3 dagen
+      - type: entities
+        show_header_toggle: false
+        entities:
           - entity: sensor.rotterdam_symbol_3d
             name: ' '
           - entity: sensor.rotterdam_rainchance_3d
             name: Regen
           - entity: sensor.rotterdam_sunchance_3d
             name: Zon
-
-          - type: section
-            label: 4 dagen  
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: 4 dagen
+      - type: entities
+        show_header_toggle: false
+        entities:
           - entity: sensor.rotterdam_symbol_4d
             name: ' '
           - entity: sensor.rotterdam_rainchance_4d
             name: Regen
           - entity: sensor.rotterdam_sunchance_4d
             name: Zon
-
-          - type: section
-            label: 5 dagen
+      - type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: 5 dagen
+      - type: entities
+        show_header_toggle: false
+        entities:
           - entity: sensor.rotterdam_symbol_5d
             name: ' '
           - entity: sensor.rotterdam_rainchance_5d
@@ -76,8 +100,11 @@ cards:
           action: more-info
         show_name: false  
         show_state: false
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Zon
       - type: entities
-        title: Zon
         show_header_toggle: false
         entities:
           - entity: sun.sun
@@ -88,3 +115,13 @@ cards:
           - entity: sensor.sunset
             name: Zon onder
             icon: mdi:weather-sunset-down
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Regenverwachting
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.rotterdam_precipitation_forecast_total
+            name: Regen verwaching (10 min)
+            icon: mdi:weather-pouring

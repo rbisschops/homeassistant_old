@@ -1,0 +1,61 @@
+# Theme file for Home Assistant
+# Type: Home Assistant yaml file
+# Date: 18-07-2019
+# Author: R.Bisschops
+#
+# Based on dark-green theme by Isabella Gross Alström
+# https://github.com/isabellaalstrom/HomeAssistantConfiguration
+#
+# Changelog:
+# V1.0.0:  First version
+
+###############################################################################
+#                              Colors
+###############################################################################
+
+primary-color: "#389638"
+disabled-text-color: "#545454"
+divider-color: "rgba(255, 255, 255, 0.12)"
+paper-card-background-color: "#202020"
+paper-grey-200: "#191919"
+paper-item-icon-color: "#d3d3d3"
+paper-listbox-background-color: "#202020"
+paper-listbox-color: "#FFFFFF"
+primary-background-color: "#303030"
+primary-text-color: "#cfcfcf"
+secondary-background-color: "#2b2b2b"
+secondary-text-color: "#389638"
+sever-alert-color: "#b60e16"
+critical-alert-color: "#ffa400"
+# Colors based on variables, see above
+label-badge-background-color: "var(--secondary-background-color)"
+label-badge-text-color: "var(--text-primary-color)"
+label-badge-red: "var(--sever-alert-color)"
+label-badge-yellow: "var(--critical-alert-color)"
+label-badge-green: "var(--primary-color)"
+#label-badge-blue: #used for normal
+paper-card-header-color: "var(--paper-item-icon-color)"
+paper-grey-50: "var(--primary-text-color)"
+paper-item-icon-active-color: "#d8bf50" #"var(--primary-color)"
+paper-item-icon_-_color: "var(--primary-text-color)"
+paper-slider-active-color: "#d8bf50" #"var(--primary-color)"
+paper-slider-knob-color: "var(--primary-color)"
+paper-slider-knob-start-color: "var(--primary-color)"
+paper-slider-pin-color: "var(--primary-color)"
+paper-slider-secondary-color: "var(--light-primary-color)"
+paper-toggle-button-checked-ink-color: "var(--dark-primary-color)"
+paper-toggle-button-checked-button-color: "var(--primary-color)"
+paper-toggle-button-checked-bar-color: "var(--light-primary-color)"
+paper-toggle-button-unchecked-bar-color: "var(--primary-text-color)"
+sidebar-icon-color: "var(--paper-item-icon-color)"
+
+###############################################################################
+#                              Fonts
+###############################################################################
+
+
+###############################################################################
+#                              Card specific modifications
+###############################################################################
+
+ha-card-border-radius: "10px" # Rounded corners on cards. NOTE: may not work with custom cards.

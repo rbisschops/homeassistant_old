@@ -15,6 +15,7 @@
 # V0.4.1:  Added condition recording mode in bedtime script 
 # V0.5.0:  Added test services in script for toilet heating
 # V0.5.1:  Added toilet heating settings to the the bed time script 
+# V0.6.0:  Added template sensors for waste bin schedular 
 
 ###############################################################################
 #                               Homeassistant settings
@@ -39,6 +40,44 @@ binary_sensor:
     country: NL
     workdays: [mon, tue, wed, thu, fri, sat]
     excludes: [sun]
+
+  - platform: template
+    sensors:
+      gft:
+        friendly_name: GFT
+        value_template: >-
+          {% if is_state('calendar.afval_kalender', 'on') %}
+            {% if state_attr('calendar.afval_kalender', 'message') == 'GFT' %}
+              true
+            {% elif state_attr('calendar.afval_kalender', 'message') == 'GFT + PMD' %}
+              true
+            {% else %}
+              false
+            {% endif %}
+          {% else %}
+            false
+          {% endif %}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/gft48_' ~ states.binary_sensor.gft.state ~ '.png' }}
+
+  - platform: template
+    sensors:
+      pmd:
+        friendly_name: PMD
+        value_template: >-
+          {% if is_state('calendar.afval_kalender', 'on') %}
+            {% if state_attr('calendar.afval_kalender', 'message') == 'PMD' %}
+              true
+            {% elif state_attr('calendar.afval_kalender', 'message') == 'GFT + PMD' %}
+              true
+            {% else %}
+              false
+            {% endif %}
+          {% else %}
+            false
+          {% endif %}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/pmd48_' ~ states.binary_sensor.pmd.state ~ '.png' }}
 
 ###############################################################################
 #                               Groups

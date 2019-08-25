@@ -1,174 +1,109 @@
-# Lovelace-UI file for Home Assistant, Statistics view
-# Type: Home Assistant yaml file
-# Date: 01-02-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Changed layout for presence
-#          Changed colors of non- critical network devices
-# V0.2.1:  Updated empty card in critcal network devices 
-# V0.4.0:  Changed some configs
-#          Removed obsolete devices
-#          Reshuffled layout
-# V0.4.1:  Changed UI layout  
+## Lovelace-UI file for Home Assistant, Statistics view
+## Type: Home Assistant yaml file
+## Date: 21-07-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Changed layout for presence
+##          Changed colors of non- critical network devices
+## V0.2.1:  Updated empty card in critcal network devices 
+## V0.4.0:  Changed some configs
+##          Removed obsolete devices
+##          Reshuffled layout
+## V0.4.1:  Changed UI layout
+## V0.5.0:  Major UI changes based on Decluttering card
+## V0.6.0:  Added MySensors Gateway
 
 title: Status
 icon: 'mdi:stethoscope'
+background: "#e3e3e3"
 cards:
   - type: vertical-stack
     cards:
-      - type: markdown
-        content: >
-          ## Kritische netwerk componenten
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Kritische netwerk componenten
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            entity: sensor.nc_diskstation
-            icon: mdi:nas
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Diskstation
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_voip
-            icon: mdi:phone-voip
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: VOIP
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_printer
-            icon: mdi:printer
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: HP Printer
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: diskstation
+              - name: Diskstation
+              - icon: nas
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: voip
+              - name: VOIP
+              - icon: phone-voip
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: printer
+              - name: HP Printer
+              - icon: printer
       - type: horizontal-stack
         cards: 
-          - type: "custom:button-card"
-            entity: sensor.nc_domoticz_master
-            icon: mdi:desktop-tower
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Domoticz (M) 
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_domoticz_slave
-            icon: mdi:desktop-tower
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Domoticz (S) 
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          # - type: "custom:button-card"
-          #   entity: sensor.nc_homeassistant_pi
-          #   icon: mdi:desktop-tower
-          #   size: 30%
-          #   color_type: icon
-          #   color: auto
-          #   color_off: rgb(255, 0, 0)      
-          #   action: more_info   
-          #   name: HASS
-          #   style:
-          #     - font-size: 1.0em
-          #     - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_harmonyhub
-            icon: mdi:router-wireless
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Harmony Hub
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: domoticz_master
+              - name: Domoticz (M)
+              - icon: desktop-tower
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: domoticz_slave
+              - name: Domoticz (S)
+              - icon: desktop-tower
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: harmonyhub
+              - name: Harmony Hub
+              - icon: router-wireless
       - type: horizontal-stack
         cards:    
-          - type: "custom:button-card"
-            entity: sensor.nc_hue_bridge
-            icon: mdi:router-wireless
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Hue Bridge
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          # - type: "custom:button-card"
-          #   entity: sensor.nc_xiaomi_bridge
-          #   icon: mdi:router-wireless
-          #   size: 30%
-          #   color_type: icon
-          #   color: auto
-          #   color_off: rgb(255, 0, 0)      
-          #   action: more_info   
-          #   name: Xiaomi Bridge
-          #   style:
-          #     - font-size: 1.0em
-          #     - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_ha_bridge
-            icon: mdi:desktop-tower
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: HA-Bridge
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
-          - type: "custom:button-card"
-            entity: sensor.nc_amazonecho
-            icon: mdi:microphone
-            size: 30%
-            color_type: icon
-            color: auto
-            color_off: rgb(255, 0, 0)      
-            action: more_info   
-            name: Echo Dot
-            style:
-              - font-size: 1.0em
-              - font-weight: normal 
-      # - type: horizontal-stack
-      #   cards:
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: hue_bridge
+              - name: Hue Bridge
+              - icon: router-wireless
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: ha_bridge
+              - name: HA-Bridge
+              - icon: desktop-tower
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: mysensors_gateway
+              - name: MySensors
+              - icon: desktop-tower
+      - type: horizontal-stack
+        cards:    
+          - type: custom:decluttering-card
+            template: stats_critical_small_icon
+            variables:
+              - sensor: amazonecho
+              - name: Echo Dot
+              - icon: microphone
+          - type: custom:button-card
+            color_type: blank-card
+          - type: custom:button-card
+            color_type: blank-card          
 
-      #     - type: custom:button-card
-      #       color_type: blank-card  
   - type: vertical-stack
     cards:
-      - type: markdown
-        content: >
-          ## Internet
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Internet
       - type: horizontal-stack
         cards:
           - type: custom:mini-graph-card
@@ -195,158 +130,87 @@ cards:
                   action: none 
   - type: vertical-stack
     cards:
-      - type: markdown
-        content: >
-          ## Overige netwerk componenten
+      - type: custom:decluttering-card
+        template: custom_markdown_card
+        variables:
+          - title: Overige netwerk componenten
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            entity: sensor.nc_laptop_rediscript
-            icon: mdi:laptop
-            size: 30%
-            color_type: icon
-            color: auto
-            #      
-            action: more_info   
-            name: Rediscript
-            style:
-              - font-size: 1.0em
-              - font-weight: normal     
-          - type: "custom:button-card"
-            entity: sensor.nc_laptop_ralph
-            icon: mdi:laptop
-            size: 30%
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Ralph
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_laptop_kim
-            icon: mdi:laptop
-            size: 30%
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Kim
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: laptop_rediscript
+              - name: Rediscript
+              - icon: laptop
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: laptop_ralph
+              - name: Ralph
+              - icon: laptop
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: laptop_kim
+              - name: Kim
+              - icon: laptop
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            entity: sensor.nc_pc_ralph
-            icon: mdi:desktop-tower
-            size: 30%
-            color_type: icon
-            color: auto 
-                  
-            action: more_info   
-            name: Ralph
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_popcornhour
-            icon: mdi:popcorn
-            size: 30%
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Popcorn
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_appletv
-            icon: mdi:apple
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Apple-TV
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-      - type: horizontal-stack                  
-        cards:
-          - type: "custom:button-card"
-            entity: sensor.nc_lgtelevision
-            icon: mdi:television
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: LG TV
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_denon
-            icon: mdi:volume-high
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Denon
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_humax
-            icon: mdi:satellite-variant
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Humax
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: pc_ralph
+              - name: Ralph PC
+              - icon: desktop-tower
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: popcornhour
+              - name: Popcorn
+              - icon: popcorn
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: appletv
+              - name: Apple-TV
+              - icon: apple
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            entity: sensor.nc_ipad
-            icon: mdi:tablet-ipad
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: iPad
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_bosch_washing_machine
-            icon: mdi:washing-machine
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Wasmachine
-            style:
-              - font-size: 1.0em
-              - font-weight: normal  
-          - type: "custom:button-card"
-            entity: sensor.nc_bosch_dryer
-            icon: mdi:tumble-dryer
-            size: 30%            
-            color_type: icon
-            color: auto
-                  
-            action: more_info   
-            name: Droger
-            style:
-              - font-size: 1.0em
-              - font-weight: normal
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: lgtelevision
+              - name: LG TV
+              - icon: television
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: denon
+              - name: Denon
+              - icon: volume-high
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: humax
+              - name: Humax
+              - icon: satellite-variant
+      - type: horizontal-stack
+        cards:
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: ipad
+              - name: iPad
+              - icon: tablet-ipad
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: bosch_washing_machine
+              - name: Wasmachine
+              - icon: washing-machine
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: bosch_dryer
+              - name: Droger
+              - icon: tumble-dryer

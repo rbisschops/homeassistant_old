@@ -18,6 +18,8 @@
 # V1.4.0:  Added utilities sensors via MQTT
 # V1.4.1:  Replaced json_attributes with json_attributes_topic
 # V1.4.2:  Added additional utilities sensors
+# V1.4.3:  Added env sensors 2nd floor hallway
+# V1.5.0:  Added season sensor
 
 ###############################################################################
 #                              Homeassistant settings
@@ -52,7 +54,9 @@ homeassistant:
     sensor.room_temp_storage:
       friendly_name: Temperatuur Berging
     sensor.room_temp_heating_room:
-      friendly_namne: Temperatuur Ketel ruimte  
+      friendly_namne: Temperatuur Ketel ruimte
+    sensor.room_temp_hallway_floor2:
+      friendly_namne: Temperatuur Overloop 2e verdieping
   # Humidity sensors
     sensor.room_humidity_office:
       friendly_name: Rel. Vochtigheid Kantoor
@@ -69,7 +73,9 @@ homeassistant:
     sensor.room_humidity_storage:
       friendly_name: Rel. Vochtigheid Berging
     sensor.room_humidity_heating_room:
-      friendly_namne: Rel. Vochtigheid Ketel ruimte       
+      friendly_namne: Rel. Vochtigheid Ketel ruimte 
+    sensor.room_humidity_hallway_floor2:
+      friendly_namne: Rel. Vochtigheid Overloop 2e verdieping      
   # Pressure sensors
     sensor.room_pressure_office:
       friendly_name: Luchtdruk Kantoor   
@@ -86,7 +92,9 @@ homeassistant:
     sensor.room_pressure_storage:
       friendly_name: Luchtdruk Berging  
     sensor.room_pressure_heating_room:
-      friendly_namne: Luchtdruk Ketel ruimte  
+      friendly_namne: Luchtdruk Ketel ruimte
+    sensor.room_pressure_hallway_floor2:
+      friendly_namne: Luchtdruk Overloop 2e verdieping  
 
 ###############################################################################
 #                              Entities
@@ -102,6 +110,10 @@ sensor:
       sunrise:
         value_template: '{% set timestamp = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%I:%M") %} {{ timestamp.lstrip("0") }}'
         unit_of_measurement: 'AM'    
+
+  ## Season sensor (astronomical)
+  - platform: season
+    type: astronomical
 
   # Utilities sensors (not ready yet)
   - platform: "mqtt"
@@ -234,6 +246,16 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env" 
+  # Added in V1.4.3   
+  - platform: "mqtt"
+    name: room_temp_hallway_floor2
+    state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    value_template: "{{ value_json.temperature }}"
+    json_attributes_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
+
   ## Inhouse environment sensors - humidity
   - platform: "mqtt"
     name: room_humidity_office
@@ -303,6 +325,16 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
+  # Added in V1.4.3
+  - platform: "mqtt"
+    name: room_humidity_hallway_floor2
+    state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    value_template: "{{ value_json.humidity }}"
+    json_attributes_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
+
   ## Inhouse environment sensors - pressure
   - platform: "mqtt"
     name: room_pressure_office  
@@ -372,6 +404,15 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
+  # Added in V1.4.3        
+  - platform: "mqtt"
+    name: room_pressure_hallway_floor2
+    state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "hPa"
+    device_class: "pressure"
+    value_template: "{{ value_json.pressure }}"
+    json_attributes_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
 
 ## Code for testing is not working yet. maybe remove later
   # - platform: command_line
@@ -412,7 +453,9 @@ group:
       - sensor.room_temp_livingroom
       - sensor.room_temp_toilet
       - sensor.room_temp_storage
-      - sensor.room_temp_heating_room      
+      - sensor.room_temp_heating_room
+      - sensor.room_temp_hallway_floor2 
+
   ## Humidity sensors
   humidity_sensors:
     name: Relatieve vochtigheid
@@ -424,7 +467,8 @@ group:
       - sensor.room_humidity_livingroom
       - sensor.room_humidity_toilet
       - sensor.room_humidity_storage
-      - sensor.room_humidity_heating_room       
+      - sensor.room_humidity_heating_room
+      - sensor.room_humidity_hallway_floor2              
   ## Pressure sensors
   pressure_sensors:
     name: Luchtdruk
@@ -436,7 +480,9 @@ group:
       - sensor.room_pressure_livingroom
       - sensor.room_pressure_toilet
       - sensor.room_pressure_storage
-      - sensor.room_pressure_heating_room       
+      - sensor.room_pressure_heating_room
+      - sensor.room_pressure_hallway_floor2   
+
   ## Indoor Environment - per room
   office_room_environment_sensors:
     name: Omgevings condities kantoor
@@ -485,7 +531,11 @@ group:
   heating_room_environment_sensors:
       - sensor.room_temp_heating_room 
       - sensor.room_humidity_heating_room 
-      - sensor.room_pressure_heating_room        
+      - sensor.room_pressure_heating_room
+  hallway_2nd_floor_environment_sensors:
+      - sensor.room_temp_hallway_floor2
+      - sensor.room_humidity_hallway_floor2
+      - sensor.room_pressure_hallway_floor2
 
 ###############################################################################
 #                               Automations

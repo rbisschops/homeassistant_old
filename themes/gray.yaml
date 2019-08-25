@@ -1,0 +1,215 @@
+# Theme file for Home Assistant
+# Type: Home Assistant yaml file
+# Date: 18-07-2019
+# Author: R.Bisschops
+#
+# Based on nest theme by Isabella Gross Alström
+# https://github.com/isabellaalstrom/HomeAssistantConfiguration
+#
+# Changelog:
+# V1.0.0:  First version
+# V1.0.1:  Cleanup and aligned with standard HA styles
+
+###############################################################################
+#                              Card specific modifications
+###############################################################################
+
+ha-card-box-shadow: "10px 10px 17px -8px #A9A9A9" # Shadows on cards. Same as `shadow-elevation-2dp_-_box-shadow:
+ha-card-border-radius: "10px" # Rounded corners on cards. NOTE: may not work with custom cards.
+# ha-card-background: # Defines the background for cards.
+
+###############################################################################
+#                              Fonts
+###############################################################################
+
+primary-font-family: 'Open Sans,sans-serif'
+paper-font-common-base_-_font-family: "var(--primary-font-family)"
+paper-font-common-code_-_font-family: "var(--primary-font-family)"
+paper-font-body1_-_font-family: "var(--primary-font-family)"
+paper-font-subhead_-_font-family: "var(--primary-font-family)"
+paper-font-headline_-_font-family: "var(--primary-font-family)"
+paper-font-caption_-_font-family: "var(--primary-font-family)"
+paper-font-title_-_font-family: "var(--primary-font-family)"
+# Each of the following all have the following elements that can be appended:
+# `_-_font-family`, `_-_webkit-font-smoothing`, `_-_white-space`, `_-_overflow`, `_-_text-overflow`, `_-_font-size`, `_-_font-weight`, `_-_letter-spacing`, `_-_line-height`, `_-_text-transform`
+# paper-font-common-base
+# paper-font-common-code
+# paper-font-common-code2
+# paper-font-common-nowrap
+# paper-font-body1
+# paper-font-body2
+# paper-font-code1
+# paper-font-code2
+# paper-font-button
+# paper-font-menu
+# paper-font-subhead
+# paper-font-caption
+# paper-font-title
+# paper-font-headline
+# paper-font-display1
+# paper-font-display2
+# paper-font-display3
+# paper-font-display4
+# app-toolbar-font-size: # 14px
+# app-drawer-font-size: # 14px
+
+###############################################################################
+#                              Colors
+###############################################################################
+
+## add on colors for this theme
+text-light-color: '#BAC0C6'
+text-medium-color: '#8c96a5'
+
+## text
+# primary-text-color: # CSS color value
+secondary-text-color: '#5f6368'
+text-primary-color: '#FFF'
+# disabled-text-color: 
+
+## main interface colors
+primary-color: '#636B75'
+# dark-primary-color: 
+# light-primary-color: # CSS color value
+# accent-color:
+# divider-color:
+# scrollbar-thumb-color:
+
+## states and badges
+# state-icon-color:
+# state-icon-active-color:
+# state-icon-unavailable-color: 
+
+## background and sidebar
+# card-background-color:
+# primary-background-color: # color of the sidebar headers background (space behind the text "Home Assistant" and your Avatar)
+# secondary-background-color: # CSS color value
+
+## sidebar menu
+# sidebar-text-color:
+# sidebar-background-color:
+# sidebar-icon-color: # CSS color value
+# sidebar-selected-text-color: # CSS color value
+# sidebar-selected-icon-color: # CSS color value
+
+## controls
+# toggle-button-color:
+# slider-color:
+# slider-secondary-color:
+# slider-bar-color:
+
+## for label-badge
+# label-badge-background-color:
+# label-badge-text-color:
+# label-badge-red:
+# label-badge-blue:
+# label-badge-green:
+# label-badge-yellow:
+# label-badge-grey:
+
+## paper-styles color
+# paper-grey-50: 
+# paper-grey-200: 
+# paper-grey-500: 
+
+## for paper-spinner
+# google-red-500:
+# google-blue-500:
+# google-green-500:
+# google-yellow-500:
+# paper-spinner-color:
+
+## for paper-slider
+# paper-green-400:
+# paper-blue-400:
+# paper-orange-400:
+
+## opacity for dark text on a light background
+# dark-divider-opacity:
+# dark-disabled-opacity:
+# dark-secondary-opacity:
+# dark-primary-opacity: 
+
+## opacity for light text on a dark background
+# light-divider-opacity: 
+# light-disabled-opacity: 
+# light-secondary-opacity: 
+# light-primary-opacity: 
+
+## derived colors, to keep existing themes mostly working
+# paper-card-background-color: # background of the cards
+# paper-listbox-background-color: # CSS color value 
+# paper-item-icon-color: # color of entities icons when off
+# paper-item-icon-active-color: # color of entities icons when on, gets overriden by lights color if available
+# table-row-background-color: 
+# table-row-alternative-background-color: 
+
+## set our toggle style
+# paper-toggle-button-checked-ink-color: 
+# paper-toggle-button-checked-button-color: # CSS color value 
+# paper-toggle-button-checked-bar-color: # CSS color value 
+# paper-toggle-button-unchecked-button-color: # CSS color value 
+# paper-toggle-button-unchecked-bar-color: # CSS color value 
+
+## set our slider style
+# paper-slider-knob-color:
+# paper-slider-knob-start-color: 
+# paper-slider-pin-color: 
+# paper-slider-active-color: # Color of the part of the slider which is active. 
+# paper-slider-secondary-color: 
+# paper-slider-container-color: # Color of the part of the slider which is not active.
+## mwc
+# mdc-theme-primary: 
+
+
+### Non documented:
+
+# accent-medium-color:
+# background-color:
+# background-color-2:
+# background-card-color:
+# border-color:
+# paper-tabs-selection-bar-color:
+# table-row-background-color:
+# table-row-alternative-background-color:
+# alarm-color-disarmed:
+# alarm-color-pending:
+# alarm-color-triggered:
+# alarm-color-armed:
+# alarm-color-autoarm:
+# alarm-state-color: 
+# paper-listbox-color: # CSS color value, ie. `redColor of the overall text of the popup menues (such as "3 dot menu" and background of hovered icon (in a lighter shade of the same color)
+# Header
+# Left Menu
+# paper-listbox_-_font-family: # |Roboto, sans serif | |Font used for the left sidebar menu. 
+# sidebar-text_-_background: # `|CSS color value, ie. `red
+# paper-card-header-color:
+# paper-dialog-background-color: # background color of dialogs that appear when clicking on a entity
+# paper-dialog-color: # text color of dialogs that appear when clicking on a entity 
+# paper-item-icon_-_color:
+# paper-item-selected_-_background-color:
+# paper-menu-button-dropdown-background:
+# paper-slider-disabled-active-color:
+
+## Shadows
+# mo-box-shadow-s:
+# mo-box-shadow-m:
+# mo-box-shadow-l:
+# mo-box-shadow-xl:
+# per-input-container-shared-input-style_-_box-shadow:
+# per-material_-_display:
+# per-material_-_position:
+# per-material-elevation-1_-_box-shadow:
+# per-material-elevation-2_-_box-shadow:
+# per-material-elevation-3_-_box-shadow:
+# per-material-elevation-4_-_box-shadow:
+# per-material-elevation-5_-_box-shadow:
+# adow-elevation-2dp_-_box-shadow:
+# adow-elevation-3dp_-_box-shadow:
+# adow-elevation-4dp_-_box-shadow:
+# shadow-elevation-6dp_-_box-shadow:
+# shadow-elevation-8dp_-_box-shadow:
+# shadow-elevation-12dp_-_box-shadow:
+# shadow-elevation-16dp_-_box-shadow:
+# shadow-elevation-24dp_-_box-shadow:
+# shadow-transition_-_transition:

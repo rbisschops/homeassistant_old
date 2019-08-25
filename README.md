@@ -7,27 +7,27 @@ Last update: August 25th, 2019
 <div align="center"><a name="menu"></a>
   <h4>
     <a href="#homeserver">
-      My Home server
+      "My Home server"
     </a>
     <span> | </span>
     <a href="#homeassistant">
-      Home Assistant
+      "Home Assistant"
     </a>
     <span> | </span>
     <a href="#devices">
-      Devices and services
+      "Devices and services"
     </a>
     <span> | </span>
     <a href="#thingsplanned">
-      Things planned
+      "Things planned"
     </a>
     <span> | </span>
     <a href="#development">
-      Development
+      "Development"
     </a>
     <span> | </span>
     <a href="#licence">
-      Licence
+      "Licence"
     </a>   
   </h4>
 </div>

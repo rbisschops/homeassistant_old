@@ -1,7 +1,8 @@
 Last update: August 18th, 2019
 
-![GitHub issues](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)
 ![](https://img.shields.io/badge/Home%20Assistant-0.96.5-blue.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/rbisschops/homeassistant)
+![GitHub issues](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)
 
 # My Home server
 
@@ -95,6 +96,8 @@ Many ideas. Too little time!
 I develop most of my applications in [Microsoft Visual Studio Code](https://code.visualstudio.com/). VS code has some nice extensions for checking the YAML syntax.
 
 If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
+
+![Twitter URL](https://img.shields.io/twitter/url/https/rbisschops?style=social)
 
 ## License
 

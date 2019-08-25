@@ -8,7 +8,7 @@ Last update: August 25th, 2019
   <h4>
     <a href="#my-home-server">My Home server</a>
     <span> | </span>
-    <a href="#home-assistant">Home assistant</a>
+    <a href="#home-assistant">Home Assistant</a>
     <span> | </span>
     <a href="#devices-and-services">Devices and services</a>
     <span> | </span>

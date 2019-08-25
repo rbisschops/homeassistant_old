@@ -120,7 +120,7 @@ I develop most of my applications in [Microsoft Visual Studio Code](https://code
 
 If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
 
-When you like my work you can always buy me a coffee.
+If my works helps you reduce time to develop, you can always consider buying me a cup of coffee.
 
 <a href="https://www.buymeacoffee.com/LQITARxGm" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 

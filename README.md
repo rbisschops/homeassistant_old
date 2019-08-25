@@ -1,10 +1,38 @@
-Last update: August 18th, 2019
+Last update: August 25th, 2019
 
 ![](https://img.shields.io/badge/Home%20Assistant-0.96.5-blue.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/rbisschops/homeassistant)
 ![GitHub issues](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)
 
-# My Home server
+<div align="center"><a name="menu"></a>
+  <h4>
+    <a href="#homeserver">
+      My Home server
+    </a>
+    <span> | </span>
+    <a href="#homeassistant">
+      Home Assistant
+    </a>
+    <span> | </span>
+    <a href="#devices">
+      Devices and services
+    </a>
+    <span> | </span>
+    <a href="#thingsplanned">
+      Things planned
+    </a>
+    <span> | </span>
+    <a href="#development">
+      Development
+    </a>
+    <span> | </span>
+    <a href="#licence">
+      Licence
+    </a>   
+  </h4>
+</div>
+
+# [My Home server](homeserver)
 
 Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Home Assistant on an old HP laptop for now. The laptop is running as a "Home server". I am currently running Ubuntu 18.04 LTS on the laptop. Home Assistant as well as all supporting applications (and some additional non Home Assistant related applications) are running in Docker containers. 
 
@@ -25,7 +53,7 @@ I plan to move everything to a dedicated NUC in time. Docker should make this si
 
 When I find the time I will write a blog or something alike about my Home server.
 
-# Home Assistant
+# [Home Assistant](#homeassistant)
 
 I'm still learning Home Assistant as I'm coming from a Domoticz RPi based environment. Home Assistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Home Assistant will be the main home automation application.   
 
@@ -49,7 +77,7 @@ I use a growing number of custom cards and helpers in my Lovelace. I will do som
 
 When things are progressing I will upload some screenshots of my UI.
 
-## Devices and services that I use
+# [Devices and services that I use](#devices)
 
 * Zwave:
   * [Aeotec Z-Stick Gen5](https://aeotec.com/z-wave-usb-stick) Z-Wave controller.
@@ -87,17 +115,17 @@ When things are progressing I will upload some screenshots of my UI.
   * [Harmony Hub](https://www.logitech.com), the Harmony Hub, despite Logitech's poor way of supporting interoperability, a powerful device for controlling the media devices. Integrated with Home Assistant. I spent a lot of time in getting it running in  Home Assistant. Still some lose ends but I'm getting there.
 
   
-## Things planned
+# [Things planned](#thingsplanned)
 
 Many ideas. Too little time!
 
-## Development
+# [Development](#development)
 
 I develop most of my applications in [Microsoft Visual Studio Code](https://code.visualstudio.com/). VS code has some nice extensions for checking the YAML syntax.
 
 If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
 
-## License
+# [License](#licence)
 
 MIT License
 

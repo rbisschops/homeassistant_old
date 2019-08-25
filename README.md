@@ -9,9 +9,6 @@ Last update: August 25th, 2019
     <a href="#homeserver">
       My Home server
     </a>
-<a href="#homeserver">
-      My Home server
-    </a>
     <span> | </span>
     <a href="#homeassistant">
       Home Assistant

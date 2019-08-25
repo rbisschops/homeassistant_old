@@ -120,6 +120,8 @@ I develop most of my applications in [Microsoft Visual Studio Code](https://code
 
 If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
 
+<a href="https://www.buymeacoffee.com/LQITARxGm" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
 # [License](#license)
 
 MIT License

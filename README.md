@@ -2,7 +2,7 @@ Last update: August 25th, 2019
 
 ![](https://img.shields.io/badge/Home%20Assistant-0.96.5-blue.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/rbisschops/homeassistant)
-![GitHub issues](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)
+[![](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)](https://github.com/rbisschops/homeassistant/issues)
 
 <div align="center"><a name="menu"></a>
   <h4>

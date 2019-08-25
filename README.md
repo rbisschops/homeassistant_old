@@ -6,29 +6,17 @@ Last update: August 25th, 2019
 
 <div align="center"><a name="menu"></a>
   <h4>
-    <a href="#homeserver">
-      My Home server
-    </a>
+    <a href="#homeserver">My Home server</a>
     <span> | </span>
-    <a href="#homeassistant">
-      Home Assistant
-    </a>
+    <a href="#homeassistant">Home Assistant</a>
     <span> | </span>
-    <a href="#devices">
-      Devices and services
-    </a>
+    <a href="#devices">Devices and services</a>
     <span> | </span>
-    <a href="#thingsplanned">
-      Things planned
-    </a>
+    <a href="#planned">Things planned</a>
     <span> | </span>
-    <a href="#development">
-      Development
-    </a>
+    <a href="#development">Development</a>
     <span> | </span>
-    <a href="#licence">
-      Licence
-    </a>
+    <a href="#licence">Licence</a>
   </h4>
 </div>
 
@@ -115,7 +103,7 @@ When things are progressing I will upload some screenshots of my UI.
   * [Harmony Hub](https://www.logitech.com), the Harmony Hub, despite Logitech's poor way of supporting interoperability, a powerful device for controlling the media devices. Integrated with Home Assistant. I spent a lot of time in getting it running in  Home Assistant. Still some lose ends but I'm getting there.
 
   
-# [Things planned](#thingsplanned)
+# [Things planned](#planned)
 
 Many ideas. Too little time!
 

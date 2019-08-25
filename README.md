@@ -7,32 +7,35 @@ Last update: August 25th, 2019
 <div align="center"><a name="menu"></a>
   <h4>
     <a href="#homeserver">
-      "My Home server"
+      My Home server
+    </a>
+<a href="#homeserver">
+      My Home server
     </a>
     <span> | </span>
     <a href="#homeassistant">
-      "Home Assistant"
+      Home Assistant
     </a>
     <span> | </span>
     <a href="#devices">
-      "Devices and services"
+      Devices and services
     </a>
     <span> | </span>
     <a href="#thingsplanned">
-      "Things planned"
+      Things planned
     </a>
     <span> | </span>
     <a href="#development">
-      "Development"
+      Development
     </a>
     <span> | </span>
     <a href="#licence">
-      "Licence"
-    </a>   
+      Licence
+    </a>
   </h4>
 </div>
 
-# [My Home server](homeserver)
+# [My Home server](#homeserver)
 
 Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Home Assistant on an old HP laptop for now. The laptop is running as a "Home server". I am currently running Ubuntu 18.04 LTS on the laptop. Home Assistant as well as all supporting applications (and some additional non Home Assistant related applications) are running in Docker containers. 
 

@@ -1,5 +1,8 @@
 Last update: August 18th, 2019
 
+![GitHub issues](https://img.shields.io/github/issues-raw/rbisschops/homeassistant)
+![](https://img.shields.io/badge/Home%20Assistant-0.96.5-blue.svg)
+
 # My Home server
 
 Here's my [Home Assistant](https://home-assistant.io/) configuration. I have installed Home Assistant on an old HP laptop for now. The laptop is running as a "Home server". I am currently running Ubuntu 18.04 LTS on the laptop. Home Assistant as well as all supporting applications (and some additional non Home Assistant related applications) are running in Docker containers. 

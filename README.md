@@ -97,7 +97,6 @@ I develop most of my applications in [Microsoft Visual Studio Code](https://code
 
 If you have questions on my configuration, ping me on twitter [@rbisschops](https://twitter.com/rbisschops)
 
-![Twitter URL](https://img.shields.io/twitter/url/https/@rbisschops?style=social)
 ## License
 
 MIT License

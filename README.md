@@ -104,7 +104,15 @@ When things are progressing I will upload some screenshots of my UI.
 
 # [Things planned](#things-planned)
 
-Many ideas. Too little time!
+Some projects I have planned:
+* MySensors:
+  * Water meter sensor version 2.0
+  * Light sensor to support better sunscreen control
+  * Water temperature sensors for monitoring and tuning the heating system
+* Add camera's for home security
+* Add motion sensors and automations to switch on lights for orientation at night time
+
+Many ideas. Too little time! I will add some more projects later.
 
 # [Development](#development)
 

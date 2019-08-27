@@ -30,7 +30,7 @@ Here's my [Home Assistant](https://home-assistant.io/) configuration. I have ins
 * [Zigbee2MQTT](https://koenkk.github.io/zigbee2mqtt/), great development for getting rid of most of the propietary bridges. I use it for all my ZigBee devices except for Hue.
 * [Mosquitto](https://mosquitto.org/), my favorite MQTT Broker. Used for exchanging data between a lot of applications and from the outside world (through the reverse proxy).
 * [Domoticz](https://www.domoticz.com/), for test mainly, not really made for containerizing so stopped moving there with Domoticz.
-* [Node-RED](https://nodered.org), Flow based programming, an intuitive addition to both Home Assistant and Domoticz (or any other home automation system).
+[Node-RED](https://nodered.org), flow based programming, an intuitive addition to both Home Assistant and Domoticz (or any other home automation system).
 * [InfluxDB](https://www.influxdata.com/), a time series database. Installed, tested with Domoticz but not used yet.
 * [Grafana](https://grafana.com/), analytics and monitoring. Installed, tested with Domoticz but not used yet.
 * [Traefik](https://traefik.io/), reverse proxy for secure access from the outside world.
@@ -43,9 +43,10 @@ When I find the time I will write a blog or something alike about my Home server
 
 # [Home Assistant](#home-assistant)
 
-I'm still learning Home Assistant as I'm coming from a Domoticz RPi based environment. Home Assistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Eventually Home Assistant will be the main home automation application.   
 
-**I regularly update my configuration files as my Home Assistant is still heavily under development.**
+Home Assistant and Domoticz are running in parallel at the moment. I spent quite some time to get the two working together. Home Assistant is the main home automation application.
+
+**I regularly update my configuration files as my Home server is still heavily under development.**
 
 ## Home Assistant setup
 

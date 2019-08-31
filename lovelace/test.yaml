@@ -13,6 +13,8 @@
 # V0.2.3:  Removed input_boolean.sunscreen_manual (moved)
 #          Added switch.tradfri_high_cabinets_switch (moved)
 # V0.3.0:  Major UI changes based on Decluttering card
+# V0.4.0:  Added new precense items for test
+
 title: Test
 icon: 'mdi:test-tube'
 background: "#e3e3e3"
@@ -23,6 +25,25 @@ cards:
       template: custom_markdown_card
       variables:
         - title: Test schakelaars algemeen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Presence test
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - input_select.ralph_status_dropdown
+        - input_select.anneke_status_dropdown
+        - input_select.kimberly_status_dropdown
+        - sensor.ralph_status
+        - sensor.anneke_status
+        - sensor.kimberly_status
+        - group.ralph
+        - group.anneke
+        - group.kimberly
+        - group.people_status
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:

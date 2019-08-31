@@ -9,17 +9,25 @@
 # V1.1.0:  Added hallway light based on trigger frontdoor sensor 
 # V1.2.0:  Fixed Bug #005
 # V1.2.1:  Fixed wrong status presence sensor
+# v1.3.0:  Added entities and logic for advanced presence
 
 ###############################################################################
 #                              Homeassistant settings
 ###############################################################################
 homeassistant:
   customize:
-    ### Timers
+    ## Timers
     timer.porchlight:
       friendly_name: Buitenlamp
     timer.hallwaylight:
       friendly_name: Halletje
+    ## Added customizations for advanced presence states (V1.3.0)
+    sensor.ralph_status:
+      entity_picture: /local/custom_icons/ralph48_on.png
+    sensor.anneke_status:
+      entity_picture: /local/custom_icons/anneke48_on.png
+    sensor.kimberly_status:
+      entity_picture: /local/custom_icons/kimberly48_on.png
 
 ## Settings for owntracks
 owntracks:
@@ -71,6 +79,53 @@ binary_sensor:
         entity_picture_template: >-
           {{ '/local/custom_icons/ralph48_' ~ states.binary_sensor.ralph_home.state ~ '.png' }}
 
+## Added input select for advanced presence states (V1.3.0)
+input_select:
+  ## Ralph advanced home sensor
+  ralph_status_dropdown:
+    name: Ralph
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+  ## Anneke advanced home sensor
+  anneke_status_dropdown:
+    name: Anneke
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+  ## Kimberly advanced home sensor
+  kimberly_status_dropdown:
+    name: Kimberly
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+
+## Added sensors for advanced presence states (V1.3.0)
+sensor:
+  - platform: template
+    sensors:
+      ralph_status:
+        value_template: '{{ states.input_select.ralph_status_dropdown.state }}'
+        friendly_name: 'Ralph'
+      anneke_status:
+        value_template: '{{ states.input_select.anneke_status_dropdown.state }}'
+        friendly_name: 'Anneke'
+      kimberly_status:
+        value_template: '{{ states.input_select.kimberly_status_dropdown.state }}'
+        friendly_name: 'Kimberly'
+
 ###############################################################################
 #                               Groups
 ###############################################################################
@@ -96,11 +151,251 @@ group:
     entities:
       - timer.porchlight
       - timer.hallwaylight
+  ## Added group for advanced presence states (V1.3.0)
+  ralph:
+    name: Aanwezigheid Ralph
+    entities:
+      - device_tracker.ralph_iphone7
+      - device_tracker.owntracks_ralph_iphone7
+  anneke:
+    name: Aanwezigheid Anneke
+    entities:
+      - device_tracker.anneke_s7
+      - device_tracker.owntracks_anneke_s7 
+  kimberly:
+    name: Aanwezigheid Kimberly
+    entities:
+      - device_tracker.kimberly_s7
+      - device_tracker.owntracks_kimberly_s7
+
+  people_status:
+    name: People Status
+    entities:
+      - sensor.ralph_status
+      - sensor.anneke_status
+      - sensor.kimberly_status
 
 ###############################################################################
 #                               Automations
 ###############################################################################
 automation:
+  ## Added automations for advanced presence states (V1.3.0)
+  - alias: Mark person as just arrived
+    hide_entity: false
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: group.ralph
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: group.anneke
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: group.kimberly
+        from: 'not_home'
+        to: 'home'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'group.anneke' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              {% if states.input_select.ralph_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}
+            {% elif trigger.entity_id == 'group.anneke' %}  
+              {% if states.input_select.anneke_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}          
+            {% else %}
+              {% if states.input_select.kimberly_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}
+            {% endif %}
+
+  - alias: Mark person as home
+    hide_entity: false
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+          seconds: 15
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+          seconds: 30
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Home
+
+  - alias: Mark person as just left
+    hide_entity: false
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: group.ralph
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: group.anneke
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: group.kimberly
+        from: 'home'
+        to: 'not_home'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'group.anneke' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Just Left
+
+  ## Alternative code:
+  # - alias: Mark person as just left
+  #   hide_entity: false
+  #   initial_state: 'off'
+  #   trigger:
+  #     - platform: state
+  #       entity_id: 
+  #         - group.ralph
+  #         - group.anneke
+  #         - group.kimberly
+  #       from: 'home'
+  #       to: 'not_home'
+  #   action:
+  #     - service: input_select.select_option
+  #       data_template:
+  #         entity_id: >
+  #           {% set map = {
+  #             'group.ralph': 'input_select.ralph_status_dropdown',
+  #             'group.anneke': 'input_select.anneke_status_dropdown',
+  #             'group.kimberly': 'input_select.kimberly_status_dropdown',
+  #           } %}
+  #           {{ map[trigger.entity_id] }}
+  #         option: Just Left
+
+  - alias: Mark person as away
+    hide_entity: false
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+          seconds: 15
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+          seconds: 30
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Away
+  
+  - alias: Mark person as extended away
+    hide_entity: false
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Away'
+        for:
+          hours: 23
+          minutes: 59
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Away'
+        for:
+          hours: 24
+          minutes: 0
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Away'
+        for:
+          hours: 24
+          minutes: 1
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Extended Away
+
   ## Test if everybody is away and perform actions
   - alias: "Iedereen is weg"
     hide_entity: false

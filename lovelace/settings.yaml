@@ -62,6 +62,16 @@ cards:
         name: Toilet verwarming aan volgens schema - niet werkdagen
       - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
         name: Toilet verwarming aan volgens schema - werkdagen
+      - entity: automation.mark_person_as_just_arrived
+        name: Markeer persoon als net thuis
+      - entity: automation.mark_person_as_home
+        name: Markeer persoon als thuis
+      - entity: automation.mark_person_as_just_left
+        name: Markeer persoon als net weg
+      - entity: automation.mark_person_as_away
+        name: Markeer persoon als weg
+      - entity: automation.mark_person_as_extended_away
+        name: Markeer persoon als langer weg
 
   - type: vertical-stack
     cards:

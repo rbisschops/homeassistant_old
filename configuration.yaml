@@ -152,8 +152,7 @@ updater:
 #      key: !secret xiaomi_aquara_key
 
 ## Configuations items (presence, Sensors, groups, automations and scripts)
-device_tracker: !include includes/device_trackers.yaml
-group: !include_dir_merge_named includes/groups
+device_tracker: !include device_trackers.yaml
 
 ## OLD STUFF, MIGRATE TO ABOVE ###
 

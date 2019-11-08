@@ -206,7 +206,17 @@ cards:
       entities:
         - input_select.toilet_heating
         - script.manual_set_toilet_heating      
-  
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Diversen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - sensor.mailbox
+
   # - type: vertical-stack
   #   cards:
   #   - type: entities

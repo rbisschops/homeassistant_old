@@ -22,6 +22,8 @@
 ## V1.2.6:  Changed eleavation trigger to 16 (was 17)
 ## V1.3.0:  Fix for #0034
 ## V1.3.1:  Code cleanup and code structure
+## V1.3.2:  Commented trigger garden lights for test
+## V1.3.3:  Changed trigger for gardenlights (based on front door trigger)
 
 ###############################################################################
 ##  Homeassistant settings
@@ -102,16 +104,31 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - binary_sensor.people_home
+          # Commented for test in V1.3.2
+          # - binary_sensor.people_home
           - input_boolean.office_door
+          ## Added in V1.3.3
+          - binary_sensor.neo_coolcam_front_door
         to: 'on'
     condition:  
       condition: and
-      conditions:     
+      conditions:
         - condition: sun
           after: sunset
         - condition: time
           before: '23:00:00'
+        ## Added in V1.3.3
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_select.ralph_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.anneke_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.kimberly_status_dropdown
+              state: 'Just Arrived'
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.domo_garden_light

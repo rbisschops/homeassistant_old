@@ -1,44 +1,44 @@
-# Package file for Home Assistant, used for environment
-# Type: Home Assistant yaml file
-# Date: 03-05-2019
-# Author: R.Bisschops
+## Package file for Home Assistant, used for environment
+## Type: Home Assistant yaml file
+## Date: 03-05-2019
+## Author: R.Bisschops
 #
-# Changelog:
-# V0.1.0:  First version
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Corrected sensors sun to be a sensor instead of a lost template
-# V1.2.0:  Added new sensors
-# V1.2.1:  Added new sensors
-# V1.2.2:  Added groups for new sensors
-# V1.2.3:  Added new sensors
-# V1.3.0:  Added friendly names for remaining sensors
-# V1.3.1:  Fixed duplicate keys
-# V1.3.2:  Added new sensors 
-# V1.3.3:  Minor correction toilet group name (typo)
-# V1.4.0:  Added utilities sensors via MQTT
-# V1.4.1:  Replaced json_attributes with json_attributes_topic
-# V1.4.2:  Added additional utilities sensors
-# V1.4.3:  Added env sensors 2nd floor hallway
-# V1.5.0:  Added season sensor
+## Changelog:
+## V0.1.0:  First version
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Corrected sensors sun to be a sensor instead of a lost template
+## V1.2.0:  Added new sensors
+## V1.2.1:  Added new sensors
+## V1.2.2:  Added groups for new sensors
+## V1.2.3:  Added new sensors
+## V1.3.0:  Added friendly names for remaining sensors
+## V1.3.1:  Fixed duplicate keys
+## V1.3.2:  Added new sensors 
+## V1.3.3:  Minor correction toilet group name (typo)
+## V1.4.0:  Added utilities sensors via MQTT
+## V1.4.1:  Replaced json_attributes with json_attributes_topic
+## V1.4.2:  Added additional utilities sensors
+## V1.4.3:  Added env sensors 2nd floor hallway
+## V1.5.0:  Added season sensor
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 homeassistant:
   customize:
-    ### ENVIRONMENT
+    ## ENVIRONMENT
     sun.sun:
       friendly_name: Dag/Nacht
 
-    # Utilities sensors
+    ## Utilities sensors
     sensor.utilities_electricity:
       friendly_name: Elektriciteits meters
     sensor.utilities_gas:
       friendly_name: Gas meter
     sensor.utilitises_water:
-      friendly_name: Water meter            
-    # Temperature sensors
+      friendly_name: Water meter
+    ## Temperature sensors
     sensor.room_temp_office:
       friendly_name: Temperatuur Kantoor
     sensor.room_temp_livingroom:
@@ -57,7 +57,7 @@ homeassistant:
       friendly_namne: Temperatuur Ketel ruimte
     sensor.room_temp_hallway_floor2:
       friendly_namne: Temperatuur Overloop 2e verdieping
-  # Humidity sensors
+    ## Humidity sensors
     sensor.room_humidity_office:
       friendly_name: Rel. Vochtigheid Kantoor
     sensor.room_humidity_livingroom:
@@ -76,7 +76,7 @@ homeassistant:
       friendly_namne: Rel. Vochtigheid Ketel ruimte 
     sensor.room_humidity_hallway_floor2:
       friendly_namne: Rel. Vochtigheid Overloop 2e verdieping      
-  # Pressure sensors
+    ## Pressure sensors
     sensor.room_pressure_office:
       friendly_name: Luchtdruk Kantoor   
     sensor.room_pressure_livingroom:
@@ -97,7 +97,7 @@ homeassistant:
       friendly_namne: Luchtdruk Overloop 2e verdieping  
 
 ###############################################################################
-#                              Entities
+#  Entities
 ###############################################################################
 
 sensor:
@@ -115,7 +115,7 @@ sensor:
   - platform: season
     type: astronomical
 
-  # Utilities sensors (not ready yet)
+  ## Utilities sensors (not ready yet)
   - platform: "mqtt"
     name: utilities_electricity
     state_topic: "home/meter/electricity"
@@ -177,6 +177,7 @@ sensor:
           {% set value = float (states.sensor.utilities_water.attributes["usage"]) %} 
           {% set value = (value-previous)|round %}
           {{ value }}   
+
   ## Inhouse environment sensors - temperature
   - platform: "mqtt"
     name: room_temp_office
@@ -186,7 +187,7 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_office_env"
-  # Added in V1.2.0
+  ## Added in V1.2.0
   - platform: "mqtt"
     name: room_temp_bathroom
     state_topic: "zigbee2mqtt/aqara_bathroom_env"
@@ -203,7 +204,7 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
-  # Added in V1.2.1
+  ## Added in V1.2.1
   - platform: "mqtt"
     name: room_temp_kim
     state_topic: "zigbee2mqtt/aqara_kim_env"
@@ -212,7 +213,7 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_kim_env" 
-  # Added in V1.2.3    
+  ## Added in V1.2.3    
   - platform: "mqtt"
     name: room_temp_livingroom
     state_topic: "zigbee2mqtt/aqara_livingroom_env"
@@ -237,7 +238,7 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_storage_env"  
-  # Added in V1.3.2   
+  ## Added in V1.3.2   
   - platform: "mqtt"
     name: room_temp_heating_room
     state_topic: "zigbee2mqtt/aqara_heating_room_env"
@@ -246,7 +247,7 @@ sensor:
     device_class: "temperature"
     value_template: "{{ value_json.temperature }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env" 
-  # Added in V1.4.3   
+  ## Added in V1.4.3   
   - platform: "mqtt"
     name: room_temp_hallway_floor2
     state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
@@ -265,7 +266,7 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic: "zigbee2mqtt/aqara_office_env"
-  # Added in V1.2.0
+  ## Added in V1.2.0
   - platform: "mqtt"
     name: room_humidity_bathroom
     state_topic: "zigbee2mqtt/aqara_bathroom_env"
@@ -282,7 +283,7 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
-  # Added in V1.2.1
+  ## Added in V1.2.1
   - platform: "mqtt"
     name: room_humidity_kim
     state_topic: "zigbee2mqtt/aqara_kim_env"
@@ -291,7 +292,7 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic:  "zigbee2mqtt/aqara_kim_env"
-  # Added in V1.2.3
+  ## Added in V1.2.3
   - platform: "mqtt"
     name: room_humidity_livingroom
     state_topic: "zigbee2mqtt/aqara_livingroom_env"
@@ -316,7 +317,7 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic: "zigbee2mqtt/aqara_storage_env"
-  # Added in V1.3.2
+  ## Added in V1.3.2
   - platform: "mqtt"
     name: room_humidity_heating_room
     state_topic: "zigbee2mqtt/aqara_heating_room_env"
@@ -325,7 +326,7 @@ sensor:
     device_class: "humidity"
     value_template: "{{ value_json.humidity }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
-  # Added in V1.4.3
+  ## Added in V1.4.3
   - platform: "mqtt"
     name: room_humidity_hallway_floor2
     state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
@@ -344,7 +345,7 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_office_env"
-  # Added in V1.2.0    
+  ## Added in V1.2.0    
   - platform: "mqtt"
     name: room_pressure_bathroom
     state_topic: "zigbee2mqtt/aqara_bathroom_env"
@@ -361,7 +362,7 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_bedroom_env"
-  # Added in V1.2.1   
+  ## Added in V1.2.1   
   - platform: "mqtt"
     name: room_pressure_kim
     state_topic: "zigbee2mqtt/aqara_kim_env"
@@ -370,7 +371,7 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_kim_env"
-  # Added in V1.2.3  
+  ## Added in V1.2.3  
   - platform: "mqtt"
     name: room_pressure_livingroom
     state_topic: "zigbee2mqtt/aqara_livingroom_env"
@@ -395,7 +396,7 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_storage_env"
-  # Added in V1.3.2        
+  ## Added in V1.3.2        
   - platform: "mqtt"
     name: room_pressure_heating_room
     state_topic: "zigbee2mqtt/aqara_heating_room_env"
@@ -404,7 +405,7 @@ sensor:
     device_class: "pressure"
     value_template: "{{ value_json.pressure }}"
     json_attributes_topic: "zigbee2mqtt/aqara_heating_room_env"
-  # Added in V1.4.3        
+  ## Added in V1.4.3        
   - platform: "mqtt"
     name: room_pressure_hallway_floor2
     state_topic: "zigbee2mqtt/aqara_hallway_floor2_env"
@@ -433,7 +434,7 @@ camera:
 
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
 group:
@@ -538,7 +539,7 @@ group:
       - sensor.room_pressure_hallway_floor2
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
   - alias: 'update utilities referentie waarden'
@@ -567,15 +568,15 @@ automation:
             }|tojson }}        
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################

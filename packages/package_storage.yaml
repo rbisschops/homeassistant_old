@@ -1,0 +1,81 @@
+# Package file for Home Assistant, used for the storage area
+# Type: Home Assistant yaml file
+# Date: 02-11-2019
+# Author: R.Bisschops
+#
+# Changelog:
+# V0.1.0:  First version
+
+###############################################################################
+##  Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    sensor.mailbox:
+      friendly_name: Brievenbus
+
+###############################################################################
+##  Entities
+###############################################################################
+
+sensor:
+  ## Mailbox vibration sensor
+  - platform: "mqtt"
+    name: mailbox
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    icon: "mdi:gesture-double-tap"
+    value_template: "{{ value_json.action }}"
+  - platform: "mqtt"
+    name: mailbox_battery
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "battery"
+    value_template: "{{ value_json.battery }}"
+  - platform: "mqtt"
+    name: mailbox_linkquality
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"
+
+###############################################################################
+##  Groups
+###############################################################################
+
+
+###############################################################################
+##  Automations
+###############################################################################
+automation:
+  ## Actions to perform on mailbox motion
+  - alias: "Post ontvangen"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: sensor.mailbox
+      to: 'vibration'  
+    action:
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Er is post'
+          value2: ' '
+          value3: ' '
+          who: 'ralph'
+          prio: -2
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################

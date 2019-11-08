@@ -9,7 +9,9 @@
 # V1.1.0:  Added hallway light based on trigger frontdoor sensor 
 # V1.2.0:  Fixed Bug #005
 # V1.2.1:  Fixed wrong status presence sensor
-# v1.3.0:  Added entities and logic for advanced presence
+# V1.3.0:  Added entities and logic for advanced presence
+# V1.4.0:  Migrated to the use of advanced presence
+# V1.4.1:  minor update notify text coming home
 
 ###############################################################################
 #                              Homeassistant settings
@@ -38,14 +40,15 @@ owntracks:
 ###############################################################################
 binary_sensor:
   ## Anyone home sensor
+  ## Upgraded to use advanced presense (V1.4.0)
   - platform: template
     sensors:
       people_home:
         friendly_name: Iemand thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
-            or is_state('device_tracker.owntracks_kimberly_s7', 'home')
-            or is_state('device_tracker.owntracks_ralph_iphone7', 'home') }}
+          {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.anneke_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Home') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
   ## Anneke home sensor
@@ -54,8 +57,9 @@ binary_sensor:
       anneke_home:
         friendly_name: Anneke thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
-            or is_state('device_tracker.anneke_s7', 'home') }}
+          {{ is_state('input_select.anneke_status_dropdown', 'Home')
+            or is_state('input_select.anneke_status_dropdown', 'Just Arrived')
+            or is_state('input_select.anneke_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/anneke48_' ~ states.binary_sensor.anneke_home.state ~ '.png' }}
   ## kimberly home sensor
@@ -64,8 +68,9 @@ binary_sensor:
       kimberly_home:
         friendly_name: Kimberly thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_kimberly_s7', 'home')
-            or is_state('device_tracker.kimberly_s7', 'home') }}
+          {{ is_state('input_select.kimberly_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Arrived')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/kimberly48_' ~ states.binary_sensor.kimberly_home.state ~ '.png' }}
   ## Ralph home sensor
@@ -74,8 +79,9 @@ binary_sensor:
       ralph_home:
         friendly_name: Ralph thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_ralph_iphone7', 'home')
-            or is_state('device_tracker.ralph_iphone7', 'home') }}
+          {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.ralph_status_dropdown', 'Just Arrived')
+            or is_state('input_select.ralph_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/ralph48_' ~ states.binary_sensor.ralph_home.state ~ '.png' }}
 
@@ -168,7 +174,7 @@ group:
       - device_tracker.kimberly_s7
       - device_tracker.owntracks_kimberly_s7
 
-  people_status:
+  people_status:                  # Currently not working need update or remove
     name: People Status
     entities:
       - sensor.ralph_status
@@ -182,7 +188,7 @@ automation:
   ## Added automations for advanced presence states (V1.3.0)
   - alias: Mark person as just arrived
     hide_entity: false
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: group.ralph
@@ -230,7 +236,7 @@ automation:
 
   - alias: Mark person as home
     hide_entity: false
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: input_select.ralph_status_dropdown
@@ -276,7 +282,7 @@ automation:
 
   - alias: Mark person as just left
     hide_entity: false
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: group.ralph
@@ -329,7 +335,7 @@ automation:
 
   - alias: Mark person as away
     hide_entity: false
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: input_select.ralph_status_dropdown
@@ -363,7 +369,7 @@ automation:
   
   - alias: Mark person as extended away
     hide_entity: false
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: input_select.ralph_status_dropdown
@@ -402,8 +408,8 @@ automation:
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: group.presence_geofence
-      to: 'not_home'
+      entity_id: binary_sensor.people_home
+      to: 'off'
     condition:
 
     action:
@@ -416,14 +422,15 @@ automation:
           prio: -2
 
   ## Test if anybody comes home and perform actions
+  ## Upgraded to use advanced presense (V1.4.0)
   - alias: "Er komt iemand thuis"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
-      from: 'not_home'
-      to: 'home'
+      entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+#      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
+      to: 'Home'
     condition:
 
     action:
@@ -431,19 +438,25 @@ automation:
         data_template:
           value1: 'Aanwezigheidsmelding: '
           value2: '{{ trigger.to_state.attributes.friendly_name }}'
-          value3: ' komt thuis'
+          value3: ' is thuis'
           who: 'ralph'
           prio: -2
 
   ## Switch on porch light when someone arrives home
+  ## Upgraded to use advanced presense (V1.4.0)
   - alias: "Buitenlamp bij thuiskomst"
     hide_entity: false
     initial_state: 'on'
     trigger:
-      platform: state
-      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
-      from: 'not_home'
-      to: 'home'
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+#        entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
+        from: 'Away'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+        from: 'Extended Away'
+        to: 'Just Arrived'
     condition:  
       condition: or
       conditions:     
@@ -481,7 +494,75 @@ automation:
         entity_id: input_boolean.domo_hallway_light
       - service: timer.start
         data:
-          entity_id: timer.hallwaylight     
+          entity_id: timer.hallwaylight
+
+  ## Switch on garden light when someone arrives home
+  - alias: "Tuin verlichting aan bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.neo_coolcam_front_door
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "00:15:00"
+        - condition: state
+          entity_id: input_boolean.domo_garden_light
+          state: 'off'
+        - condition: time
+          before: '23:00:00'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_select.ralph_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.anneke_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.kimberly_status_dropdown
+              state: 'Just Arrived'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+
+  ## Switch on livingroom lights when someone arrives home
+  - alias: "Woonkamer verlichting aan bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.neo_coolcam_front_door
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "00:15:00"
+        - condition: state
+          entity_id: input_boolean.livingroom_lights_status
+          state: 'off'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_select.ralph_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.anneke_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.kimberly_status_dropdown
+              state: 'Just Arrived'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights_status
 
   ## Switch off porchlight based on timer
   - alias: "Buitenlamp uit xx minuten na trigger"

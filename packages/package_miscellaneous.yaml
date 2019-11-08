@@ -1,46 +1,50 @@
-# Package file for Home Assistant, used for alarms 
-# Type: Home Assistant yaml file
-# Date: 22-03-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added bed time automation and scripts
-# V0.2.1:  Changed bed time script
-# V0.2.2:  Changed domoticz entertainment switch to Tradfri
-# V0.3.0:  Moved input select toliet heating to package_toilet
-# V0.3.1:  Added Tradfri testswitch
-# V0.3.2:  Minor code clean
-# V0.4.0:  Removed Tradfri testswitch
-# V0.4.1:  Added condition recording mode in bedtime script 
-# V0.5.0:  Added test services in script for toilet heating
-# V0.5.1:  Added toilet heating settings to the the bed time script 
-# V0.6.0:  Added template sensors for waste bin schedular 
+## Package file for Home Assistant, used for alarms 
+## Type: Home Assistant yaml file
+## Date: 06-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added bed time automation and scripts
+## V0.2.1:  Changed bed time script
+## V0.2.2:  Changed domoticz entertainment switch to Tradfri
+## V0.3.0:  Moved input select toliet heating to package_toilet
+## V0.3.1:  Added Tradfri testswitch
+## V0.3.2:  Minor code clean
+## V0.4.0:  Removed Tradfri testswitch
+## V0.4.1:  Added condition recording mode in bedtime script 
+## V0.5.0:  Added test services in script for toilet heating
+## V0.5.1:  Added toilet heating settings to the the bed time script 
+## V0.6.0:  Added template sensors for waste bin schedular 
+## V0.7.0:  Added comments and some code cleaning
 
 ###############################################################################
-#                               Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
   
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_boolean:
-## Holiday mode toggle switch, used for setting when on holiday 
-## Several automations depend on this
+  ## Holiday mode toggle switch, used for setting when on holiday 
+  ## Several automations depend on this
   holiday_mode:
     name: Vakantie mode aan
     icon: mdi:toggle-switch
     initial: off
 
-## Definition of workdays with the workday sensor
-## Used in several automations
 binary_sensor:
+  ## Definition of workdays with the workday sensor
+  ## Used in several automations
   - platform: workday
     country: NL
     workdays: [mon, tue, wed, thu, fri, sat]
     excludes: [sun]
 
+  ## Definition of the GFT (Bio) garbage bin
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put the bin out" notifications
   - platform: template
     sensors:
       gft:
@@ -60,6 +64,9 @@ binary_sensor:
         entity_picture_template: >-
           {{ '/local/custom_icons/gft48_' ~ states.binary_sensor.gft.state ~ '.png' }}
 
+  ## Definition of the PMD (Platic and metal) garbage bin
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put the bin out" notifications
   - platform: template
     sensors:
       pmd:
@@ -79,15 +86,34 @@ binary_sensor:
         entity_picture_template: >-
           {{ '/local/custom_icons/pmd48_' ~ states.binary_sensor.pmd.state ~ '.png' }}
 
+  ## Definition of the PMD and GFT (Plastic and metal and bio) garbage bins
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put both bins out" notifications
+  - platform: template
+    sensors:
+      gft_pmd:
+        friendly_name: 'GFT en PMD'
+        value_template: >-
+          {% if is_state('calendar.afval_kalender', 'on') %}
+            {% if state_attr('calendar.afval_kalender', 'message') == 'GFT + PMD' %}
+              true
+            {% else %}
+              false
+            {% endif %}
+          {% else %}
+            false
+          {% endif %}
+
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
+  ## AUtomation for runnning the bed time script when called
   - alias: "Bed mode ingeschakeld"
     hide_entity: false
     initial_state: 'on'
@@ -100,28 +126,53 @@ automation:
       - service: script.turn_on
         entity_id: script.bedtime
 
+  ## Automation to run when the garbage bins need to go out for collection
+  - alias: "Vuilnisbak aan de straat"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.gft
+      - binary_sensor.pmd
+      - binary_sensor.gft_pmd
+      - input_boolean.metering_cabinet_door
+      to: 'on'
+    action:
+      - service: script.notify_telegram
+        data_template:
+          value1: 'Vandaag '
+          value2: '{{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' buiten zetten'
+          who: 'ralph'
+
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 script:
+  ## Script running when we go to bed, sets the house in sleep mode
   bedtime:
     alias: Bedtime script
     sequence:
+      ## Swtcih off the outdoor lighting
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_garden_light
+      ## 
       - service: homeassistant.turn_off
-        entity_id: input_boolean.domo_virtual_heating        
+        entity_id: input_boolean.domo_virtual_heating
+      ## Switch off the living room lights
       - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights_status
-      ## Service added for climate settings toilet  
+      ## Change the climate settings for the toilet heating  
       - service: script.set_toilet_heating_mode
         data_template:
           mode: 'Energy Heat'
+      ## Turn off the media center, but only when recording mode is not set
       - condition: state
         entity_id: input_boolean.recording_mode
         state: 'off'
@@ -129,6 +180,6 @@ script:
         entity_id: switch.tradfri_media_switch
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 

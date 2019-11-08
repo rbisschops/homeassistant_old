@@ -14,6 +14,7 @@
 #          Added switch.tradfri_high_cabinets_switch (moved)
 # V0.3.0:  Major UI changes based on Decluttering card
 # V0.4.0:  Added new precense items for test
+# V0.4.1:  Added input booleans for garbage bins
 
 title: Test
 icon: 'mdi:test-tube'
@@ -37,13 +38,6 @@ cards:
         - input_select.ralph_status_dropdown
         - input_select.anneke_status_dropdown
         - input_select.kimberly_status_dropdown
-        - sensor.ralph_status
-        - sensor.anneke_status
-        - sensor.kimberly_status
-        - group.ralph
-        - group.anneke
-        - group.kimberly
-        - group.people_status
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -64,6 +58,7 @@ cards:
       show_header_toggle: false
       entities:
         - entity: binary_sensor.neo_coolcam_front_door
+        - entity: binary_sensor.neo_coolcam_storage_door
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -144,7 +139,6 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.front_door
         - entity: input_boolean.hallway_livingroom_door
         - entity: input_boolean.hallway_storage_door
         - entity: input_boolean.metering_cabinet_door
@@ -158,9 +152,9 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.storage_door
         - entity: input_boolean.freezer
-
+        - entity: input_boolean.plastic_bin
+        - entity: input_boolean.bio_bin
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card

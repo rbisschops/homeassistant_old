@@ -13,6 +13,8 @@
 # V1.4.0:  Changed layout and updated icons for lamps
 # V1.4.1:  Changed lamp icons
 # V1.4.2:  Minor color updates
+# V1.4.3:  Added overlays for garbage bins
+# V1.5.0:  Updated presence sensors
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -24,6 +26,29 @@ cards:
   - type: picture-elements
     image: /local/floorplans/groundfloor.png
     elements:
+      # Garbage bins overlays
+      - type: image
+        entity: input_boolean.plastic_bin
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/pmd_bin.png
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.bio_bin
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/gft_bin.png
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
       # Appliance doors overlays
       - type: image
         entity: binary_sensor.refrigerator_door
@@ -60,7 +85,7 @@ cards:
           position: absolute
           transform: translate(0%, 0%)
       - type: image
-        entity: input_boolean.storage_door
+        entity: binary_sensor.neo_coolcam_storage_door
         tap_action:
           action: none
         state_image:

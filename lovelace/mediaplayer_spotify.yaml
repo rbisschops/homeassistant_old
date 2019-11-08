@@ -1,0 +1,167 @@
+## Conditional buttons for Spotify
+- type: conditional
+  conditions:
+    - entity: 'switch.spotify'
+      state: 'on' 
+  card:
+    type: vertical-stack
+    cards:
+      ## Conditional buttons for Spotify. 1st row (empty as seperator)
+      - type: horizontal-stack
+        cards: 
+          - type: custom:button-card
+            color_type: blank-card
+      ## Conditional buttons for Spotify. 2nd row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: volume-plus
+              - device: Versterker
+              - command: VolumeUp
+          - type: conditional
+            conditions:
+              - entity: switch.spotify
+                state: 'on'
+            card:    
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: arrow-up-bold
+              - device: LG TV
+              - command: DirectionUp
+          - type: conditional
+            conditions:
+              - entity: switch.spotify
+                state: 'on'
+            card:
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: home
+              - device: LG TV
+              - command: Home
+      ## Conditional buttons for Spotify. 3rd row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: volume-minus
+              - device: Versterker
+              - command: VolumeDown
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: arrow-left-bold 
+              - device: LG TV
+              - command: DirectionLeft
+          - type: custom:decluttering-card
+            template: media_button_small_text_3
+            variables:
+              - switch: television
+              - name: OK
+              - device: LG TV
+              - command: OK
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: television
+              - icon: arrow-right-bold
+              - device: LG TV
+              - command: DirectionRight
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: backup-restore
+              - device: LG TV
+              - command: Back
+      ## Conditional buttons for Spotify. 4th row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: volume-mute
+              - device: Versterker
+              - command: Mute
+          - type: conditional
+            conditions:
+              - entity: switch.spotify
+                state: 'on'
+            card:    
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: arrow-down-bold
+              - device: LG TV
+              - command: DirectionDown
+          - type: conditional
+            conditions:
+              - entity: switch.spotify
+                state: 'on'
+            card:    
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_text_3
+            variables:
+              - switch: television
+              - name: Stereo
+              - device: Versterker
+              - command: ModeStereo
+      ## Conditional buttons for Spotify. 5th row
+
+      ## Conditional buttons for Spotify. 6th row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: rewind
+              - device: LG TV
+              - command: Rewind
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: pause
+              - device: LG TV
+              - command: Pause
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: play
+              - device: LG TV
+              - command: Play
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: stop
+              - device: LG TV
+              - command: Stop
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: spotify
+              - icon: fast-forward
+              - device: LG TV
+              - command: FastForward

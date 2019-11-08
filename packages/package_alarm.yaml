@@ -12,6 +12,7 @@
 # V1.1.0:  Minor cleanup
 # V1.1.1:  Replaced json_attributes with json_attributes_topic
 # V1.2.0:  Added binary sensors for alarm states
+# V1.2.1:  Added input booleans for garbage bins
 
 ###############################################################################
 #                              Homeassistant settings
@@ -59,6 +60,10 @@ input_boolean:
     name: Toiletdeur
   freezer:
     name: Vriezerdeur
+  bio_bin:
+    name: GFT bak
+  plastic_bin:
+    name: PMD bak
   # First floor
   bath_room_door:
     name: Badkamer deur
@@ -120,8 +125,8 @@ binary_sensor:
       doors:
         friendly_name: Deuren
         value_template: >-
-          {{ is_state('input_boolean.front_door', 'on')
-            or is_state('input_boolean.storage_door', 'on')
+          {{ is_state('binary_sensor.neo_coolcam_front_door', 'on')
+            or is_state('binary_sensor.neo_coolcam_storage_door', 'on')
             or is_state('input_boolean.garden_door', 'on') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/door48_' ~ states.binary_sensor.doors.state ~ '.png' }}

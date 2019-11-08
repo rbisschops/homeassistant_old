@@ -9,7 +9,8 @@
 # V0.2.0:  Added test input and services in automations, 
 #          for testing commented actual climate entity in all automations 
 # V0.2.1:  Added script for manual control of the toilet heating
-# V0.3.0:  updated automations and script for automated ontrol of the toilet heating  
+# V0.3.0:  updated automations and script for automated control of the toilet heating
+# V0.3.1:  Minor updates in comments
 
 ###############################################################################
 #                               Homeassistant settings
@@ -63,7 +64,7 @@ automation:
           entity_id: binary_sensor.workday_sensor
           state: 'on'
     action:
-      ## kick of the script for setting the heating mode
+      ## Start the script for setting the heating mode
       - service: script.set_toilet_heating_mode
         data_template:
           mode: 'heat'
@@ -87,7 +88,7 @@ automation:
           entity_id: binary_sensor.workday_sensor
           state: 'off'
     action:
-      ## kick of the script for setting the heating mode
+      ##start the script for setting the heating mode
       - service: script.set_toilet_heating_mode
         data_template:
           mode: 'heat'           

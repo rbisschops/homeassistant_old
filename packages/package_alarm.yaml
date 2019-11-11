@@ -1,39 +1,46 @@
-# Package file for Home Assistant, used for all alarm sensors and
-# associated automations and scripts
-# Type: Home Assistant yaml file
-# Date: 13-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.3.0:  Added test switches for alarm sensors
-# V0.3.0:  Added refrigerator alarm and automations, renamed to package_alarm
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Minor cleanup
-# V1.1.1:  Replaced json_attributes with json_attributes_topic
-# V1.2.0:  Added binary sensors for alarm states
-# V1.2.1:  Added input booleans for garbage bins
+## Package file for Home Assistant, used for all alarm sensors and
+## associated automations and scripts
+## Type: Home Assistant yaml file
+## Date: 09-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.3.0:  Added test switches for alarm sensors
+## V0.3.0:  Added refrigerator alarm and automations, renamed to package_alarm
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Minor cleanup
+## V1.1.1:  Replaced json_attributes with json_attributes_topic
+## V1.2.0:  Added binary sensors for alarm states
+## V1.2.1:  Added input booleans for garbage bins
+## V1.2.2:  Code cleanup and changes to entities, package ready for migration to new homeserver
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 homeassistant:
   customize:
-    # Binary sensors
+    ## Binary sensors
     binary_sensor.refrigerator_door:
       friendly_name: Koelkast deur
+    # binary_sensor.freezer_door:
+    #   friendly name: Vriezer deur  
     binary_sensor.motion_sensor_office:
       friendly_name: Bewegingssensor kantoor
-    # sensors stats
-    sensor.door_window_sensor_stats:
-      friendly_name: Deur sensor
-    sensor.motion_sensor_office_stats:
-      friendly_name: Bewegingssensor kantoor
-
+    ## Battery level sensors
+    sensor.aqara_refrigerator_door_battery:
+      friendly_name: Koelkastdeur (batterij)
+    sensor.motion_sensor_office_battery:
+      friendly_name: Bewegingssensor kantoor (batterij)
+    ## Link quality sensors
+    sensor.aqara_refrigerator_door_linkquality:
+      friendly_name: Koelkastdeur (link quality)
+    sensor.motion_sensor_office_linkquality:
+      friendly_name: Bewegingssensor kantoor (link quality)
 
 ###############################################################################
-#                              Entities
+#  Entities
 ###############################################################################
 
 input_boolean:
@@ -41,9 +48,7 @@ input_boolean:
   alarm:
     name: Alarm
   ## Test switches for doors and windows, will be replaced with sensors in the future
-  # Groundfloor
-  front_door:
-    name: Voordeur
+  ## Groundfloor
   front_window:
     name: Voorraam
   garden_door:
@@ -54,17 +59,11 @@ input_boolean:
     name: Tussendeur berging
   metering_cabinet_door:
     name: Meterkast deur
-  storage_door:
-    name: Bergingdeur
   toilet_door:
     name: Toiletdeur
   freezer:
     name: Vriezerdeur
-  bio_bin:
-    name: GFT bak
-  plastic_bin:
-    name: PMD bak
-  # First floor
+  ## First floor
   bath_room_door:
     name: Badkamer deur
   bed_room_door:
@@ -77,7 +76,7 @@ input_boolean:
     name: Kantoor raam
   side_room_window:
     name: Kastenkamer raam
-  # Second floor
+  ## Second floor
   heating_room_door:
     name: Ketelkast deur
   top_floor_room: #rename!!
@@ -86,12 +85,17 @@ input_boolean:
     name: Slaapkamer raam links
   bedroom_window_r:
     name: Slaapkamer raam rechts
+  ## Special pupose test switches
+  bio_bin:
+    name: GFT bak
+  plastic_bin:
+    name: PMD bak
 
 binary_sensor:
   ## Door/window sensors (Xiaomi)
   - platform: mqtt
     name: refrigerator_door
-    state_topic: "zigbee2mqtt/refrigerator_door"
+    state_topic: "zigbee2mqtt/aqara_refrigerator_door"
     availability_topic: "zigbee2mqtt/bridge/state"
     payload_on: false
     payload_off: true
@@ -108,14 +112,13 @@ binary_sensor:
     value_template: "{{ value_json.occupancy }}"
     device_class: "motion"
 
-  ## Binary sensor based on the state of input_boolean.alarm. Used for Home lovelace tab
+  ## Binary sensor based on the state of input_boolean.alarm. Used for lovelace tab Home 
   - platform: template
     sensors:
       alarm:
         friendly_name: Alarm
         value_template: >-
-          {{ is_state('input_boolean.alarm', 'on')
-            or is_state('device_tracker.owntracks_kimberly_s7', 'off') }}
+          {{ is_state('input_boolean.alarm', 'on') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/alarm48_' ~ states.input_boolean.alarm.state ~ '.png' }}
 
@@ -146,34 +149,50 @@ binary_sensor:
           {{ '/local/custom_icons/window48_' ~ states.binary_sensor.windows.state ~ '.png' }}
 
 sensor:
-  ## Door/Window sensor status (Xiaomi)
-  - platform: mqtt
-    name: door_window_sensor_stats
-    state_topic: "zigbee2mqtt/door_window_sensor"
+  ## Refridgerator door battery status monitoring sensor
+  - platform: "mqtt"
+    name: aqara_refrigerator_door_battery
+    state_topic: "zigbee2mqtt/zigbee2mqtt/aqara_refrigerator_door"
     availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
     device_class: "battery"
     value_template: "{{ value_json.battery }}"
-    json_attributes_topic: "zigbee2mqtt/door_window_sensor"
 
-  ## Motion sensors status (Xiaomi)      
-  - platform: mqtt
-    name: motion_sensor_office_stats
+  ## Refridgerator door link quality status monitoring sensor
+  - platform: "mqtt"
+    name: aqara_refrigerator_door_linkquality
+    state_topic: "zigbee2mqtt/zigbee2mqtt/aqara_refrigerator_door"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"
+
+  ## Motion sensor office battery status monitoring sensor
+  - platform: "mqtt"
+    name: motion_sensor_office_battery
     state_topic: "zigbee2mqtt/mijia_office_motion"
     availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
     device_class: "battery"
     value_template: "{{ value_json.battery }}"
-    json_attributes_topic: "zigbee2mqtt/mijia_office_motion"
+
+  ## Motion sensor office link quality status monitoring sensor
+  - platform: "mqtt"
+    name: motion_sensor_office_linkquality
+    state_topic: "zigbee2mqtt/mijia_office_motion"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"
 
 ###############################################################################
-#                               Groups
+#  Groups
 ###############################################################################
 
 group:
-  # Door/window sensors
+  ## Door/window sensors
   door_window_sensors:
     name: Deur/raam sensoren
     entities:
-      - binary_sensor.door_window_sensor
+      - binary_sensor.refrigerator_door
   motion_sensors:
     name: Bewegingssensoren
     entities:
@@ -182,18 +201,13 @@ group:
     name: Bewegingssensoren kantoor
     entities:
       - binary_sensor.motion_sensor_office
-  alarm_sensors_stats:
-    name: status alarm sensoren
-    entities:
-      - sensor.motion_sensor_office_stats
-      - sensor.door_window_sensor_stats
 
 ###############################################################################
-#                               Automations
+#  Automations
 ###############################################################################
 
 automation:
-  # Test if refigerator door is open for more then xx minutes
+  ## Test if refigerator door or freezer door is open for more then xx minutes
   - alias: "Koelkast alarm"
     hide_entity: false
     initial_state: 'on'
@@ -205,7 +219,7 @@ automation:
         for: '00:10:00'
 #      - platform: state
 #        entity_id:
-#          - <sensor.freezer>
+#          - binary_sensor.freezer_door
 #        to: 'on'
 #        for: '00:10:00'
     action:
@@ -219,7 +233,7 @@ automation:
       - service: homeassistant.turn_on
         entity_id: input_boolean.alarm
 
-  # Test if refigerator door is open for more then xx minutes
+  ## Test if alarm is gereset and perform actions
   - alias: "Alarm gereset"
     hide_entity: false
     initial_state: 'on'
@@ -238,15 +252,15 @@ automation:
           prio: -2
 
 ###############################################################################
-#                              Templates
+#  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+#  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+#  Timers
 ###############################################################################

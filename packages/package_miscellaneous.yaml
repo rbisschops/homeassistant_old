@@ -17,6 +17,7 @@
 ## V0.5.1:  Added toilet heating settings to the the bed time script 
 ## V0.6.0:  Added template sensors for waste bin schedular 
 ## V0.7.0:  Added comments and some code cleaning
+## V0.8.0:  Remover Domo Virtual heating from script
 
 ###############################################################################
 ##  Homeassistant settings
@@ -162,9 +163,6 @@ script:
       ## Swtcih off the outdoor lighting
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_garden_light
-      ## 
-      - service: homeassistant.turn_off
-        entity_id: input_boolean.domo_virtual_heating
       ## Switch off the living room lights
       - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights_status

@@ -20,6 +20,7 @@ telegram_bot:
     api_key: !secret telegram_api_key
     allowed_chat_ids:
       - !secret ralph_telegram_chat_id
+      - !secret anneke_telegram_chat_id
 
 ## Notifier services
 notify:

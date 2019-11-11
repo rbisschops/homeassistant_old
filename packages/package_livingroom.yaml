@@ -197,23 +197,6 @@ automation:
           {% endif%}
         entity_id: input_boolean.domo_hallway_light
 
-  # Switch water ornament on an off from HA-Bridge
-  - alias: "Water ornament - voice"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.habridge_water_ornament
-    action:
-      - service_template: >-
-          {% if is_state('binary_sensor.habridge_water_ornament', 'on') %}
-            homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_water_ornament', 'off') %}
-            homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_water_ornament
-
 ###############################################################################
 #                              Scripts
 ###############################################################################

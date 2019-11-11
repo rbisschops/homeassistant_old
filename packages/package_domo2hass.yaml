@@ -1,33 +1,34 @@
-# Package file for Home Assistant, used for getting Domoticz data via MQTT 
-# Type: Home Assistant yaml file
-# Date: 12-05-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Updated with additional input booleans
-# V0.3.0:  Added switches that copies bahaviour of HA Bridge sensors
-# V0.3.1:  Removed sensors from domo, removed groups
-# V0.3.2:  Removed sensors from domo, removed groups
-# V0.4.0:  Code cleaned, removed all code for environental sensors
-# V0.5.0:  Added code for receiving Domoticz data from switches 
-#          (lighting2 and Light/Switch types)
-# V0.5.1:  Removed domo entertainment switch
-# V0.5.2:  Added sunscreen switch (first version)
-# V0.6.0:  Added automations and script for electricity meters
-# V0.6.1:  Updated automation for storing E high and low values (swapped them)
-# V0.6.2:  Added retain flag for mqtt utility sensors
+## Package file for Home Assistant, used for getting Domoticz data via MQTT 
+## Type: Home Assistant yaml file
+## Date: 09-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Updated with additional input booleans
+## V0.3.0:  Added switches that copies bahaviour of HA Bridge sensors
+## V0.3.1:  Removed sensors from domo, removed groups
+## V0.3.2:  Removed sensors from domo, removed groups
+## V0.4.0:  Code cleaned, removed all code for environental sensors
+## V0.5.0:  Added code for receiving Domoticz data from switches 
+##          (lighting2 and Light/Switch types)
+## V0.5.1:  Removed domo entertainment switch
+## V0.5.2:  Added sunscreen switch (first version)
+## V0.6.0:  Added automations and script for electricity meters
+## V0.6.1:  Updated automation for storing E high and low values (swapped them)
+## V0.6.2:  Added retain flag for mqtt utility sensors
+## V0.7.0:  Code cleanup and changes to entities, package ready for migration to new homeserver
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 homeassistant:
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_boolean:
-  # Light switches
+  ## Light switches
   domo_garden_light:
     name: Verlichting tuin
   domo_porch_light:
@@ -40,37 +41,20 @@ input_boolean:
     name: Verlichting bar
   domo_christmastree:
     name: Kerstboom
-  # Other switches  
-  domo_virtual_heating:
-    name: Virtuele verwarming
+  ## Other switches
   domo_water_ornament:
     name: Waterbollen tuin
   domo_sunscreen:
-    name: Zonnescherm  
-
-## Alternative switch to use as template copy. Not tested yet. Won't work as it is now 
-# switch:
-#   - platform: template
-#     switches:
-#       copy:
-#         value_template: "{{ is_state('binary_sensor.habridge_bar_light', 'on') }}"
-#         turn_on:
-#           service: switch.turn_on
-#           data:
-#             entity_id: binary_sensor.habridge_bar_light
-#         turn_off:
-#           service: switch.turn_off
-#           data:
-#             entity_id: binary_sensor.habridge_bar_light
+    name: Zonnescherm
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
 
 
 ###############################################################################
-#                              Automations
+#  Automations
 ###############################################################################
 automation:
   ## Publish a switch to Domoticz
@@ -85,9 +69,8 @@ automation:
         - input_boolean.domo_porch_light
         - input_boolean.domo_hallway_light
         - input_boolean.domo_kitchen_cabinets
-        - input_boolean.domo_christmastree    
+        - input_boolean.domo_christmastree
         - input_boolean.domo_bar_light
-        - input_boolean.domo_virtual_heating
         - input_boolean.domo_water_ornament
         - input_boolean.domo_sunscreen
     condition:
@@ -96,12 +79,12 @@ automation:
         data_template:
           device: '{{ trigger.to_state.attributes.friendly_name }}'
           new_state: >-
-            {{ trigger.to_state.state }}        
+            {{ trigger.to_state.state }}
 
   ## Convert Domoticz Zigbee switch (type Light/Switch) to Hass 
   - alias: Read domoticz Zigbee switch via MQTT
     hide_entity: false
-    initial_state: 'on'  
+    initial_state: 'on'
     trigger:
       - platform: mqtt
         topic: 'domoticz/out'
@@ -114,12 +97,12 @@ automation:
         data_template:
           device: '{{ trigger.payload_json.idx }}'
           state: >-
-            {{ trigger.payload_json.svalue1 }}   
+            {{ trigger.payload_json.svalue1 }}
 
   ## Convert Domoticz CoCo switch (type Lighting 2) to Hass 
   - alias: Read domoticz COCO switch via MQTT
     hide_entity: false
-    initial_state: 'on'  
+    initial_state: 'on'
     trigger:
       - platform: mqtt
         topic: 'domoticz/out'
@@ -152,9 +135,9 @@ automation:
   #         message: '{{ trigger.to_state.object_id }}'
 
   ## Convert Domoticz Energy meters to Hass
-  # Gas meter will sent svalue1
-  # Elektra meter will sent svalue1, svalue2, svalue5
-  # Water meter will sent    
+  ## Gas meter will sent svalue1
+  ## Elektra meter will sent svalue1, svalue2, svalue5
+  ## Water meter will sent    
   - alias: Domoticz Elektra waarden via MQTT
     hide_entity: false
     initial_state: 'on'  
@@ -167,7 +150,7 @@ automation:
       - condition: template
         value_template: '{{ trigger.payload_json.dtype == "P1 Smart Meter" }}'
       - condition: template
-        value_template: '{{ trigger.payload_json.name == "Elektra" }}'        
+        value_template: '{{ trigger.payload_json.name == "Elektra" }}'
     action: 
       - service: script.domoticz_electricity
         data_template:
@@ -215,20 +198,20 @@ automation:
           usage: '{{ trigger.payload_json.svalue1 }}' 
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 script:
   #############################################################################
-  # Script for converting and setting Domoticz switches via MQTT.
-  # Uses a dict to lookup the ID of the switch in Domoticz.
-  # Uses a dict to convert state to a state recognized by Domoticz.
-  # The Domoticz API call is packed in JSON and sent to the MQTT topic 
-  # domoticz/in as the payload. 
+  ## Script for converting and setting Domoticz switches via MQTT.
+  ## Uses a dict to lookup the ID of the switch in Domoticz.
+  ## Uses a dict to convert state to a state recognized by Domoticz.
+  ## The Domoticz API call is packed in JSON and sent to the MQTT topic 
+  ## domoticz/in as the payload. 
   ############################################################################# 
 
   ## Convert Hass switch to Domoticz
@@ -237,7 +220,7 @@ script:
     sequence:
       - service: mqtt.publish
         data_template:
-          topic: 'domoticz/in'          
+          topic: 'domoticz/in'
           payload_template: >-
             {% set domoticz_devices = 
               {
@@ -247,14 +230,13 @@ script:
               "Verlichting halletje": 21,
               "Verlichting hoge kasten (KaKu)": 23,
               "Verlichting bar": 27,
-              "Virtuele verwarming": 161,
               "Waterbollen tuin": 29,
               "Zonnescherm": 30
               } 
             %}
             {% set status =
               {
-              "on": "On",  
+              "on": "On",
               "off": "Off"
               }
             %}
@@ -283,22 +265,7 @@ script:
             {{ {
              "command": payload,
              "source": device
-            }|tojson }}           
-
-  # switch_to_domo:
-  #   alias: Convert to domoticz entity
-  #   sequence:
-  #     - service_template: >-
-  #         {% set device = device|replace("habridge_", "") %}
-  #         {% if is_state(["binary_sensor.habridge_",device]|join(), 'on') %}
-  #           homeassistant.turn_on
-  #         {% elif is_state(["binary_sensor.habridge_",device]|join(), 'off') %}
-  #           homeassistant.turn_off
-  #         {% endif%}
-  #       data_template:
-  #         entity_id: >-
-  #           {% set entity = ["input_boolean.domo_",device]|join() %}
-  #           {{ entity }}  
+            }|tojson }}
 
   domoticz_electricity:
     alias: Receive domoticz elektra readings via MQTT
@@ -306,7 +273,7 @@ script:
       - service: mqtt.publish
         data_template:
           topic: 'home/meter/electricity'
-          retain: true          
+          retain: true
           payload_template: >-
             {{ {
               "device": device,
@@ -334,7 +301,7 @@ script:
       - service: mqtt.publish
         data_template:
           topic: 'home/meter/water'
-          retain: true          
+          retain: true
           payload_template: >-
             {{ {
               "device": device,
@@ -342,6 +309,5 @@ script:
             }|tojson }}
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
-

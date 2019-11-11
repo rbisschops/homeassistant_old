@@ -22,6 +22,10 @@ cards:
       template: custom_markdown_card
       variables:
         - title: Instellingen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Algemeen
     - type: entities
       show_state: false
       show_name: false
@@ -36,49 +40,10 @@ cards:
       - entity: input_boolean.recording_mode
         name: Recorder mode
         icon: 'mdi:video'
-
-  - type: vertical-stack
-    cards:
     - type: custom:decluttering-card
-      template: custom_markdown_card
+      template: custom_markdown_card_small
       variables:
-        - title: Automatiseringen
-    - type: entities
-      show_state: false
-      show_name: false
-      show_header_toggle: false
-      entities:
-      - entity: automation.buitenlamp_bij_thuiskomst
-        name: Buitenlamp bij thuiskomst
-      - entity: automation.er_komt_iemand_thuis
-        name: Er komt iemand thuis
-      - entity: automation.iedereen_is_weg  
-        name: Iedereen is weg
-      - entity: automation.tuinverlichting_bij_thuiskomst
-        name: Tuinverlichting aan bij thuiskomst
-      - entity: automation.tuinverlichting_bij_zonsondergang 
-        name: Tuinverlichting aan bij zonsondergang
-      - entity: automation.toilet_verwarming_aan_volgens_schema_niet_werkdagen
-        name: Toilet verwarming aan volgens schema - niet werkdagen
-      - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
-        name: Toilet verwarming aan volgens schema - werkdagen
-      - entity: automation.mark_person_as_just_arrived
-        name: Markeer persoon als net thuis
-      - entity: automation.mark_person_as_home
-        name: Markeer persoon als thuis
-      - entity: automation.mark_person_as_just_left
-        name: Markeer persoon als net weg
-      - entity: automation.mark_person_as_away
-        name: Markeer persoon als weg
-      - entity: automation.mark_person_as_extended_away
-        name: Markeer persoon als langer weg
-
-  - type: vertical-stack
-    cards:
-    - type: custom:decluttering-card
-      template: custom_markdown_card
-      variables:
-        - title: Zigbee2mqtt instellingen
+        - title: Zigbee2mqtt
     - type: entities
       show_state: false
       show_name: false
@@ -91,4 +56,94 @@ cards:
       - entity: timer.zigbee_permit_join
         name: Resterende join tijd
 
-
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Automatiseringen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Alarmen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.koelkast_alarm
+        name: Koelkast alarm
+      - entity: automation.alarm_gereset
+        name: Alarm gereset
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Aanwezigheid
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.buitenlamp_bij_thuiskomst
+        name: Buitenlamp bij thuiskomst
+      - entity: automation.er_komt_iemand_thuis
+        name: Er komt iemand thuis
+      - entity: automation.iedereen_is_weg  
+        name: Iedereen is weg
+      - entity: automation.mark_person_as_just_arrived
+        name: Markeer persoon als net thuis
+      - entity: automation.mark_person_as_home
+        name: Markeer persoon als thuis
+      - entity: automation.mark_person_as_just_left
+        name: Markeer persoon als net weg
+      - entity: automation.mark_person_as_away
+        name: Markeer persoon als weg
+      - entity: automation.mark_person_as_extended_away
+        name: Markeer persoon als langer weg
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Tuin
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.tuinverlichting_bij_thuiskomst
+        name: Tuinverlichting aan bij thuiskomst
+      - entity: automation.tuinverlichting_bij_zonsondergang 
+        name: Tuinverlichting aan bij zonsondergang
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Toilet verwarming
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.toilet_verwarming_aan_volgens_schema_niet_werkdagen
+        name: Toilet verwarming aan volgens schema - niet werkdagen
+      - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
+        name: Toilet verwarming aan volgens schema - werkdagen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Domoticz
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.domoticz_publish_switch
+        name: Publiceer schakelaar
+      - entity: automation.read_domoticz_zigbee_switch_via_mqtt
+        name: Lees zigbee schakelaar
+      - entity: automation.read_domoticz_coco_switch_via_mqtt
+        name: Lees klik-aan-klik-uit schakelaar
+      - entity: automation.domoticz_elektra_waarden_via_mqtt
+        name: Lees waarden elektriciteit
+      - entity: automation.domoticz_gas_waarden_via_mqtt
+        name: Lees waarden gas
+      - entity: automation.domoticz_water_waarden_via_mqtt
+        name: Lees waarden water

@@ -1,28 +1,29 @@
-# Package file for Home Assistant, used for the toilet
-# Type: Home Assistant yaml file
-# Date: 21-03-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.1.1:  Updated automation
-# V0.2.0:  Added test input and services in automations, 
-#          for testing commented actual climate entity in all automations 
-# V0.2.1:  Added script for manual control of the toilet heating
-# V0.3.0:  updated automations and script for automated control of the toilet heating
-# V0.3.1:  Minor updates in comments
+## Package file for Home Assistant, used for the toilet
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Updated automation
+## V0.2.0:  Added test input and services in automations, 
+##          for testing commented actual climate entity in all automations 
+## V0.2.1:  Added script for manual control of the toilet heating
+## V0.3.0:  updated automations and script for automated control of the toilet heating
+## V0.3.1:  Minor updates in comments
+## V0.3.2:  Code cleaning
 
 ###############################################################################
-#                               Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_select:
-## Electrical toilet heating controlled by Z-Wave Thermostat
-## Used for manual control of the toilet heating
+  ## Electrical toilet heating controlled by Z-Wave Thermostat
+  ## Used for manual control of the toilet heating
   toilet_heating:
     name: Verwarming toilet
     options:
@@ -42,12 +43,12 @@ input_select:
 
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
   ## Switch toilet heating based on time for workdays 
@@ -112,15 +113,15 @@ automation:
           option: 'heat' 
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
-## Script for setting the Hue scene manual
 script:
+  ## Script for setting the Hue scene manual
   manual_set_toilet_heating:
     alias: Stel toilet verwarming in
     sequence: 
@@ -133,9 +134,8 @@ script:
           entity_id: input_select.toilet_heating_dummy
           option: '{{ states.input_select.toilet_heating.state }}'
 
-## Script for setting the heating mode in the toilet
-# used by multiple packages (this, miscellaneous)
-
+  ## Script for setting the heating mode in the toilet
+  ## used by multiple packages (this, miscellaneous)
   set_toilet_heating_mode:
     alias: Zend verwarmings mode naar toilet verwarming
     sequence:
@@ -177,5 +177,5 @@ script:
           option: '{{ mode }}'
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################

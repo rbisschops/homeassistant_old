@@ -1,22 +1,23 @@
-# Package file for Home Assistant, used for setting the Hue scenes  
-# Type: Home Assistant yaml file
-# Date: 27-02-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.1.1:  Minor comments updates
-# V0.1.2:  Update group name
-# V0.1.3:  Removed Verlichting uit as its not a real Hue scene 
-# V0.2.0:  Major update for HA 
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Added group living_room_hue_lights (from groups) 
+## Package file for Home Assistant, used for setting the Hue scenes  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Minor comments updates
+## V0.1.2:  Update group name
+## V0.1.3:  Removed Verlichting uit as its not a real Hue scene 
+## V0.2.0:  Major update for HA 
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Added group living_room_hue_lights (from groups) 
+## V1.1.1:  Cleanup code
 
-# Notes: Scenes are stored in the Hue Bridge and can be 
-# edited with the Hue V1 and/or V2 App
+## Notes: Scenes are stored in the Hue Bridge and can be 
+## edited with the Hue V1 and/or V2 App
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 homeassistant:
@@ -36,10 +37,10 @@ hue:
 #      allow_unreachable: true
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 
-# Input selectors for scenes and Rooms
+## Input selectors for scenes and Rooms
 input_select:
   hue_scenes:
     name: Licht scenes woonkamer
@@ -65,10 +66,10 @@ input_select:
     initial: Woonkamer
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
-# Group with the Scenes, Rooms and script, used in the UI
+## Group with the Scenes, Rooms and script, used in the UI
 group:
   hue_light_control:
     name: Verlichting
@@ -88,21 +89,21 @@ group:
       - group.hue_light_control     
 
 ###############################################################################
-#                              Automations
+##  Automations
 ###############################################################################
 
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
-## Script for setting the Hue scene manual
 script:
+  ## Script for setting the Hue scene manual
   manual_set_hue_scene:
     alias: Set Hue scenes handmatig
     sequence: 
@@ -111,8 +112,8 @@ script:
           group: '{{ states.input_select.hue_groups.state }}'
           name: '{{ states.input_select.hue_scenes.state }}'
 
-## Script for setting the Hue scene manual
-# used by multiple packages (media_center)
+  ## Script for setting the Hue scene manual
+  ## used by multiple packages (media_center)
   set_hue_scene:
     alias: Send Hue scene naar Hue Bridge
     sequence: 
@@ -122,6 +123,6 @@ script:
           scene_name: '{{ name }}'
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 

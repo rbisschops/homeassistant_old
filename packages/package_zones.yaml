@@ -1,14 +1,15 @@
-# Package file for Home Assistant, used for zones
-# Type: Home Assistant yaml file
-# Date: 14-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V1.0.0:  Production versionn
+## Package file for Home Assistant, used for zones
+## Type: Home Assistant yaml file
+## Date: 14-01-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V1.0.0:  Production versionn
+## V1.0.1:  Code cleaning
 
 ###############################################################################
-#                              Homeassistant settings
+##                              Homeassistant settings
 ###############################################################################
 
 homeassistant:
@@ -21,10 +22,10 @@ homeassistant:
       friendly_name: Universiteit
 
 ###############################################################################
-#                              Entities
+##                              Entities
 ###############################################################################
 zone:
-  # Override for the default home zone
+  ## Override for the default home zone
   - name: Home
     latitude: !secret latitude_home
     longitude: !secret longitude_home
@@ -44,25 +45,25 @@ zone:
     icon: mdi:school
 
 ###############################################################################
-#                               Groups
+##                               Groups
 ###############################################################################
 
 
 ###############################################################################
-#                               Automations
+##                               Automations
 ###############################################################################
 
 
 ###############################################################################
-#                              Templates
+##                              Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##                              Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##                              Timers
 ###############################################################################

@@ -1,10 +1,12 @@
-# Package file for Home Assistant, used for the storage area
-# Type: Home Assistant yaml file
-# Date: 02-11-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
+## Package file for Home Assistant, used for the storage area
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Code cleaning
+## V0.2.0:  Moved in automations and timers from package_presence
 
 ###############################################################################
 ##  Homeassistant settings
@@ -50,6 +52,50 @@ sensor:
 ##  Automations
 ###############################################################################
 automation:
+  ## Switch on porch light when someone arrives home
+  ## Upgraded to use advanced presense (V1.4.0)
+  - alias: "Buitenlamp bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+#        entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
+        from: 'Away'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+        from: 'Extended Away'
+        to: 'Just Arrived'
+    condition:  
+      condition: or
+      conditions:     
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_porch_light
+      - service: timer.start
+        data:
+          entity_id: timer.porchlight
+
+  ## Switch off porchlight based on timer
+  - alias: "Buitenlamp uit xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.porchlight
+    condition:
+
+    action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.domo_porch_light
+
   ## Actions to perform on mailbox motion
   - alias: "Post ontvangen"
     hide_entity: false
@@ -79,3 +125,6 @@ automation:
 ###############################################################################
 ##  Timers
 ###############################################################################
+timer:
+  porchlight:
+    duration: '00:10:00'

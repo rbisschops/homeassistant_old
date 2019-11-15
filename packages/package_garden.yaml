@@ -24,6 +24,7 @@
 ## V1.3.1:  Code cleanup and code structure
 ## V1.3.2:  Commented trigger garden lights for test
 ## V1.3.3:  Changed trigger for gardenlights (based on front door trigger)
+## V1,4.0:  Moved in automations from package_presence
 
 ###############################################################################
 ##  Homeassistant settings

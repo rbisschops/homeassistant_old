@@ -1,0 +1,96 @@
+## Package file for Home Assistant, used for presence  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version, moved in automations and timers from package_presence
+
+###############################################################################
+##  Homeassistant settings
+###############################################################################
+
+
+###############################################################################
+##  Entities
+###############################################################################
+
+
+###############################################################################
+##  Groups
+###############################################################################
+
+
+###############################################################################
+##  Automations
+###############################################################################
+automation:
+  ## Switch on hallway light when someone arrives home
+  - alias: "Halletje aan bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.neo_coolcam_front_door
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.domo_porch_light
+          state: 'on'
+        - condition: sun
+          after: sunset
+          after_offset: "00:15:00"
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_hallway_light
+      - service: timer.start
+        data:
+          entity_id: timer.hallwaylight
+
+  ## Switch off hallway light based on timer
+  - alias: "Halletje uit xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.hallwaylight
+    condition:
+    action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.domo_hallway_light
+
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################
+
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################
+timer:
+  hallwaylight:
+    duration: '00:02:00'

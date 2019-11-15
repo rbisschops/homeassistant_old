@@ -1,20 +1,22 @@
-# Package file for Home Assistant, used for presence  
-# Type: Home Assistant yaml file
-# Date: 14-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Added hallway light based on trigger frontdoor sensor 
-# V1.2.0:  Fixed Bug #005
-# V1.2.1:  Fixed wrong status presence sensor
-# V1.3.0:  Added entities and logic for advanced presence
-# V1.4.0:  Migrated to the use of advanced presence
-# V1.4.1:  minor update notify text coming home
+## Package file for Home Assistant, used for presence  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Added hallway light based on trigger frontdoor sensor 
+## V1.2.0:  Fixed Bug #005
+## V1.2.1:  Fixed wrong status presence sensor
+## V1.3.0:  Added entities and logic for advanced presence
+## V1.4.0:  Migrated to the use of advanced presence
+## V1.4.1:  minor update notify text coming home
+## V1.4.2:  code cleanup
+## V1.5.0:  Moved out several automations and times to dedicated room/area
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 homeassistant:
   customize:
@@ -36,7 +38,7 @@ owntracks:
   max_gps_accuracy: 200
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 binary_sensor:
   ## Anyone home sensor
@@ -133,7 +135,7 @@ sensor:
         friendly_name: 'Kimberly'
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
   presence_devices:
@@ -152,11 +154,6 @@ group:
     name: Aanwezigheid
     entities:
       - binary_sensor.people_home
-  presence_timers:
-    name: Aanwezigheid timers
-    entities:
-      - timer.porchlight
-      - timer.hallwaylight
   ## Added group for advanced presence states (V1.3.0)
   ralph:
     name: Aanwezigheid Ralph
@@ -182,7 +179,7 @@ group:
       - sensor.kimberly_status
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
   ## Added automations for advanced presence states (V1.3.0)
@@ -309,30 +306,6 @@ automation:
             {% endif %}
           option: Just Left
 
-  ## Alternative code:
-  # - alias: Mark person as just left
-  #   hide_entity: false
-  #   initial_state: 'off'
-  #   trigger:
-  #     - platform: state
-  #       entity_id: 
-  #         - group.ralph
-  #         - group.anneke
-  #         - group.kimberly
-  #       from: 'home'
-  #       to: 'not_home'
-  #   action:
-  #     - service: input_select.select_option
-  #       data_template:
-  #         entity_id: >
-  #           {% set map = {
-  #             'group.ralph': 'input_select.ralph_status_dropdown',
-  #             'group.anneke': 'input_select.anneke_status_dropdown',
-  #             'group.kimberly': 'input_select.kimberly_status_dropdown',
-  #           } %}
-  #           {{ map[trigger.entity_id] }}
-  #         option: Just Left
-
   - alias: Mark person as away
     hide_entity: false
     initial_state: 'on'
@@ -442,174 +415,16 @@ automation:
           who: 'ralph'
           prio: -2
 
-  ## Switch on porch light when someone arrives home
-  ## Upgraded to use advanced presense (V1.4.0)
-  - alias: "Buitenlamp bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
-#        entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
-        from: 'Away'
-        to: 'Just Arrived'
-      - platform: state
-        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
-        from: 'Extended Away'
-        to: 'Just Arrived'
-    condition:  
-      condition: or
-      conditions:     
-        - condition: sun
-          after: sunset
-        - condition: sun
-          before: sunrise
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_porch_light
-      - service: timer.start
-        data:
-          entity_id: timer.porchlight
-
-  ## Switch on hallway light when someone arrives home
-  - alias: "Halletje aan bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.neo_coolcam_front_door
-        to: 'on'
-    condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.domo_porch_light
-          state: 'on'
-        - condition: sun
-          after: sunset
-          after_offset: "00:15:00"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_hallway_light
-      - service: timer.start
-        data:
-          entity_id: timer.hallwaylight
-
-  ## Switch on garden light when someone arrives home
-  - alias: "Tuin verlichting aan bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.neo_coolcam_front_door
-        to: 'on'
-    condition:
-      condition: and
-      conditions:
-        - condition: sun
-          after: sunset
-          after_offset: "00:15:00"
-        - condition: state
-          entity_id: input_boolean.domo_garden_light
-          state: 'off'
-        - condition: time
-          before: '23:00:00'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_select.ralph_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.anneke_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.kimberly_status_dropdown
-              state: 'Just Arrived'
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_garden_light
-
-  ## Switch on livingroom lights when someone arrives home
-  - alias: "Woonkamer verlichting aan bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.neo_coolcam_front_door
-        to: 'on'
-    condition:
-      condition: and
-      conditions:
-        - condition: sun
-          after: sunset
-          after_offset: "00:15:00"
-        - condition: state
-          entity_id: input_boolean.livingroom_lights_status
-          state: 'off'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_select.ralph_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.anneke_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.kimberly_status_dropdown
-              state: 'Just Arrived'
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.livingroom_lights_status
-
-  ## Switch off porchlight based on timer
-  - alias: "Buitenlamp uit xx minuten na trigger"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.porchlight
-    condition:
-
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.domo_porch_light
-
-   ## Switch off hallway light based on timer
-  - alias: "Halletje uit xx minuten na trigger"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.hallwaylight
-    condition:
-
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.domo_hallway_light
-
-
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
-timer:
-  porchlight:
-    duration: '00:10:00'
-  hallwaylight:
-    duration: '00:02:00'

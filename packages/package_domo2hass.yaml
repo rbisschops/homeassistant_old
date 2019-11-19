@@ -1,6 +1,6 @@
 ## Package file for Home Assistant, used for getting Domoticz data via MQTT 
 ## Type: Home Assistant yaml file
-## Date: 09-11-2019
+## Date: 17-11-2019
 ## Author: R.Bisschops
 ##
 ## Changelog:
@@ -20,6 +20,7 @@
 ## V0.7.0:  Code cleanup and changes to entities, package ready for migration to new homeserver
 ## V0.8.0:  Added seperate automations for various Domo light controls 
 ##          to avoid script already running error
+## V0.8.1:  Removed script requirement for domo2hass script chistmastree (test)
 
 ###############################################################################
 ##  Homeassistant settings
@@ -60,175 +61,172 @@ group:
 ###############################################################################
 automation:
   ## Publish a switch to Domoticz
-  - alias: Domoticz publish switch
-    hide_entity: false
-    initial_state: 'on'  
-    trigger:     
-      platform: state
-      entity_id:
+  ## Obsolete since V0.8.0, remove after a while
+  # - alias: Domoticz publish switch
+  #   hide_entity: false
+  #   initial_state: 'on'  
+  #   trigger:     
+  #     platform: state
+  #     entity_id:
         # - input_boolean.domo_entertainment
-        - input_boolean.domo_garden_light
-        - input_boolean.domo_porch_light
-        - input_boolean.domo_hallway_light
-        - input_boolean.domo_kitchen_cabinets
+        # - input_boolean.domo_garden_light
+        # - input_boolean.domo_porch_light
+        # - input_boolean.domo_hallway_light
+        # - input_boolean.domo_kitchen_cabinets
         # - input_boolean.domo_christmastree
-        - input_boolean.domo_bar_light
-        - input_boolean.domo_water_ornament
-        - input_boolean.domo_sunscreen
-    condition:
-    action:
-      - service: script.domoticz_switch
-        data_template:
-          device: '{{ trigger.to_state.attributes.friendly_name }}'
-          new_state: >-
-            {{ trigger.to_state.state }}
-
-  #
-  # Test new christmas tree light automation first and if working, copy payload template stuff
-  # to other V0.8 automations
-  #
-  ## Added V0.8
+        # - input_boolean.domo_bar_light
+        # - input_boolean.domo_water_ornament
+        # - input_boolean.domo_sunscreen
+    # condition:
+    # action:
+    #   - service: script.domoticz_switch
+    #     data_template:
+    #       device: '{{ trigger.to_state.attributes.friendly_name }}'
+    #       new_state: >-
+    #         {{ trigger.to_state.state }}
+  
+  ## Added V0.8.1
   ## Publish christmas tree light switch to Domoticz
   - alias: Domoticz publish - Kerstboom
     hide_entity: false
     initial_state: 'on'
-    trigger:     
+    trigger:
       platform: state
       entity_id:
         - input_boolean.domo_christmastree
-        - binary_sensor.habridge_christmastree
     condition:
     action:
       - service: mqtt.publish
         data_template:
           topic: 'domoticz/in'
           payload_template: >-
-            {% set states =
-              {
-              "on": "On",
-              "off": "Off"
-              }
-            %}
-            {% set new_state = states[{{trigger.to_state.state }}] %}
             {{ {
              "command": "switchlight",
              "idx": 26,
-             "switchcmd": new_state
+             "switchcmd": trigger.to_state.state|capitalize
             }|tojson }}
 
-  ## Added V0.8
+  ## Added V0.8.0
   ## Publish garden light switch to Domoticz
-  # - alias: Domoticz publish - Tuinverlichting
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:     
-  #     platform: state
-  #     entity_id:
-  #       - input_boolean.domo_garden_light
-  #       - binary_sensor.habridge_garden_light
-  #   condition:
-  #   action:
-  #     - service: mqtt.publish
-  #       data_template:
-  #         topic: 'domoticz/in'
-  #         payload_template: >-
-  #           # {% set new_state = {{ trigger.to_state.state }} }%}
-  #           {% set status =
-  #             {
-  #             "on": "On",
-  #             "off": "Off"
-  #             }
-  #           %}
-  #           {% set new_state = status[{{trigger.to_state.state }}] %}
-  #           {{ {
-  #            "command": "switchlight",
-  #            "idx": 28,
-  #            "switchcmd": new_state
-  #           }|tojson }}
-
-  ## Added V0.8
+  - alias: Domoticz publish - Tuinverlichting
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.domo_garden_light
+    condition:
+    action:
+      - service: script.domoticz_gardenlights
+        data_template:
+          device: 28
+          new_state: >-
+            {{ trigger.to_state.state }}
   ## Publish garden light switch to Domoticz
-  # - alias: Domoticz publish - Buitenlamp
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:     
-  #     platform: state
-  #     entity_id:
-  #       - input_boolean.domo_porch_light
-  #       - binary_sensor.habridge_porch_light
-  #   condition:
-  #   action:
-  #     - service: mqtt.publish
-  #       data_template:
-  #         topic: 'domoticz/in'
-  #         payload_template: >-
-  #           {% set status =
-  #             {
-  #             "on": "On",
-  #             "off": "Off"
-  #             }
-  #           %}
-  #           {{ {
-  #            "command": "switchlight",
-  #            "idx": 20,
-  #            "switchcmd": new_state
-  #           }|tojson }}
-
-  ## Added V0.8
+  - alias: Domoticz publish - Tuinverlichting
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.domo_garden_light
+    condition:
+    action:
+      - service: script.domoticz_gardenlights
+        data_template:
+          device: 28
+          new_state: >-
+            {{ trigger.to_state.state }}
+  ## Publish garden light switch to Domoticz
+  - alias: Domoticz publish - Buitenlamp
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_porch_light
+    condition:
+    action:
+      - service: script.domoticz_porchlight
+        data_template:
+          device: 20
+          new_state: >-
+            {{ trigger.to_state.state }}
   ## Publish hallway light switch to Domoticz
-  # - alias: Domoticz publish - Halletje
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:     
-  #     platform: state
-  #     entity_id:
-  #       - input_boolean.domo_hallway_light
-  #       - binary_sensor.habridge_hallway_light
-  #   condition:
-  #   action:
-  #     - service: mqtt.publish
-  #       data_template:
-  #         topic: 'domoticz/in'
-  #         payload_template: >-
-  #           {% set status =
-  #             {
-  #             "on": "On",
-  #             "off": "Off"
-  #             }
-  #           %}
-  #           {{ {
-  #            "command": "switchlight",
-  #            "idx": 21,
-  #            "switchcmd": new_state
-  #           }|tojson }}
-
-  ## Added V0.8
+  - alias: Domoticz publish - Halletje
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_hallway_light
+    condition:
+    action:
+      - service: script.domoticz_hallway
+        data_template:
+          device: 21
+          new_state: >-
+            {{ trigger.to_state.state }}
   ## Publish kitchen cabinets light switch to Domoticz
-  # - alias: Domoticz publish - Hoge kasten
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:     
-  #     platform: state
-  #     entity_id:
-  #       - input_boolean.domo_kitchen_cabinets
-  #       ## - binary_sensor.??
-  #   condition:
-  #   action:
-  #     - service: mqtt.publish
-  #       data_template:
-  #         topic: 'domoticz/in'
-  #         payload_template: >-
-  #           {% set status =
-  #             {
-  #             "on": "On",
-  #             "off": "Off"
-  #             }
-  #           %}
-  #           {{ {
-  #            "command": "switchlight",
-  #            "idx": 23,
-  #            "switchcmd": new_state
-  #           }|tojson }}
+  - alias: Domoticz publish - Hoge kasten
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_kitchen_cabinets
+    condition:
+    action:
+      - service: script.domoticz_kitchen_cabinets
+        data_template:
+          device: 23
+          new_state: >-
+            {{ trigger.to_state.state }}
+  ## Publish kitchen cabinets light switch to Domoticz
+  - alias: Domoticz publish - Lampen bar
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_bar_light
+    condition:
+    action:
+      - service: script.domoticz_bar_lights
+        data_template:
+          device: 27
+          new_state: >-
+            {{ trigger.to_state.state }}
+  ## Publish water ornament switch to Domoticz
+  - alias: Domoticz publish - Waterbollen
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_water_ornament
+    condition:
+    action:
+      - service: script.domoticz_water_ornament
+        data_template:
+          device: 29
+          new_state: >-
+            {{ trigger.to_state.state }}
+  ## Publish sunscreen switch to Domoticz
+  - alias: Domoticz publish - Zonnescherm 
+    hide_entity: false
+    initial_state: 'on'
+    trigger:     
+      platform: state
+      entity_id:
+        - input_boolean.domo_sunscreen
+    condition:
+    action:
+      - service: script.domoticz_sunscreen
+        data_template:
+          device: 30
+          new_state: >-
+            {{ trigger.to_state.state }}
 
   ## Convert Domoticz Zigbee switch (type Light/Switch) to Hass 
   - alias: Read domoticz Zigbee switch via MQTT
@@ -266,27 +264,9 @@ automation:
           state: >-
             {{ trigger.payload_json.nvalue }}    
 
-  # Switch Dome entity based on HA Bridge sensor
-  # - alias: "Domo entry - voice"
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:
-  #     platform: state
-  #     entity_id:
-  #       - binary_sensor.habridge_christmastree
-  #   action:
-  #     - service: script.switch_to_domo
-  #       data_template:
-  #         device: '{{ trigger.to_state.object_id }}'
-  #     - service: logbook.log
-  #       data_template:
-  #         name: Device value
-  #         message: '{{ trigger.to_state.object_id }}'
-
+  # Added V0.6.0
   ## Convert Domoticz Energy meters to Hass
-  ## Gas meter will sent svalue1
   ## Elektra meter will sent svalue1, svalue2, svalue5
-  ## Water meter will sent    
   - alias: Domoticz Elektra waarden via MQTT
     hide_entity: false
     initial_state: 'on'  
@@ -307,7 +287,7 @@ automation:
           low: '{{ trigger.payload_json.svalue1 }}' 
           high: '{{ trigger.payload_json.svalue2 }}'
           current: '{{ trigger.payload_json.svalue5 }}'
-
+  ## Gas meter will sent svalue1
   - alias: Domoticz Gas waarden via MQTT
     hide_entity: false
     initial_state: 'on'  
@@ -326,7 +306,7 @@ automation:
         data_template:
           device: '{{ trigger.payload_json.name }}'
           usage: '{{ trigger.payload_json.svalue1 }}' 
-
+  ## Water meter will sent  
   - alias: Domoticz Water waarden via MQTT
     hide_entity: false
     initial_state: 'on'  
@@ -356,14 +336,146 @@ automation:
 ###############################################################################
 script:
   #############################################################################
+  ## Added V0.8
+  ## Scripts for converting and setting Domoticz switches via MQTT.
+  ## ID is transferred from respective automation
+  ## The Domoticz API call is packed in JSON and sent to the MQTT topic 
+  ## domoticz/in as the payload.
+  ############################################################################# 
+
+  ## Sent Christamstree to Domoticz 
+  domoticz_christmastree:  
+    alias: Set christmastree via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent Gardenlights to Domoticz 
+  domoticz_gardenlights:  
+    alias: Set gardenlights via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent porchlight to Domoticz 
+  domoticz_porchlight:  
+    alias: Set porchlight via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent hallway lights to Domoticz 
+  domoticz_hallway:  
+    alias: Set hallwaylights via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent kitchen high cabinets to Domoticz 
+  domoticz_kitchen_cabinets:  
+    alias: Set high cabinets via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent kitchen bar lights to Domoticz 
+  domoticz_bar_lights:  
+    alias: Set bar lights via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent water ornament to Domoticz 
+  domoticz_water_ornament:  
+    alias: Set water ornament via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+  ## Sent sunscreen to Domoticz 
+  domoticz_sunscreen:  
+    alias: Set sunscreen via MQTT
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: 'domoticz/in'
+          payload_template: >-
+            {% set new_state = new_state|capitalize %}
+            {% set device = device|int %}
+            {{ {
+             "command": "switchlight",
+             "idx": device,
+             "switchcmd": new_state
+            }|tojson }}
+
+  #############################################################################
   ## Script for converting and setting Domoticz switches via MQTT.
   ## Uses a dict to lookup the ID of the switch in Domoticz.
   ## Uses a dict to convert state to a state recognized by Domoticz.
   ## The Domoticz API call is packed in JSON and sent to the MQTT topic 
-  ## domoticz/in as the payload. 
+  ## domoticz/in as the payload.
+  ##
+  ## Obsolete since V0.8.0, remove after a while
   ############################################################################# 
 
   ## Convert Hass switch to Domoticz
+
   domoticz_switch:  
     alias: Set domoticz switch via MQTT
     sequence:
@@ -416,6 +528,8 @@ script:
              "source": device
             }|tojson }}
 
+  ## Added V0.8
+  ## Read electiricity values from Domoticz
   domoticz_electricity:
     alias: Receive domoticz elektra readings via MQTT
     sequence:
@@ -431,6 +545,8 @@ script:
               "current_usage": current
             }|tojson }}
 
+  ## Added V0.8
+  ## Read gas values from Domoticz
   domoticz_gas:
     alias: Receive domoticz gas readings via MQTT
     sequence:
@@ -444,6 +560,8 @@ script:
               "usage": usage,
             }|tojson }}
 
+  ## Added V0.8
+  ## Read gas values from Domoticz
   domoticz_water:
     alias: Receive domoticz water readings via MQTT
     sequence:

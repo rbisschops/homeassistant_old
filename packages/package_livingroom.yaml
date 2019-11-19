@@ -17,6 +17,8 @@
 ## V0.5.1:  Restored CoCo kitchen high cabinets switch
 ## V0.5.2:  Cleanup code
 ## V0.6.0:  Moved in automations from package_presence
+## V0.7.0:  Added livingroom lights at sunset
+## V0.8.0:  Moved automations to package_hallway and packag_storage
 
 ###############################################################################
 ##  Homeassistant settings
@@ -164,6 +166,28 @@ automation:
       - service: homeassistant.turn_on
         entity_id: input_boolean.livingroom_lights_status
 
+  ## Added V0.7.0
+  ## Switch on livingroom lights at sunset
+  - alias: "Woonkamer verlichting aan bij zonsondergang"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '-01:00:00'
+    condition:
+      condition: and
+      conditions: 
+        - condition: state
+          entity_id: binary_sensor.people_home
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights_status
+
   ## Switch bar lights on an off from HA-Bridge
   - alias: "Bar lampen - voice"
     hide_entity: false
@@ -181,23 +205,6 @@ automation:
           {% endif%}
         entity_id: input_boolean.domo_bar_light
 
-  ## Switch porch lights on an off from HA-Bridge
-  - alias: "Buitenlamp - voice"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.habridge_porch_light
-    action:
-      - service_template: >-
-          {% if is_state('binary_sensor.habridge_porch_light', 'on') %}
-          homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_porch_light', 'off') %}
-          homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_porch_light  
-
   ## Switch Christmas tree on an off from HA-Bridge
   - alias: "Kerstboom - voice"
     hide_entity: false
@@ -214,23 +221,6 @@ automation:
             homeassistant.turn_off
           {% endif%}
         entity_id: input_boolean.domo_christmastree 
-
-  ## Switch hallway lights on an off from HA-Bridge
-  - alias: "Hallway lights - voice"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.habridge_hallway_light
-    action:
-      - service_template: >-
-          {% if is_state('binary_sensor.habridge_hallway_light', 'on') %}
-            homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_hallway_light', 'off') %}
-            homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_hallway_light
 
 ###############################################################################
 ##  Scripts

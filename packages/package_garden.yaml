@@ -24,7 +24,8 @@
 ## V1.3.1:  Code cleanup and code structure
 ## V1.3.2:  Commented trigger garden lights for test
 ## V1.3.3:  Changed trigger for gardenlights (based on front door trigger)
-## V1,4.0:  Moved in automations from package_presence
+## V1.4.0:  Moved in automations from package_presence
+## V1.5.0:  Updated sunscreen scripts due to change in domo2hass automations
 
 ###############################################################################
 ##  Homeassistant settings
@@ -160,9 +161,8 @@ automation:
         entity_id: 
           - input_boolean.sunscreen_pause
     action:
-      - service: script.domoticz_switch
+      - service: script.domoticz_sunscreen
         data_template:
-          device: 'Zonnescherm'
           new_state: '{{ states.input_boolean.domo_sunscreen.state }}'
 
   ## Open sunscreen based on position of the sun (elevation)
@@ -189,8 +189,8 @@ automation:
       - service: script.open_sunscreen
       - service: script.notify_prowl
         data_template:
-          value1: 'Zonnescherm - Elevatie: '
-          value2: 'zonnescherm gaat open'
+          value1: 'Zonnescherm: '
+          value2: 'zonnescherm gaat open op basis van elevatie zon'
           value3: ' '
           who: 'ralph'
           prio: -2   
@@ -221,8 +221,8 @@ automation:
       - service: script.open_sunscreen
       - service: script.notify_prowl
         data_template:
-          value1: 'Zonnescherm - Regenverwachting: '
-          value2: 'zonnescherm gaat open'
+          value1: 'Zonnescherm: '
+          value2: 'zonnescherm gaat open, geen regen verwacht'
           value3: ' '
           who: 'ralph'
           prio: -2
@@ -290,9 +290,8 @@ script:
   # pause_sunscreen:
   #   alias: Pauzeer zonnescherm op huidige positie
   #   sequence:
-  #     - service: script.domoticz_switch
+  #     - service: script.domoticz_sunscreen
   #       data_template:
-  #         device: 'Zonnescherm'
   #         new_state: '{{ states.input_boolean.domo_sunscreen.state }}'
 
 ###############################################################################

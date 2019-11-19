@@ -1,10 +1,11 @@
 ## Package file for Home Assistant, used for presence  
 ## Type: Home Assistant yaml file
-## Date: 11-11-2019
+## Date: 17-11-2019
 ## Author: R.Bisschops
 ##
 ## Changelog:
 ## V0.1.0:  First version, moved in automations and timers from package_presence
+## V0.2.0:  Moved in automations from package_livingroom
 
 ###############################################################################
 ##  Homeassistant settings
@@ -63,6 +64,23 @@ automation:
     action:
     - service: homeassistant.turn_off
       entity_id: input_boolean.domo_hallway_light
+
+  ## Switch hallway lights on an off from HA-Bridge
+  - alias: "Hallway lights - voice"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.habridge_hallway_light
+    action:
+      - service_template: >-
+          {% if is_state('binary_sensor.habridge_hallway_light', 'on') %}
+            homeassistant.turn_on
+          {% elif is_state('binary_sensor.habridge_hallway_light', 'off') %}
+            homeassistant.turn_off
+          {% endif%}
+        entity_id: input_boolean.domo_hallway_light
 
 ###############################################################################
 ##  Templates

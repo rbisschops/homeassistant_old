@@ -18,6 +18,9 @@
 ## V0.6.0:  Added template sensors for waste bin schedular 
 ## V0.7.0:  Added comments and some code cleaning
 ## V0.8.0:  Remover Domo Virtual heating from script
+## V0.9.0:  Added leaving autoamtions and scripts
+## V0.10.0: Added extended away script
+## V0.11.0: Added hallway and porchlight on with timer to leaving script
 
 ###############################################################################
 ##  Homeassistant settings
@@ -32,6 +35,12 @@ input_boolean:
   ## Several automations depend on this
   holiday_mode:
     name: Vakantie mode aan
+    icon: mdi:toggle-switch
+    initial: off
+  ## Christmas mode toggle switch, used for setting when on ehem the holiday season is there 
+  ## Several automations depend on this
+  christmas_mode:
+    name: Kerst periode
     icon: mdi:toggle-switch
     initial: off
 
@@ -114,7 +123,8 @@ binary_sensor:
 ##  Automations
 ###############################################################################
 automation:
-  ## AUtomation for runnning the bed time script when called
+  ## Automation for runnning the bed time script 
+  ## Called by Alexa via HA Bridge
   - alias: "Bed mode ingeschakeld"
     hide_entity: false
     initial_state: 'on'
@@ -127,6 +137,35 @@ automation:
       - service: script.turn_on
         entity_id: script.bedtime
 
+  ## Automation for runnning the leaving script
+  ## Called by Alexa via HA Bridge  
+  - alias: "Leaving mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.habridge_leaving
+      to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.leaving
+
+  ## Added V0.10.0
+  ## Automation for runnning the extended away script
+  ## Called from binary sensor Extended Away
+  - alias: "Extended away mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.everybody_extended_away
+      to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.extended_away
+
   ## Automation to run when the garbage bins need to go out for collection
   - alias: "Vuilnisbak aan de straat"
     hide_entity: false
@@ -137,15 +176,18 @@ automation:
       - binary_sensor.gft
       - binary_sensor.pmd
       - binary_sensor.gft_pmd
-      - input_boolean.metering_cabinet_door
       to: 'on'
     action:
-      - service: script.notify_telegram
+      - service: script.notify_telegram_ralph
         data_template:
-          value1: 'Vandaag '
+          value1: 'Vandaag moet de '
           value2: '{{ trigger.to_state.attributes.friendly_name }}'
-          value3: ' buiten zetten'
-          who: 'ralph'
+          value3: ' bak buiten worden gezet'
+      - service: script.notify_telegram_anneke
+        data_template:
+          value1: 'Vandaag moet de '
+          value2: '{{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' bak buiten worden gezet'
 
 ###############################################################################
 ##  Templates
@@ -163,18 +205,111 @@ script:
       ## Swtcih off the outdoor lighting
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_garden_light
+      ## Swtcih off the christmastree
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.domo_christmastree
+        ## Switch off the living room lights
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.livingroom_lights_status
+      ## Change the climate settings for the toilet heating  
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.toilet_heating
+          option: 'Spaarstand'
+      - condition: state
+        entity_id: input_boolean.recording_mode
+        state: 'off'
+      - service: homeassistant.turn_off
+        entity_id: switch.tradfri_media_switch
+
+  ## Added V0.9.0
+  ## Script when leaving home, also called when everybody is away (from package_presence)
+  leaving:
+    alias: Leaving script
+    sequence:
+      ## Switch off the outdoor lighting
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.domo_garden_light
       ## Switch off the living room lights
       - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights_status
       ## Change the climate settings for the toilet heating  
-      - service: script.set_toilet_heating_mode
+      - service: input_select.select_option
         data_template:
-          mode: 'Energy Heat'
+          entity_id: input_select.toilet_heating
+          option: >
+            {% if (states.input_select.toilet_heating.state != 'Uit') %}
+              'Spaarstand'
+            {% else %}
+              'Uit'
+            {% endif %}
       ## Turn off the media center, but only when recording mode is not set
       - condition: state
         entity_id: input_boolean.recording_mode
         state: 'off'
       - service: homeassistant.turn_off
+        entity_id: switch.tradfri_media_switch
+      ## Added V0.
+      ## Turn on lighting, but only when dark
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
+      ## Switch on the outdoor lighting
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_porch_light
+      - service: timer.start
+        data_template:
+          entity_id: timer.porchlight
+          duration: '00:{{ states.input_text.timer_minutes_porch_short.state | int }}:00'
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_hallway_light
+      - service: timer.start
+        data_template:
+          entity_id: timer.hallwaylight
+          duration: '00:{{ states.input_text.timer_minutes_hallwaylight_long.state | int }}:00'
+
+  ## Added V0.10.0
+  ## Script everybody extended away
+  extended_away:
+    alias: Iedereen langere tijd weg script
+    sequence:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.toilet_heating
+          option: 'Uit'
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.holiday_mode
+
+  ## Added V0.9.0
+  coming_home:
+    alias: Coming home script
+    sequence:
+      ## Change the climate settings for the toilet heating  
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: >
+            {% if (states.input_select.toilet_heating.state != 'Uit') %}
+              'Verwarmen'
+            {% else %}
+              'Uit'
+            {% endif %}
+      ## Turn on lighting, but only when dark
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
+      ## Switch on the outdoor lighting
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+      ## Switch on the living room lights
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights_status
+      ## Turn on the media center, but only when recording mode is not set
+      - condition: time
+        after: '19:30:00:00'
+      - service: homeassistant.turn_on
         entity_id: switch.tradfri_media_switch
 
 ###############################################################################

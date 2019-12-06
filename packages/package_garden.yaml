@@ -26,6 +26,8 @@
 ## V1.3.3:  Changed trigger for gardenlights (based on front door trigger)
 ## V1.4.0:  Moved in automations from package_presence
 ## V1.5.0:  Updated sunscreen scripts due to change in domo2hass automations
+## V1.6.0:  Added gardenlights before sunrise on and oof automations
+##          Changed condtional sensor people_home to everybody_away
 
 ###############################################################################
 ##  Homeassistant settings
@@ -76,7 +78,7 @@ automation:
           {% elif is_state('binary_sensor.habridge_garden_light', 'off') %}
             homeassistant.turn_off
           {% endif%}
-        entity_id: input_boolean.domo_garden_light  
+        entity_id: input_boolean.domo_garden_light
 
   # Switch water ornament on an off from HA-Bridge
   - alias: "Water ornament - voice"
@@ -107,13 +109,59 @@ automation:
       condition: and
       conditions: 
         - condition: state
-          entity_id: binary_sensor.people_home
-          state: 'on'
+          entity_id: binary_sensor.everybody_away
+          state: 'off'
         - condition: state
           entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
       - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+
+  ## Added V1.6.0  
+  ## Switch on gardenlights before sunrise but only if someone is home
+  - alias: "Tuinverlichting voor zonsopkomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: time
+      at: '06:30:00'
+    condition:
+      condition: and
+      conditions: 
+        - condition: state
+          entity_id: binary_sensor.everybody_away
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: state
+          entity_id: sun.sun
+          state: 'below_horizon'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+
+  ## Added V1.6.0
+  ## Switch off gardenlights at sunrise but only if someone is home
+  - alias: "Tuinverlichting uit bij zonsopkomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: sun
+      event: sunrise
+      offset: '-00:15:00'
+    condition:
+      condition: and
+      conditions: 
+        - condition: state
+          entity_id: binary_sensor.everybody_away
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+    action:
+      - service: homeassistant.turn_off
         entity_id: input_boolean.domo_garden_light
 
   ## Switch gardenlights at home coming but only when dark and before 23:00
@@ -123,9 +171,6 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          # Commented for test in V1.3.2
-          # - binary_sensor.people_home
-          - input_boolean.office_door
           ## Added in V1.3.3
           - binary_sensor.neo_coolcam_front_door
         to: 'on'

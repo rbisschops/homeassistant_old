@@ -1,20 +1,20 @@
-# Lovelace-UI file for Home Assistant, Test view
-# Type: Home Assistant yaml file
-# Date: 12-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Moved some switches to other tabs
-# V0.2.1:  Changed UI layout
-# V0.2.2:  Added susncreen dummy switch
-# V0.2.1:  Added sunscreen manaul overide input boolean for test
-# V0.2.2:  Removed virtual heating from Domo (obsolete)
-# V0.2.3:  Removed input_boolean.sunscreen_manual (moved)
-#          Added switch.tradfri_high_cabinets_switch (moved)
-# V0.3.0:  Major UI changes based on Decluttering card
-# V0.4.0:  Added new precense items for test
-# V0.4.1:  Added input booleans for garbage bins
+## Lovelace-UI file for Home Assistant, Test view
+## Type: Home Assistant yaml file
+## Date: 12-07-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Moved some switches to other tabs
+## V0.2.1:  Changed UI layout
+## V0.2.2:  Added susncreen dummy switch
+## V0.2.1:  Added sunscreen manaul overide input boolean for test
+## V0.2.2:  Removed virtual heating from Domo (obsolete)
+## V0.2.3:  Removed input_boolean.sunscreen_manual (moved)
+##          Added switch.tradfri_high_cabinets_switch (moved)
+## V0.3.0:  Major UI changes based on Decluttering card
+## V0.4.0:  Added new precense items for test
+## V0.4.1:  Added input booleans for garbage bins
 
 title: Test
 icon: 'mdi:test-tube'
@@ -69,6 +69,7 @@ cards:
       show_header_toggle: false
       entities:
         - entity: timer.hallwaylight
+        - entity: timer.porchlight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:

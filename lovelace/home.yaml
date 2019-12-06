@@ -1,21 +1,21 @@
-# Lovelace-UI file for Home Assistant, Home page view
-# Type: Home Assistant yaml file
-# Date: 13-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added waste bin icons
-# V0.3.0:  Updated presence sensors
+## Lovelace-UI file for Home Assistant, Home page view
+## Type: Home Assistant yaml file
+## Date: 13-07-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added waste bin icons
+## V0.3.0:  Updated presence sensors
 
 title: Home
 icon: 'mdi:home'
 theme: nest
 
-#background: center / cover no-repeat url("/local/background_grey.jpg") fixed
+# background: center / cover no-repeat url("/local/background_grey.jpg") fixed
 background: "#e3e3e3"
 cards:
-## Presence cards
+  ## Presence cards
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -30,27 +30,7 @@ cards:
       - entity: binary_sensor.anneke_home
       - entity: binary_sensor.kimberly_home
       - entity: binary_sensor.ralph_home
-      # - type: horizontal-stack
-      #   cards:
-      #   - type: picture-entity
-      #     entity: group.anneke
-      #     image: /local/anneke_off.png
-      #     show_name: false
-      #     state_image:
-      #       'home': /local/anneke_on.png
-      #   - type: picture-entity
-      #     entity: group.kimberly
-      #     image: /local/kimberly_off.png
-      #     show_name: false
-      #     state_image:
-      #       'home': /local/kimberly_on.png
-      #   - type: picture-entity
-      #     entity: group.ralph
-      #     image: /local/ralph_off.png
-      #     show_name: false
-      #     state_image:
-      #       'home': /local/ralph_on.png
-## Alarm cards
+  ## Alarm cards
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -83,7 +63,7 @@ cards:
           entities:
           - entity: binary_sensor.gft
           - entity: binary_sensor.pmd
-## Control cards
+  ## Control cards
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -150,8 +130,7 @@ cards:
           color_type: blank-card
         - type: custom:button-card
           color_type: blank-card
-
-## Weather card
+  ## Weather card
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card

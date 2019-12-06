@@ -14,18 +14,18 @@
 ## V1.4.1:  minor update notify text coming home
 ## V1.4.2:  code cleanup
 ## V1.5.0:  Moved out several automations and times to dedicated room/area
+## V1.6.0:  Added everybody away sensor
+##          Added service to automation
+## V1.7.0:  Added everybody extended away sensor
+## V1.8.0:  Added comming home script to automation "Er komt iemand thuis"
 
 ###############################################################################
 ##  Homeassistant settings
 ###############################################################################
 homeassistant:
   customize:
-    ## Timers
-    timer.porchlight:
-      friendly_name: Buitenlamp
-    timer.hallwaylight:
-      friendly_name: Halletje
-    ## Added customizations for advanced presence states (V1.3.0)
+    ## Added V1.3.0
+    ## Customizations for advanced presence states
     sensor.ralph_status:
       entity_picture: /local/custom_icons/ralph48_on.png
     sensor.anneke_status:
@@ -49,10 +49,42 @@ binary_sensor:
         friendly_name: Iemand thuis
         value_template: >-
           {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.ralph_status_dropdown', 'Just Arrived')
+            or is_state('input_select.ralph_status_dropdown', 'Just Left')
             or is_state('input_select.anneke_status_dropdown', 'Home')
-            or is_state('input_select.kimberly_status_dropdown', 'Home') }}
+            or is_state('input_select.anneke_status_dropdown', 'Just Arrived')
+            or is_state('input_select.anneke_status_dropdown', 'Just Left')
+            or is_state('input_select.kimberly_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Arrived')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+  ## Added V1.6.0
+  ## Everybody is away
+  - platform: template
+    sensors:
+      everybody_away:
+        friendly_name: Niemand thuis (kort)
+        value_template: >-
+          {{ is_state('input_select.ralph_status_dropdown', 'Away')
+            and is_state('input_select.anneke_status_dropdown', 'Away')
+            and is_state('input_select.kimberly_status_dropdown', 'Away') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+
+  ## Added V1.7.0
+  ## Everybody is extended away
+  - platform: template
+    sensors:
+      everybody_extended_away:
+        friendly_name: Niemand thuis (lang)
+        value_template: >-
+          {{ is_state('input_select.ralph_status_dropdown', 'Extended Away')
+            and is_state('input_select.anneke_status_dropdown', 'Extended Away')
+            and is_state('input_select.kimberly_status_dropdown', 'Extended Away') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+
   ## Anneke home sensor
   - platform: template
     sensors:
@@ -141,15 +173,16 @@ group:
   presence_devices:
     name: Aanwezigheid (Netwerk)
     entities:
-      - device_tracker.anneke_s7
-      - device_tracker.kimberly_s7
-      - device_tracker.ralph_iphone7
+      - device_tracker.wifi_anneke_s7
+      # - device_tracker.wifi_kimberly_s7
+      - device_tracker.wifi_kimberly_iphone8 
+      - device_tracker.wifi_ralph_iphone7
   presence_geofence:
     name: Aanwezigheid (Geofence)
     entities:
       - device_tracker.owntracks_anneke_s7
-      - device_tracker.owntracks_kimberly_s7
-      - device_tracker.owntracks_ralph_iphone7
+      - device_tracker.kimberly_iphone8
+      - device_tracker.ralph_iphone7
   presence_states:
     name: Aanwezigheid
     entities:
@@ -158,18 +191,18 @@ group:
   ralph:
     name: Aanwezigheid Ralph
     entities:
+      - device_tracker.wifi_ralph_iphone7
       - device_tracker.ralph_iphone7
-      - device_tracker.owntracks_ralph_iphone7
   anneke:
     name: Aanwezigheid Anneke
     entities:
-      - device_tracker.anneke_s7
+      - device_tracker.wifi_anneke_s7
       - device_tracker.owntracks_anneke_s7 
   kimberly:
     name: Aanwezigheid Kimberly
     entities:
-      - device_tracker.kimberly_s7
-      - device_tracker.owntracks_kimberly_s7
+      - device_tracker.wifi_kimberly_iphone8
+      - device_tracker.kimberly_iphone8
 
   people_status:                  # Currently not working need update or remove
     name: People Status
@@ -374,18 +407,18 @@ automation:
               input_select.kimberly_status_dropdown
             {% endif %}
           option: Extended Away
-
+  ## Updated V1.6.0
   ## Test if everybody is away and perform actions
   - alias: "Iedereen is weg"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: binary_sensor.people_home
-      to: 'off'
-    condition:
-
+      entity_id: binary_sensor.everybody_away
+      to: 'on'
     action:
+      - service: script.turn_on
+        entity_id: script.leaving
       - service: script.notify_prowl
         data_template:
           value1: 'Afwezigheidsmelding: '
@@ -394,6 +427,7 @@ automation:
           who: 'ralph'
           prio: -2
 
+  ## Updated V1.8.0
   ## Test if anybody comes home and perform actions
   ## Upgraded to use advanced presense (V1.4.0)
   - alias: "Er komt iemand thuis"
@@ -402,11 +436,10 @@ automation:
     trigger:
       platform: state
       entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
-#      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
       to: 'Home'
-    condition:
-
     action:
+      - service: script.turn_on
+        entity_id: script.coming_home
       - service: script.notify_prowl
         data_template:
           value1: 'Aanwezigheidsmelding: '

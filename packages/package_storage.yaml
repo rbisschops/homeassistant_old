@@ -8,6 +8,9 @@
 ## V0.1.1:  Code cleaning
 ## V0.2.0:  Moved in automations and timers from package_presence
 ## V0.3.0:  Moved in automations from package_livingroom
+## V0.4.0:  Added inputs for timers porchlight, changed porchlight timers to variables.
+##          Moved in homeasstant settings from package_presence
+## V0.4.1:  Removed test automation for porchlight
 
 ###############################################################################
 ##  Homeassistant settings
@@ -15,12 +18,30 @@
 
 homeassistant:
   customize:
+    ## Sensors 
     sensor.mailbox:
       friendly_name: Brievenbus
+    ## Timers
+    timer.porchlight:
+      friendly_name: Buitenlamp
+
 
 ###############################################################################
 ##  Entities
 ###############################################################################
+
+## Added V0.4.0
+input_text:
+  timer_minutes_porch_long:
+    name:  Buitenlamp lang (min)
+    initial: 10
+    min: 1
+    max: 60
+  timer_minutes_porch_short:
+    name: Buitenlamp kort (min)
+    initial: 5
+    max: 60
+    min: 1
 
 sensor:
   ## Mailbox vibration sensor
@@ -53,6 +74,48 @@ sensor:
 ##  Automations
 ###############################################################################
 automation:
+  ## Added V0.4.0
+  ## Test min and max settings on long porch light timer input 
+  - alias: "Valideer buitenlamp timer lang"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_porch_long
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_porch_long
+          value: >
+            {% if (states.input_text.timer_minutes_porch_long.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_porch_long.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_porch_long.state | int }}
+            {% endif %}
+
+  ## Added V0.4.0
+  ## Test min and max settings on short porch light timer input 
+  - alias: "Valideer buitenlamp timer kort"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_porch_short
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_porch_short
+          value: >
+            {% if (states.input_text.timer_minutes_porch_short.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_porch_short.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_porch_short.state | int }}
+            {% endif %}
+
   ## Switch on porch light when someone arrives home
   ## Upgraded to use advanced presense (V1.4.0)
   - alias: "Buitenlamp bij thuiskomst"
@@ -61,7 +124,6 @@ automation:
     trigger:
       - platform: state
         entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
-#        entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
         from: 'Away'
         to: 'Just Arrived'
       - platform: state
@@ -70,7 +132,7 @@ automation:
         to: 'Just Arrived'
     condition:  
       condition: or
-      conditions:     
+      conditions:
         - condition: sun
           after: sunset
         - condition: sun
@@ -79,8 +141,9 @@ automation:
       - service: homeassistant.turn_on
         entity_id: input_boolean.domo_porch_light
       - service: timer.start
-        data:
+        data_template:
           entity_id: timer.porchlight
+          duration: '00:{{ states.input_text.timer_minutes_porch_long.state | int }}:00'
 
   ## Switch off porchlight based on timer
   - alias: "Buitenlamp uit xx minuten na trigger"
@@ -91,8 +154,6 @@ automation:
       event_type: timer.finished
       event_data:
         entity_id: timer.porchlight
-    condition:
-
     action:
     - service: homeassistant.turn_off
       entity_id: input_boolean.domo_porch_light
@@ -123,13 +184,19 @@ automation:
       entity_id: sensor.mailbox
       to: 'vibration'  
     action:
-      - service: script.notify_prowl
+      - service: script.notify_telegram_ralph
         data_template:
           value1: 'Er is post'
           value2: ' '
           value3: ' '
-          who: 'ralph'
           prio: -2
+      - service: script.notify_telegram_anneke
+        data_template:
+          value1: 'Er is post'
+          value2: ' '
+          value3: ' '
+          prio: -2
+          
 ###############################################################################
 ##  Templates
 ###############################################################################
@@ -145,4 +212,3 @@ automation:
 ###############################################################################
 timer:
   porchlight:
-    duration: '00:10:00'

@@ -12,6 +12,7 @@
 ## V1.0.0:  Production version 1.0.0
 ## V1.1.0:  Added group living_room_hue_lights (from groups) 
 ## V1.1.1:  Cleanup code
+## V1.2.0:  Added scrips for controlling hue lamps direct (without using scenes)
 
 ## Notes: Scenes are stored in the Hue Bridge and can be 
 ## edited with the Hue V1 and/or V2 App
@@ -86,8 +87,18 @@ group:
       - light.lage_kast_rechts
       - light.staande_lamp_links
       - light.staande_lamp_rechts
-      - group.hue_light_control     
-
+  ## Added V1.2.0
+  living_room_low_cabinets:
+    name: Verlichting lage kasten
+    entities:
+      - light.lage_kast_links
+      - light.lage_kast_rechts
+  ## Added V1.2.0
+  living_room_standing_lamps:
+    name: Verlichting staande lampen
+    entities:
+      - light.staande_lamp_links
+      - light.staande_lamp_rechts
 ###############################################################################
 ##  Automations
 ###############################################################################
@@ -121,6 +132,89 @@ script:
         data_template:
           group_name: '{{ group }}'
           scene_name: '{{ name }}'
+
+  ## Added V1.2.0
+  ## Test script for setting Hue lamps > remove asap
+  ## used in package_livingroom
+  lights_adjust_test:
+    alias: licht test aanpassen
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kast_links
+          brightness: 1
+          xy_color: [0.3698, 0.3723]
+      - delay:
+          seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kast_links
+          brightness: 255
+          transition: 10
+
+  ## Added V1.2.0
+  ## Script for setting Hue lamps in video mode
+  ## used in package_media_center
+  hue_video_mode:
+    alias: Licht aanpassen voor video mode
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: 90
+          xy_color: [0.459, 0.411]
+          transition: 5
+      - service: light.turn_on
+        data_template:
+          entity_id:  group.living_room_standing_lamps
+          brightness: 100
+          xy_color: [0.459, 0.411]
+          transition: 5
+
+  ## Added V1.2.0
+  ## Script for setting Hue lamps in normal mode
+  ## used in package_media_center
+  hue_normal_mode:
+    alias: Licht aanpassen voor video mode
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: 100
+          xy_color: [0.459, 0.411]
+          transition: 5
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: 150
+          xy_color: [0.459, 0.411]
+          transition: 5
+
+  ## Added V1.2.0
+  ## Script for setting Hue lamps at sunset
+  ## used in package_livingroom
+  hue_sunset_mode:
+    alias: Licht aan bij zonsondergang
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_hue_lights
+          brightness: 1
+          xy_color: [0.459, 0.411]
+      - delay:
+            seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: 100
+          xy_color: [0.459, 0.411]
+          transition: 1800
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: 150
+          xy_color: [0.459, 0.411]
+          transition: 1800
 
 ###############################################################################
 ##  Timers

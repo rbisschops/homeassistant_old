@@ -10,6 +10,7 @@
 ## V0.3.1:  Bug fixes
 ## V0.3.2:  Added binary sensor for media PowerOff, removed friendly name Television, dupplicate
 ## V0.3.3:  Cleanup code
+## V0.4.0:  Added away habridge scene
 
 ###############################################################################
 ##  Homeassistant settings
@@ -81,6 +82,13 @@ binary_sensor:
   - platform: mqtt
     name: habridge_bed_time
     state_topic: 'scene/bed_time'
+    off_delay: 2
+    payload_on: 'on'
+    payload_off: 'off'
+  ## Added in V0.4.0
+  - platform: mqtt
+    name: habridge_leaving
+    state_topic: 'scene/leaving'
     off_delay: 2
     payload_on: 'on'
     payload_off: 'off'

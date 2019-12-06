@@ -19,6 +19,13 @@
 ## V0.6.0:  Moved in automations from package_presence
 ## V0.7.0:  Added livingroom lights at sunset
 ## V0.8.0:  Moved automations to package_hallway and packag_storage
+## V0.9.0:  Added christmas tree to automations.
+##          Changed script livingroom lights off. Introduced timer.
+## V0.10.0: Changed the offset for sun conditions in automation
+##          Woonkamer verlichting aan bij thuiskomst to -01:00:00
+## V0.11.0: Added test script for hue light control light
+## V0.12.0: Changed automation sunset to start script for slow increase of brightness (package_hue script)
+##          Added time for kitchen light on at sunset
 
 ###############################################################################
 ##  Homeassistant settings
@@ -29,7 +36,7 @@ homeassistant:
     switch.tradfri_media_switch:
       friendly_name: Entertainment
     switch.tradfri_high_cabinets_switch:
-      friendly_name: Verlichting hoge kasten (ZigBee)  
+      friendly_name: Verlichting hoge kasten (ZigBee)
     ## Scripts        
     script.livingroom_lights_on:
       icon: mdi:lightbulb
@@ -48,18 +55,18 @@ homeassistant:
 ###############################################################################
 input_select:
  ## Mode selector for the lights in the livingroom
- ##  used for the modes the light can be set in from media center 
+ ## used for the modes the light can be set in from media center 
   livingroom_lights_mode:
-    name: Verlichtsmode Woonkamer 
+    name: Verlichtsmode Woonkamer
     options:
       - Normaal
       - Video
     initial: Normaal
-    icon: mdi:lightbulb      
+    icon: mdi:lightbulb
 
-## Status of lighting in the livingroom used to see if lighitng is on 
-##  several automations depend on this
 input_boolean:
+  ## Status of lighting in the livingroom used to see if lighitng is on 
+  ## several automations depend on this
   livingroom_lights_status:
     name: Verlichting woonkamer
 
@@ -73,6 +80,7 @@ switch:
     payload_on: "ON"
     value_template: "{{ value_json.state }}"
     command_topic: "zigbee2mqtt/tradfri_high_cabinets_switch/set"
+
 sensor:
   ## Switch for high cabinets, sensor (Tradfri via Zigbee2MQTT)
   - platform: "mqtt"
@@ -130,8 +138,8 @@ automation:
           {% if is_state('input_boolean.livingroom_lights_status', 'on') %}
             script.livingroom_lights_on
           {% elif is_state('input_boolean.livingroom_lights_status', 'off') %}
-            script.livingroom_lights_off  
-          {% endif%}      
+            script.livingroom_lights_off
+          {% endif%}
 
   ## Switch on livingroom lights when someone arrives home
   - alias: "Woonkamer verlichting aan bij thuiskomst"
@@ -147,7 +155,7 @@ automation:
       conditions:
         - condition: sun
           after: sunset
-          after_offset: "00:15:00"
+          after_offset: '-01:00:00'
         - condition: state
           entity_id: input_boolean.livingroom_lights_status
           state: 'off'
@@ -165,8 +173,11 @@ automation:
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.livingroom_lights_status
+      - service: homeassistant.turn_on
+        entity_id: 
+          - input_boolean.domo_christmastree
 
-  ## Added V0.7.0
+  ## Added V0.7.0, Updated V0.11.0
   ## Switch on livingroom lights at sunset
   - alias: "Woonkamer verlichting aan bij zonsondergang"
     hide_entity: false
@@ -185,8 +196,16 @@ automation:
           entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.livingroom_lights_status
+      - service: script.turn_on
+        entity_id: script.hue_sunset_mode
+      - service: timer.start
+        data_template:
+          entity_id: timer.kitchencabinets_on
+          duration: '01:00:00'
+      - service: timer.start
+        data_template:
+          entity_id: timer.christmastree_on
+          duration: '01:00:00'
 
   ## Switch bar lights on an off from HA-Bridge
   - alias: "Bar lampen - voice"
@@ -205,7 +224,7 @@ automation:
           {% endif%}
         entity_id: input_boolean.domo_bar_light
 
-  ## Switch Christmas tree on an off from HA-Bridge
+  ## Switch Christmas tree on and off from HA-Bridge
   - alias: "Kerstboom - voice"
     hide_entity: false
     initial_state: 'on'
@@ -220,7 +239,85 @@ automation:
           {% elif is_state('binary_sensor.habridge_christmastree', 'off') %}
             homeassistant.turn_off
           {% endif%}
-        entity_id: input_boolean.domo_christmastree 
+        entity_id: input_boolean.domo_christmastree
+
+  ## Added V0.9.0
+  ## Switch off kitchen cabinets light based on timer
+  - alias: "Hoge kasten keuken uit xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.kitchencabinets
+    condition:
+    action:
+    - service: homeassistant.turn_off
+      entity_id: 
+        - input_boolean.domo_kitchen_cabinets
+        # - switch.tradfri_high_cabinets_switch
+
+  ## Added V0.11.0
+  ## Switch on kitchen cabinets light based on timer
+  - alias: "Hoge kasten keuken aan xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.kitchencabinets_on
+    condition:
+    action:
+    - service: homeassistant.turn_on
+      entity_id: 
+        - input_boolean.domo_kitchen_cabinets
+        # - switch.tradfri_high_cabinets_switch
+
+  ## Added V0.11.0
+  ## Switch on christmas tree based on timer
+  - alias: "Cristmas tree aan xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.christmastree_on
+    condition:
+    action:
+    - service: homeassistant.turn_on
+      entity_id: 
+        - input_boolean.domo_christmastree
+
+  ## Adeed in V0.11.0
+  ## Test automation for testing direct color control on a hue lamp >> remove asap
+  - alias: Test hue color and transitions on
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.hallway_livingroom_door
+      to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.hue_video_mode
+
+  ## Adeed in V0.11.0
+  ## Test automation for testing direct color control on a hue lamp >> remove asap
+  - alias: Test hue color and transitions off
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.hallway_livingroom_door
+      to: 'off'
+    action:
+      - service: script.turn_on
+        entity_id: script.hue_sunset_mode
 
 ###############################################################################
 ##  Scripts
@@ -234,7 +331,7 @@ script:
           - input_boolean.domo_kitchen_cabinets
       # - service: homeassistant.turn_on
       #   entity_id: 
-      #     - switch.tradfri_high_cabinets_switch         
+      #     - switch.tradfri_high_cabinets_switch
       - service: input_select.select_option
         data_template:
           entity_id: input_select.hue_scenes
@@ -248,20 +345,21 @@ script:
         data_template:
           group: 'Woonkamer'
           name: '{{ states.input_select.hue_scenes.state }}'
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_christmastree
 
   livingroom_lights_off:
     alias: Woonkamer licht uit script
     sequence:
+      - service: timer.start
+        data:
+          entity_id: timer.kitchencabinets
       - service: homeassistant.turn_off
         entity_id: 
           - light.woonkamer
-      - delay: '00:01:00'
       - service: homeassistant.turn_off
         entity_id:
-          - input_boolean.domo_kitchen_cabinets
-      # - service: homeassistant.turn_off
-      #   entity_id:
-      #     - switch.tradfri_high_cabinets_switch
+          - input_boolean.domo_christmastree
 
   livingroom_lights_adjust:
     alias: woonkamer licht aanpassen script
@@ -283,3 +381,8 @@ script:
 ###############################################################################
 ##  Timers
 ###############################################################################
+timer:
+  kitchencabinets:
+    duration: '00:01:00'
+  kitchencabinets_on:
+  christmastree_on:  

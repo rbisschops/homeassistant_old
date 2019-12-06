@@ -36,7 +36,9 @@ notify:
   - name: telegram_ralph
     platform: telegram
     chat_id: !secret ralph_telegram_chat_id
-
+  - name: telegram_anneke
+    platform: telegram
+    chat_id: !secret anneke_telegram_chat_id
 
 ###############################################################################
 ##  Entities
@@ -144,9 +146,6 @@ script:
           message: '{{ value1 }} {{ value2 }} {{ value3 }}'
 
 ## Telegram:
-## Script to send notifications to Telegram. Syntax:
-
-## Pushbullet:
 ## Script to send notifications to Pushbullet. Syntax:
 ##   service:  script.notify_pushbullet
 ##   data_template:
@@ -154,30 +153,32 @@ script:
 ##     value2: ''
 ##     value3: "{{ trigger.to_state.state }}"
 ##     priority: number
-##     who: "name of the addressee", should match the selection in the list below. 
-##          Defaults to "ralph"
 ##
 ## Dependancies:
 ##   input_boolean.text_notifications
 
-  notify_telegram:
-    alias: Telegram notifications
+  notify_telegram_ralph:
+    alias: Telegram notifications Ralph
     sequence:
       - condition: or
         conditions:
           - condition: state
             entity_id: input_boolean.text_notifications
             state: 'on'
-      - service_template: >
-            {% if who == 'ralph' %}
-              notify.telegram_ralph
-            {% elif who == 'anneke' %}
-              notify.telegram_ralph
-            {% elif who == 'kimbery' %}
-              notify.telegram_ralph
-            {% else %}
-              notify.telegram_ralph
-            {% endif %}
+      - service: notify.telegram_ralph
+        data_template:
+          title: '{{ title }}'
+          message: '{{ value1 }} {{ value2 }} {{ value3 }}'
+
+  notify_telegram_anneke:
+    alias: Telegram notifications Anneke
+    sequence:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: input_boolean.text_notifications
+            state: 'on'
+      - service: notify.telegram_anneke
         data_template:
           title: '{{ title }}'
           message: '{{ value1 }} {{ value2 }} {{ value3 }}'

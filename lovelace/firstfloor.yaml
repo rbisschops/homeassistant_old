@@ -1,13 +1,13 @@
-# Lovelace-UI file for Home Assistant, Firstfloor view
-# Type: Home Assistant yaml file
-# Date: 30-05-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Moved overleays to the top in the code (see remarks)
-# V0.3.0:  Changed layout
-# V0.3.1:  Minor color updates
+## Lovelace-UI file for Home Assistant, Firstfloor view
+## Type: Home Assistant yaml file
+## Date: 30-05-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Moved overleays to the top in the code (see remarks)
+## V0.3.0:  Changed layout
+## V0.3.1:  Minor color updates
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -19,7 +19,7 @@ cards:
   - type: picture-elements
     image: /local/floorplans/first_floor.png
     elements:
-      # Doors and windows overlays
+      ## Doors and windows overlays
       - type: image
         entity: input_boolean.bath_room_door
         tap_action:
@@ -86,7 +86,7 @@ cards:
           left: 0%
           position: absolute
           transform: translate(0%, 0%)  
-      # Outdoor temperature (buienradar)
+      ## Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
         prefix: 'Buiten temperatuur: '
@@ -95,7 +95,6 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold'
-#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
         prefix: 'Relatieve luchtvochtigheid: '
@@ -104,8 +103,7 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold' 
-#          color: var(--text-primary-color)
-      # Indoor temerature and humdity sensors
+      ## Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_bathroom
         style:
@@ -161,7 +159,7 @@ cards:
           color: '#000000'
           font-weight: 'bold'
 
-      #Smoke detectors
+      ## Smoke detectors
       - type: image
         entity: binary_sensor.fibaro_hallway_101_smoke_sensor_sensor
         title: Rookdetector overloop (101)
@@ -176,7 +174,7 @@ cards:
           position: absolute
           width: 2.5%
 
-      # Motion sensors
+      ## Motion sensors
       - type: state-icon
         entity: binary_sensor.motion_sensor_office
         title: Beweging kantoor

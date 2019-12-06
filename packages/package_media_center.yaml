@@ -655,10 +655,11 @@ script:
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      - service: script.hue_normal_mode
 
   ## Script for additional settings when Netflix mode is set 
   media_mode_netflix:
@@ -683,10 +684,11 @@ script:
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'    
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      - service: script.hue_video_mode
 
   ## Script for additional settings when Radio mode is set 
   media_mode_radio:
@@ -702,14 +704,15 @@ script:
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
-          option: "Normaal"             
+          option: "Normaal"
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'  
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'  
+      - service: script.hue_normal_mode
 
   ## Script for additional settings when Music mode is set 
   media_mode_music:
@@ -729,12 +732,13 @@ script:
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'
+      - service: script.hue_normal_mode
 
-  ## Script for additional settings when Poweroff is set 
+      ## Script for additional settings when Poweroff is set 
   media_mode_poweroff:
     alias: Aanvullende media settings PowerOff
     sequence:
@@ -745,10 +749,11 @@ script:
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'
+      - service: script.hue_normal_mode
 
   ## Script for additional settings when any video mode is set 
   media_mode_video:
@@ -768,10 +773,11 @@ script:
       - condition: state
         entity_id: input_boolean.livingroom_lights_status
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      - service: script.hue_video_mode
 
   ## Script for audio mode settings when music modes are selected 
   amplifier_mode_music:

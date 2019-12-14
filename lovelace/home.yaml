@@ -1,12 +1,13 @@
 ## Lovelace-UI file for Home Assistant, Home page view
 ## Type: Home Assistant yaml file
-## Date: 13-07-2019
+## Date: 07-12-2019
 ## Author: R.Bisschops
 ##
 ## Changelog:
 ## V0.1.0:  First version
 ## V0.2.0:  Added waste bin icons
 ## V0.3.0:  Updated presence sensors
+## v0.4.0:  Added christmas buttons (conditional)
 
 title: Home
 icon: 'mdi:home'
@@ -30,6 +31,7 @@ cards:
       - entity: binary_sensor.anneke_home
       - entity: binary_sensor.kimberly_home
       - entity: binary_sensor.ralph_home
+
   ## Alarm cards
   - type: vertical-stack
     cards:
@@ -63,6 +65,7 @@ cards:
           entities:
           - entity: binary_sensor.gft
           - entity: binary_sensor.pmd
+
   ## Control cards
   - type: vertical-stack
     cards:
@@ -79,7 +82,7 @@ cards:
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.livingroom_lights_status 
+            - entity: input_boolean.livingroom_lights
             - name: Woonkamer 
             - icon: lightbulb
         - type: custom:decluttering-card
@@ -114,6 +117,34 @@ cards:
             - entity: input_boolean.domo_porch_light 
             - name: Buitenlamp 
             - icon: lightbulb
+    ## Added V0.4.0
+    - type: conditional
+      conditions:
+        - entity: 'input_boolean.christmas_mode'
+          state: 'on' 
+      card:
+        type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Kerstversiering
+    - type: conditional
+      conditions:
+        - entity: 'input_boolean.christmas_mode'
+          state: 'on' 
+      card:
+        type: horizontal-stack
+        cards:
+          - type: custom:decluttering-card
+            template: light_button_large
+            variables: 
+              - entity: input_boolean.domo_christmastree
+              - name: Kerstboom 
+              - icon: pine-tree
+          - type: custom:button-card
+            color_type: blank-card
+          - type: custom:button-card
+            color_type: blank-card
+
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -130,6 +161,7 @@ cards:
           color_type: blank-card
         - type: custom:button-card
           color_type: blank-card
+
   ## Weather card
   - type: vertical-stack
     cards:

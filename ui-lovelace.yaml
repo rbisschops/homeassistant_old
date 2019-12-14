@@ -1,27 +1,31 @@
-# Lovelace-UI file for Home Assistant
-# Type: Home Assistant yaml file
-# Date: 01-02-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added Utilities view
-# V0.3.0:  Added Decluttering-card V0.2.0
-#          Updated button card to V1.11.1
-#          Added templates for buttn card
-# V0.3.1:  Fix for #0033, button-card action behaviour
-# V0.4.0:  Added new styles for buttons
+## Lovelace-UI file for Home Assistant
+## Type: Home Assistant yaml file
+## Date: 14-12-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added Utilities view
+## V0.3.0:  Added Decluttering-card V0.2.0
+##          Updated button card to V1.11.1
+##          Added templates for buttn card
+## V0.3.1:  Fix for ##0033, button-card action behaviour
+## V0.4.0:  Added new styles for buttons
+## V0.5.0:  Updated buttoncard V1.1.11 > V3.0.0
+##          Updated mini graph card V0.3.0 > V0.8.2
+##          Updated Custom compact header V1.1.0 > V1.4.9
+##          decluttering card = upto date, card-mod will be updated after migration to V0.10x
 
 ###############################################################################
-#                         Additional resources used
+##  Additional resources used
 ###############################################################################
 
 resources:
-  - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.3.0
+  - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.8.2
     type: module
-  - url: /local/custom_cards/button-card.js?v=1.11.1
+  - url: /local/custom_cards/button-card.js?v=3.0.0
     type: module
-  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js
+  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js?V1.4.9
     type: module
   - url: /local/custom_cards/decluttering-card.js?v=0.2.0
     type: module
@@ -29,8 +33,8 @@ resources:
     type: module
 
 ###############################################################################
-#                      Custom compact header settings
-#             https://github.com/maykar/compact-custom-header
+##  Custom compact header settings
+##  https://github.com/maykar/compact-custom-header
 ###############################################################################
 
 cch:
@@ -45,8 +49,8 @@ cch:
   disable: false
 
 ###############################################################################
-#                      Custom button card templates
-#             https://github.com/custom-cards/button-card
+##  Custom button card templates
+##  https://github.com/custom-cards/button-card
 ###############################################################################
 
 button_card_templates:
@@ -195,8 +199,8 @@ button_card_templates:
         - font-weight: normal
 
 ###############################################################################
-#                           Settings for Declustering-card
-#               https://github.com/custom-cards/decluttering-card
+##  Settings for Declustering-card
+##  https://github.com/custom-cards/decluttering-card
 ###############################################################################
 
 decluttering_templates:
@@ -463,7 +467,7 @@ decluttering_templates:
               - color: rgb(56, 150, 56)
 
 ###############################################################################
-#                              Main Lovemace settings
+##  Main Lovemace settings
 ###############################################################################
 
 title: Bisschops Mansion

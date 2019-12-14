@@ -31,7 +31,6 @@ input_select:
       - 'Verwarmen'
       - 'Spaarstand'
       - 'Uit'
-    initial: 'Uit'
     icon: mdi:thermometer
   toilet_heating_dummy:
     name: Verwarming toilet (dummy)
@@ -39,7 +38,6 @@ input_select:
       - 'Verwarmen'
       - 'Spaarstand'
       - 'Uit'
-    initial: 'Uit'
     icon: mdi:thermometer
 
 

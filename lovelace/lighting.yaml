@@ -11,6 +11,10 @@
 ## V0.2.3:  Added input_boolean.sunscreen_manual (moved)
 ##          Removed switch.tradfri_high_cabinets_switch (moved)
 
+########################################################################
+## THIS FILE IN NOT MAINTAINED AND WILL BE REMOVED IN THE FUTURE !!!! ##
+########################################################################
+
 title: Settings
 icon: 'mdi:cogs
 cards:

@@ -438,7 +438,7 @@ cards:
           width: 3%
       ## Master switches
       - type: image
-        entity: input_boolean.livingroom_lights_status
+        entity: input_boolean.livingroom_lights
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_off.png

@@ -438,8 +438,6 @@ automation:
       entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
       to: 'Home'
     action:
-      - service: script.turn_on
-        entity_id: script.coming_home
       - service: script.notify_prowl
         data_template:
           value1: 'Aanwezigheidsmelding: '

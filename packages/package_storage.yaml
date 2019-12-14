@@ -52,6 +52,12 @@ sensor:
     icon: "mdi:gesture-double-tap"
     value_template: "{{ value_json.action }}"
   - platform: "mqtt"
+    name: mailbox_all
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    icon: "mdi:gesture-double-tap"
+    value_template: "{{ value_json }}"
+  - platform: "mqtt"
     name: mailbox_battery
     state_topic: "zigbee2mqtt/aqara_mailbox"
     availability_topic: "zigbee2mqtt/bridge/state"

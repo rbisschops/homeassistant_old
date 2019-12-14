@@ -1,4 +1,4 @@
-## Package file for Home Assistant, used for alarms 
+## Package file for Home Assistant, used for miscellaneous configs
 ## Type: Home Assistant yaml file
 ## Date: 06-11-2019
 ## Author: R.Bisschops
@@ -21,6 +21,7 @@
 ## V0.9.0:  Added leaving autoamtions and scripts
 ## V0.10.0: Added extended away script
 ## V0.11.0: Added hallway and porchlight on with timer to leaving script
+## V0.12.0  Added sunset automations and scripts
 
 ###############################################################################
 ##  Homeassistant settings
@@ -36,13 +37,12 @@ input_boolean:
   holiday_mode:
     name: Vakantie mode aan
     icon: mdi:toggle-switch
-    initial: off
+
   ## Christmas mode toggle switch, used for setting when on ehem the holiday season is there 
   ## Several automations depend on this
   christmas_mode:
     name: Kerst periode
     icon: mdi:toggle-switch
-    initial: off
 
 binary_sensor:
   ## Definition of workdays with the workday sensor
@@ -154,6 +154,7 @@ automation:
   ## Added V0.10.0
   ## Automation for runnning the extended away script
   ## Called from binary sensor Extended Away
+  ## Note: Potentially replace binary_sensor.everybody_extended_away with a group
   - alias: "Extended away mode ingeschakeld"
     hide_entity: false
     initial_state: 'on'
@@ -166,7 +167,21 @@ automation:
       - service: script.turn_on
         entity_id: script.extended_away
 
+  ## Automation for running the sunset script
+  ## Triggered based on sunset minus offset 
+  - alias: "Zonsondergang mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '-01:00:00'
+    action:
+      - service: script.turn_on
+        entity_id: script.sunset
+
   ## Automation to run when the garbage bins need to go out for collection
+  ## Tiggered by sensors based on Google calendar entries
   - alias: "Vuilnisbak aan de straat"
     hide_entity: false
     initial_state: 'on'
@@ -202,16 +217,16 @@ script:
   bedtime:
     alias: Bedtime script
     sequence:
-      ## Swtcih off the outdoor lighting
+      ## Switch off the outdoor lighting
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_garden_light
-      ## Swtcih off the christmastree
+      ## Switch off the christmastree
       - service: homeassistant.turn_off
         entity_id: input_boolean.domo_christmastree
         ## Switch off the living room lights
       - service: homeassistant.turn_off
-        entity_id: input_boolean.livingroom_lights_status
-      ## Change the climate settings for the toilet heating  
+        entity_id: input_boolean.livingroom_lights
+      ## Change the climate settings for the toilet heating
       - service: input_select.select_option
         data:
           entity_id: input_select.toilet_heating
@@ -232,29 +247,34 @@ script:
         entity_id: input_boolean.domo_garden_light
       ## Switch off the living room lights
       - service: homeassistant.turn_off
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
       ## Change the climate settings for the toilet heating  
       - service: input_select.select_option
         data_template:
           entity_id: input_select.toilet_heating
           option: >
             {% if (states.input_select.toilet_heating.state != 'Uit') %}
-              'Spaarstand'
+              Spaarstand
             {% else %}
-              'Uit'
+              Uit
             {% endif %}
       ## Turn off the media center, but only when recording mode is not set
-      - condition: state
-        entity_id: input_boolean.recording_mode
-        state: 'off'
-      - service: homeassistant.turn_off
+      # - condition: state
+      #   entity_id: input_boolean.recording_mode
+      #   state: 'off'
+      # - service: homeassistant.turn_off
+      #   entity_id: switch.tradfri_media_switch
+      - service_template: >
+          {% if (states.input_boolean.recording_mode.state == 'off') %}
+            homeassistant.turn_off
+          {% else %}
+            homeassistant.turn_on
+          {% endif %}
         entity_id: switch.tradfri_media_switch
-      ## Added V0.
       ## Turn on lighting, but only when dark
-      - condition: sun
-        after: sunset
-      - condition: sun
-        before: sunrise
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
       ## Switch on the outdoor lighting
       - service: homeassistant.turn_on
         entity_id: input_boolean.domo_porch_light
@@ -269,6 +289,31 @@ script:
           entity_id: timer.hallwaylight
           duration: '00:{{ states.input_text.timer_minutes_hallwaylight_long.state | int }}:00'
 
+  ## Added V0.9.0
+  coming_home:
+    alias: Coming home script
+    sequence:
+      ## Change the climate settings for the toilet heating  
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.toilet_heating
+          option: >
+            {% if (states.input_select.toilet_heating.state != 'Uit') %}
+              Verwarmen
+            {% else %}
+              Uit
+            {% endif %}
+      ## Turn on lighting, but only when dark
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      ## Switch on the outdoor lighting
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.domo_garden_light
+      ## Switch on the living room lights
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights
+
   ## Added V0.10.0
   ## Script everybody extended away
   extended_away:
@@ -281,36 +326,94 @@ script:
       - service: homeassistant.turn_on
         entity_id: input_boolean.holiday_mode
 
-  ## Added V0.9.0
-  coming_home:
-    alias: Coming home script
+  ## Added V0.12.0
+  sunset:
+    alias: Zonsondergang
     sequence:
-      ## Change the climate settings for the toilet heating  
-      - service: input_select.select_option
+      - condition: state
+        entity_id: binary_sensor.people_home
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.holiday_mode
+        state: 'off'
+      ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_transition
         data_template:
-          entity_id: input_select.toilet_heating
-          option: >
-            {% if (states.input_select.toilet_heating.state != 'Uit') %}
-              'Verwarmen'
+          brightness_start_group_1: 1
+          brightness_start_group_2: 1
+          brightness_stop_group_1: >
+            {% if (states.input_select.livingroom_lights_mode.state == 'Video') %}
+              90
             {% else %}
-              'Uit'
+              100
             {% endif %}
-      ## Turn on lighting, but only when dark
-      - condition: sun
-        after: sunset
-      - condition: sun
-        before: sunrise
-      ## Switch on the outdoor lighting
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_garden_light
-      ## Switch on the living room lights
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.livingroom_lights_status
-      ## Turn on the media center, but only when recording mode is not set
-      - condition: time
-        after: '19:30:00:00'
-      - service: homeassistant.turn_on
-        entity_id: switch.tradfri_media_switch
+          brightness_stop_group_2: >
+            {% if (states.input_select.livingroom_lights_mode.state == 'Video') %}
+              100
+            {% else %}
+              150
+            {% endif %}
+          profile_start_1: >
+            {% if (states.input_boolean.christmas_mode.state == 'on') %}
+              'christmas_normal_1'
+            {% else %}
+              'normal_1'
+            {% endif %}
+          profile_start_2: >
+            {% if (states.input_boolean.christmas_mode.state == 'on') %}
+              'christmas_normal_2'
+            {% else %}
+              'normal_2'
+            {% endif %}
+          profile_stop_1: >
+            {% if (states.input_boolean.christmas_mode.state == 'on') %}
+              'christmas_normal_1'
+            {% else %}
+              'normal_1'
+            {% endif %}
+          profile_stop_2: >
+            {% if (states.input_boolean.christmas_mode.state == 'on') %}
+              'christmas_normal_2'
+            {% else %}
+              'normal_2'
+            {% endif %}
+          transition: 1800
+      # - service: script.hue_sunset_mode
+      ## start timer for kitchen cabinets, will switch on after xx hour
+      - service: timer.start
+        data_template:
+          entity_id: timer.kitchencabinets_on
+          duration: '00:30:00'
+      ## check if it is christmas time
+      - condition: state
+        entity_id: input_boolean.christmas_mode
+        state: 'on'
+      ## start timer for christmas tree, will switch on after xx hour
+      - service: timer.start
+        data_template:
+          entity_id: timer.christmastree_on
+          duration: '00:30:00'
+
+  ##----------------------------------------------
+  ## Test scripts >> Remove ASAP after testing 
+  ##----------------------------------------------
+  
+  ## Added V0.12.0
+  hue_test:
+    alias: hue test
+    sequence:
+      ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_transition
+        data_template:
+          brightness_start_group_1: 1
+          brightness_start_group_2: 1
+          brightness_stop_group_1: 100 
+          brightness_stop_group_2: 150
+          profile_start_1: "concentrate_1"
+          profile_start_2: "concentrate_2"
+          profile_stop_1: "relax_1"
+          profile_stop_2: "relax_2"
+          transition: 30
 
 ###############################################################################
 ##  Timers

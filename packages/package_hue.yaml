@@ -57,6 +57,7 @@ input_select:
       - Schoonmaken
       - TV mode
       - Verlichting aan
+      - Zonsondergang
     initial: Verlichting aan
   hue_groups:
     name: Ruimte
@@ -134,60 +135,97 @@ script:
           scene_name: '{{ name }}'
 
   ## Added V1.2.0
-  ## Test script for setting Hue lamps > remove asap
-  ## used in package_livingroom
-  lights_adjust_test:
-    alias: licht test aanpassen
-    sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: light.lage_kast_links
-          brightness: 1
-          xy_color: [0.3698, 0.3723]
-      - delay:
-          seconds: 1
-      - service: light.turn_on
-        data_template:
-          entity_id: light.lage_kast_links
-          brightness: 255
-          transition: 10
-
-  ## Added V1.2.0
   ## Script for setting Hue lamps in video mode
   ## used in package_media_center
-  hue_video_mode:
+  hue_mode_video:
     alias: Licht aanpassen voor video mode
     sequence:
       - service: light.turn_on
         data_template:
           entity_id: group.living_room_low_cabinets
           brightness: 90
-          xy_color: [0.459, 0.411]
+          xy_color: [0.502, 0.414]
           transition: 5
       - service: light.turn_on
         data_template:
           entity_id:  group.living_room_standing_lamps
           brightness: 100
-          xy_color: [0.459, 0.411]
+          xy_color: [0.502, 0.414]
           transition: 5
+
+# [0.502, 0.414] releax
+# [0.459, 0.411] normal
 
   ## Added V1.2.0
   ## Script for setting Hue lamps in normal mode
   ## used in package_media_center
-  hue_normal_mode:
+  hue_mode_normal:
     alias: Licht aanpassen voor video mode
     sequence:
       - service: light.turn_on
         data_template:
           entity_id: group.living_room_low_cabinets
           brightness: 100
-          xy_color: [0.459, 0.411]
+          xy_color: [0.502, 0.414]
           transition: 5
       - service: light.turn_on
         data_template:
           entity_id: group.living_room_standing_lamps
           brightness: 150
-          xy_color: [0.459, 0.411]
+          xy_color: [0.502, 0.414]
+          transition: 5
+
+  ## Added V1.2.0
+  ## Script for setting Hue lamps in normal mode
+  ## used in package_media_center
+  hue_mode_change:
+    alias: Licht aanpassen voor video of normale mode
+    sequence:
+      - service: script.set_hue_scene_auto
+        data_template:
+          brightness_stop_group_1: >
+            {% if (states.input_select.livingroom_lights_mode.state == "Video") %}
+              90
+            {% else %}
+              100
+            {% endif %}
+          brightness_stop_group_2: >
+            {% if (states.input_select.livingroom_lights_mode.state == "Video") %}
+              100
+            {% else %}
+              150
+            {% endif %}
+          profile_stop_1: >
+            {% if (states.input_boolean.christmas_mode.state == "on") %}
+              "christmas_normal_1"
+            {% else %}
+              "normal_1"
+            {% endif %}
+          profile_stop_2: >
+            {% if (states.input_boolean.christmas_mode.state == "on") %}
+              "christmas_normal_2"
+            {% else %}
+              "normal_2"
+            {% endif %}
+          transition: 5
+
+
+  ## Added V1.2.0
+  ## Script for setting Hue lamps in relax mode
+  hue_mode_relax:
+    alias: Licht aanpassen voor relax mode
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: 100
+          xy_color: [0.502, 0.414]
+          transition: 5
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: 150
+          xy_color: [0.502, 0.414]
           transition: 5
 
   ## Added V1.2.0
@@ -215,6 +253,73 @@ script:
           brightness: 150
           xy_color: [0.459, 0.411]
           transition: 1800
+
+  set_hue_scene_transition:
+    alias: Set hue mode automatisch
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: "{{ brightness_start_group_1 }}"
+          profile: "{{ profile_start_1 }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: "{{ brightness_start_group_2 }}"
+          profile: "{{ profile_start_2 }}"
+      - delay:
+            seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: "{{ brightness_stop_group_1 }}"
+          profile: "{{ profile_stop_1 }}"
+          transition: "{{ transition|float }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: "{{ brightness_stop_group_2 }}"
+          profile: "{{ profile_stop_2 }}"
+          transition: "{{ transition|float }}"
+
+  set_hue_scene_auto:
+    alias: Set hue mode overgang naar andere scene
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_low_cabinets
+          brightness: "{{ brightness_stop_group_1 }}"
+          profile: "{{ profile_stop_1 }}"          
+          transition: "{{ transition|float }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: group.living_room_standing_lamps
+          brightness: "{{ brightness_stop_group_2 }}"
+          profile: "{{ profile_stop_2 }}"
+          transition: "{{ transition|float }}"
+
+  ##----------------------------------------------
+  ## Test scripts >> Remove ASAP after testing 
+  ##----------------------------------------------
+
+  ## Added V1.2.0
+  ## Test script for setting Hue lamps
+  ## used in package_livingroom
+  lights_adjust_test:
+    alias: licht test aanpassen
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kast_links
+          brightness: 1
+          xy_color: [0.3698, 0.3723]
+      - delay:
+          seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kast_links
+          brightness: 255
+          transition: 10
 
 ###############################################################################
 ##  Timers

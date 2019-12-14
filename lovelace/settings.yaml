@@ -1,6 +1,6 @@
 ## Lovelace-UI file for Home Assistant, Settings view
 ## Type: Home Assistant yaml file
-## Date: 12-07-2019
+## Date: 07-12-2019
 ## Author: R.Bisschops
 ##
 ## Changelog:
@@ -12,6 +12,7 @@
 ## V0.5.0:  Changed layout of wifi and gps home buttons due to change of owntracks location  in HA 0.95
 ## V0.6.0:  Major UI changes based on Decluttering card
 ## V0.7.0:  Added timer settings
+## v0.8.0:  Added christmas setting
 
 title: Settings
 icon: 'mdi:settings'
@@ -38,9 +39,10 @@ cards:
       - entity: input_boolean.holiday_mode 
         name: Vakantie mode
         icon: 'mdi:briefcase'
-      # - entity: input_boolean.christmas_mode
-      #   name: Kerst mode
-      #   icon: 'mdi:pine-tree'
+      ## Added V0.8.0
+      - entity: input_boolean.christmas_mode
+        name: Kerst mode
+        icon: 'mdi:pine-tree'
       - entity: input_boolean.recording_mode
         name: Recorder mode
         icon: 'mdi:video'
@@ -72,7 +74,6 @@ cards:
         name: Zigbee2mqtt permit join
       - entity: timer.zigbee_permit_join
         name: Resterende join tijd
-
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card

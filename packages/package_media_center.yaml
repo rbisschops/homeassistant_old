@@ -115,7 +115,6 @@ input_select:
       - DVD
       - Teletekst
       - PowerOff 
-    initial: PowerOff
     icon: mdi:remote
   test_old_status:
     name: Oude status
@@ -131,7 +130,6 @@ input_select:
       - DVD
       - Teletekst
       - PowerOff 
-    initial: Televisie
     icon: mdi:remote      
 
 input_boolean:
@@ -653,13 +651,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'TV mode'
-      - service: script.hue_normal_mode
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
   ## Script for additional settings when Netflix mode is set 
   media_mode_netflix:
@@ -682,13 +681,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Video"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'TV mode'
-      - service: script.hue_video_mode
+      # - service: script.hue_mode_video
+      - service: script.hue_mode_change
 
   ## Script for additional settings when Radio mode is set 
   media_mode_radio:
@@ -706,13 +706,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'Verlichting aan'  
-      - service: script.hue_normal_mode
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
   ## Script for additional settings when Music mode is set 
   media_mode_music:
@@ -730,13 +731,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'Verlichting aan'
-      - service: script.hue_normal_mode
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
       ## Script for additional settings when Poweroff is set 
   media_mode_poweroff:
@@ -747,13 +749,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'Verlichting aan'
-      - service: script.hue_normal_mode
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
   ## Script for additional settings when any video mode is set 
   media_mode_video:
@@ -771,13 +774,14 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Video"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
       # - service: script.set_hue_scene
       #   data_template:
       #     group: 'Woonkamer'
       #     name: 'TV mode'
-      - service: script.hue_video_mode
+      # - service: script.hue_mode_video
+      - service: script.hue_mode_change
 
   ## Script for audio mode settings when music modes are selected 
   amplifier_mode_music:

@@ -18,6 +18,7 @@
 ##          Added service to automation
 ## V1.7.0:  Added everybody extended away sensor
 ## V1.8.0:  Added comming home script to automation "Er komt iemand thuis"
+## V1.8.1: Removed initial state from input_select
 
 ###############################################################################
 ##  Homeassistant settings
@@ -130,7 +131,6 @@ input_select:
       - Just Left
       - Away
       - Extended Away
-    initial: Home
   ## Anneke advanced home sensor
   anneke_status_dropdown:
     name: Anneke
@@ -140,7 +140,6 @@ input_select:
       - Just Left
       - Away
       - Extended Away
-    initial: Home
   ## Kimberly advanced home sensor
   kimberly_status_dropdown:
     name: Kimberly
@@ -150,7 +149,6 @@ input_select:
       - Just Left
       - Away
       - Extended Away
-    initial: Home
 
 ## Added sensors for advanced presence states (V1.3.0)
 sensor:

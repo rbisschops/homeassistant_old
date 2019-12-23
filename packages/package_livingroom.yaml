@@ -27,6 +27,10 @@
 ## V0.12.0: Changed automation sunset to start script for slow increase of brightness (package_hue script)
 ##          Added timer for kitchen light on at sunset
 ## V0.12.1: Updated timer for kitchen high cabinets
+## V0.13.0: Moved out input select for hue modes (to package_hue)
+## V0.14.0: Changed automations for Christmastree,
+##          Added input_booleans for Christmastree, 
+##          Added groups for christmastree
 
 ###############################################################################
 ##  Homeassistant settings
@@ -37,13 +41,11 @@ homeassistant:
     switch.tradfri_media_switch:
       friendly_name: Entertainment
     switch.tradfri_high_cabinets_switch:
-      friendly_name: Verlichting hoge kasten (ZigBee)
-    ## Scripts        
+      friendly_name: Verlichting hoge kasten (Tradfri)
+    ## Scripts
     script.livingroom_lights_on:
       icon: mdi:lightbulb
     script.livingroom_lights_off:
-      icon: mdi:lightbulb
-    script.livingroom_lights_adjust:
       icon: mdi:lightbulb
 
 # logger:
@@ -54,22 +56,48 @@ homeassistant:
 ###############################################################################
 ##  Entities
 ###############################################################################
-input_select:
- ## Mode selector for the lights in the livingroom
- ## used for the modes the light can be set in from media center
-  livingroom_lights_mode:
-    name: Verlichtsmode Woonkamer
-    options:
-      - Normaal
-      - Video
-    initial: Normaal
-    icon: mdi:lightbulb
+binary_sensor:
+  ## Anyone home sensor
+  ## Upgraded to use advanced presense (V1.4.0)
+  - platform: template
+    sensors:
+      people_home:
+        friendly_name: Iemand thuis
+        value_template: >-
+          {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.ralph_status_dropdown', 'Just Arrived')
+            or is_state('input_select.ralph_status_dropdown', 'Just Left')
+            or is_state('input_select.anneke_status_dropdown', 'Home')
+            or is_state('input_select.anneke_status_dropdown', 'Just Arrived')
+            or is_state('input_select.anneke_status_dropdown', 'Just Left')
+            or is_state('input_select.kimberly_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Arrived')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Left') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
 
 input_boolean:
-  ## Status of lighting in the livingroom used to see if lighitng is on 
-  ## several automations depend on this
+  ## Living roon light input
+  ## Used in multiple automations and scripts
   livingroom_lights:
     name: Verlichting woonkamer
+  ## Status of lighting in the livingroom used to see if lighitng is on 
+  ## several automations depend on this
+  livingroom_lights_status:
+    name: Status wwoonkamer lampen
+  ## Added V0.14.0
+  ## Christmas tree switch
+  ## Used in multiple automations and scripts
+  christmastree:
+    name: Kertstboom
+  ## Barlight switch
+  ## Used in multiple automations and scripts
+  barlight:
+    name: Verlichting bar
+  ## High cabinets switch
+  ## Used in multiple automations and scripts
+  highcabinets:
+    name: Verlichting hoge kasten (KaKu)
 
 switch:
   ## Switch for high cabinets (Tradfri via Zigbee2MQTT)
@@ -89,12 +117,27 @@ sensor:
     state_topic: "zigbee2mqtt/tradfri_high_cabinets_switch"
     availability_topic: "zigbee2mqtt/bridge/state"
     unit_of_measurement: "-"
-    value_template: "{{ value_json.linkquality }}"   
+    value_template: "{{ value_json.linkquality }}"
 
 ###############################################################################
 ##  Groups
 ###############################################################################
-
+group:
+  christmastree:
+    name: kerstboom
+    entities:
+      - switch.habridge_christmastree
+      - input_boolean.christmastree
+  barlight:
+    name: Verlichting bar
+    entities:
+      - switch.habridge_barlight
+      - input_boolean.barlight
+  highcabinets:
+    name: Verlichting hoge kasten (KaKu)
+    entities:
+      - switch.habridge_highcabinets
+      - input_boolean.highcabinets
 
 ###############################################################################
 ##  Automations
@@ -127,38 +170,80 @@ automation:
     action:
       - service: homeassistant.turn_off
         entity_id: input_boolean.livingroom_lights
-  ## Switch bar lights on an off from HA-Bridge
-  - alias: "Bar lampen - voice"
+
+  ## Added V0.14.0
+  ## Switch Christmas tree on and off
+  - alias: "Kerstboom aan-uit"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id:
-        - binary_sensor.habridge_bar_light
+      entity_id: 
+        - switch.habridge_christmastree
+        - input_boolean.christmastree
     action:
       - service_template: >-
-          {% if is_state('binary_sensor.habridge_bar_light', 'on') %}
+          {% if is_state(trigger.entity_id, 'on') %}
             homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_bar_light', 'off') %}
+          {% elif is_state(trigger.entity_id, 'off') %}
             homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_bar_light
-  ## Switch Christmas tree on and off from HA-Bridge
-  - alias: "Kerstboom - voice"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.habridge_christmastree
-    action:
-      - service_template: >-
-          {% if is_state('binary_sensor.habridge_christmastree', 'on') %}
-            homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_christmastree', 'off') %}
-            homeassistant.turn_off
-          {% endif%}
+          {% endif %}
         entity_id: input_boolean.domo_christmastree
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.christmastree
+  ## Switch Bar lights on and off
+  - alias: "Verlichting bar aan-uit"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+        - switch.habridge_barlight
+        - input_boolean.barlight
+    action:
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: input_boolean.domo_barlight
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.barlight
+  ## Switch lights high cabinets on and off
+  - alias: "Verlichting hoge kasten aan-uit"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+        - switch.habridge_highcabinets
+        - input_boolean.highcabinets
+    action:
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: input_boolean.domo_highcabinets
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.highcabinets
 
   ## Switch livingroom lights on and off
   - alias: "Verlichting woonkamer"
@@ -176,72 +261,6 @@ automation:
             script.livingroom_lights_off
           {% endif%}
 
-  ## Switch on livingroom lights when someone arrives home
-  - alias: "Woonkamer verlichting aan bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.neo_coolcam_front_door
-        to: 'on'
-    condition:
-      condition: and
-      conditions:
-        - condition: sun
-          after: sunset
-          after_offset: '-01:00:00'
-        - condition: state
-          entity_id: input_boolean.livingroom_lights
-          state: 'off'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_select.ralph_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.anneke_status_dropdown
-              state: 'Just Arrived'
-            - condition: state
-              entity_id: input_select.kimberly_status_dropdown
-              state: 'Just Arrived'
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.livingroom_lights
-      - service: homeassistant.turn_on
-        entity_id: 
-          - input_boolean.domo_christmastree
-
-  # ## Added V0.7.0, Updated V0.11.0
-  # ## Switch on livingroom lights at sunset
-  # - alias: "Woonkamer verlichting aan bij zonsondergang"
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:
-  #     platform: sun
-  #     event: sunset
-  #     offset: '-01:00:00'
-  #   condition:
-  #     condition: and
-  #     conditions: 
-  #       - condition: state
-  #         entity_id: binary_sensor.people_home
-  #         state: 'on'
-  #       - condition: state
-  #         entity_id: input_boolean.holiday_mode
-  #         state: 'off'
-  #   action:
-  #     - service: script.turn_on
-  #       entity_id: script.hue_sunset_mode
-  #     - service: timer.start
-  #       data_template:
-  #         entity_id: timer.kitchencabinets_on
-  #         duration: '01:00:00'
-  #     - service: timer.start
-  #       data_template:
-  #         entity_id: timer.christmastree_on
-  #         duration: '01:00:00'
-
   ## Added V0.11.0
   ## Switch on kitchen cabinets light based on timer
   - alias: "Hoge kasten keuken aan xx minuten na trigger"
@@ -256,7 +275,7 @@ automation:
     action:
     - service: homeassistant.turn_on
       entity_id: 
-        - input_boolean.domo_kitchen_cabinets
+        - input_boolean.highcabinets
         # - switch.tradfri_high_cabinets_switch
 
   ## Added V0.9.0
@@ -273,7 +292,7 @@ automation:
     action:
     - service: homeassistant.turn_off
       entity_id: 
-        - input_boolean.domo_kitchen_cabinets
+        - input_boolean.highcabinets
         # - switch.tradfri_high_cabinets_switch
 
   ## Added V0.11.0
@@ -290,39 +309,11 @@ automation:
     action:
     - service: homeassistant.turn_on
       entity_id: 
-        - input_boolean.domo_christmastree
+        - input_boolean.christmastree
 
   ##----------------------------------------------
   ## Test automations >> Remove ASAP after testing 
   ##----------------------------------------------
-  
-  ## Added in V0.11.0
-  ## Test automation for testing direct color control on a hue lamp >> remove asap
-  - alias: Test hue color and transitions on
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id:
-        - input_boolean.hallway_livingroom_door
-      to: 'on'
-    action:
-      - service: script.turn_on
-        entity_id: script.hue_test
-
-  ## Added in V0.11.0
-  ## Test automation for testing direct color control on a hue lamp >> remove asap
-  # - alias: Test hue color and transitions off
-  #   hide_entity: false
-  #   initial_state: 'on'
-  #   trigger:
-  #     platform: state
-  #     entity_id:
-  #       - input_boolean.hallway_livingroom_door
-  #     to: 'off'
-  #   action:
-  #     - service: script.turn_on
-  #       entity_id: script.hue_sunset_mode
 
 ###############################################################################
 ##  Scripts
@@ -331,33 +322,36 @@ script:
   livingroom_lights_on:
     alias: Woonkamer licht aan script
     sequence:
+      ## check if lights are currently off
+      - condition: state
+        entity_id: input_boolean.livingroom_lights_status
+        state: 'off'
+      - service: homeassistant.turn_on
+        entity_id:
+          - input_boolean.livingroom_lights_status
       - service: homeassistant.turn_on
         entity_id: 
-          - input_boolean.domo_kitchen_cabinets
-      # - service: homeassistant.turn_on
-      #   entity_id: 
-      #     - switch.tradfri_high_cabinets_switch
-      # - service: input_select.select_option
-      #   data_template:
-      #     entity_id: input_select.hue_scenes
-      #     option: >-
-      #       {% if is_state('input_select.livingroom_lights_mode', 'Normaal') %}
-      #       Verlichting aan
-      #       {% elif is_state('input_select.livingroom_lights_mode', 'Video') %}
-      #       TV mode
-      #       {% endif %}
-      # - service: script.set_hue_scene
-      #   data_template:
-      #     group: 'Woonkamer'
-      #     name: '{{ states.input_select.hue_scenes.state }}'
+          - input_boolean.highcabinets
       - service: script.hue_mode_change
+      ## check if it is christmas time
+      - condition: state
+        entity_id: input_boolean.christmas_mode
+        state: 'on'
+      ## Switch on the chritmas tree lights
       - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_christmastree
+        entity_id: 
+          - input_boolean.christmastree
 
   livingroom_lights_off:
     alias: Woonkamer licht uit script
     sequence:
-      ## Updated V
+      ## check if lights are currently on
+      - condition: state
+        entity_id: input_boolean.livingroom_lights_status
+        state: 'on'
+      - service: homeassistant.turn_off
+        entity_id:
+          - input_boolean.livingroom_lights_status
       - service: timer.start
         data_template:
           entity_id: timer.kitchencabinets_off
@@ -365,26 +359,13 @@ script:
       - service: homeassistant.turn_off
         entity_id: 
           - light.woonkamer
+      ## check if it is christmas time
+      - condition: state
+        entity_id: input_boolean.christmas_mode
+        state: 'on'
       - service: homeassistant.turn_off
         entity_id:
-          - input_boolean.domo_christmastree
-
-  livingroom_lights_adjust:
-    alias: woonkamer licht aanpassen script
-    sequence:
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.hue_scenes
-          option: >-
-            {% if is_state('input_select.livingroom_lights_mode', 'Normaal') %}
-            Verlichting aan
-            {% elif is_state('input_select.livingroom_lights_mode', 'Video') %}
-            TV mode
-            {% endif %}          
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: '{{ states.input_select.hue_scenes.state }}'
+          - input_boolean.christmastree
 
 ###############################################################################
 ##  Timers

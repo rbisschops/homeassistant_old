@@ -28,6 +28,9 @@
 ## V1.5.0:  Updated sunscreen scripts due to change in domo2hass automations
 ## V1.6.0:  Added gardenlights before sunrise on and oof automations
 ##          Changed condtional sensor people_home to everybody_away
+## V1.7.0:  Changed automations for garden lights and fountain,
+##          Added input_booleans for garden lights and fountain, 
+##          Added groups for garden lights and fountain
 
 ###############################################################################
 ##  Homeassistant settings
@@ -47,55 +50,86 @@ input_boolean:
   ## Manual mode switch for the sunscreen 
   sunscreen_manual:
     name: Zonnescherm handmatig  
+  ## Added V1.7.0
+  gardenlight:
+    name: Tuin verlichting
+  waterornament:
+    name: Waterbollen
 
 ###############################################################################
 ##  Groups
 ###############################################################################
 group:
-  garden_lights:
-    name: Tuinverlichting
+  # garden_lights:
+  #   name: Tuinverlichting
+  #   entities:
+  #     - input_boolean.gardenlight
+  #     - automation.tuinverlichting_bij_zonsondergang
+  #     - automation.tuinverlichting_bij_thuiskomst
+  ## Added V1.7.0
+  gardenlight:
+    name: Tuin verlichting
     entities:
-      - input_boolean.domo_garden_light
-      - automation.tuinverlichting_bij_zonsondergang
-      - automation.tuinverlichting_bij_thuiskomst
-
+      - switch.habridge_gardenlight
+      - input_boolean.gardenlight
+  waterornament:
+    name: Waterbollen
+    entities:
+      - switch.habridge_waterornament
+      - input_boolean.waterornament
 ###############################################################################
 ##  Automations
 ###############################################################################
 automation:
-  ## Switch garden lights on and off from HA-Bridge
-  - alias: "Tuin verlichting - voice"
+  ## Added V1.7.0
+  ## Switch garden lights on and off
+  - alias: "Verlichting tuin aan-uit"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id:
-        - binary_sensor.habridge_garden_light
+      entity_id: 
+        - switch.habridge_gardenlight
+        - input_boolean.gardenlight
     action:
       - service_template: >-
-          {% if is_state('binary_sensor.habridge_garden_light', 'on') %}
+          {% if is_state(trigger.entity_id, 'on') %}
             homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_garden_light', 'off') %}
+          {% elif is_state(trigger.entity_id, 'off') %}
             homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_garden_light
-
-  # Switch water ornament on an off from HA-Bridge
-  - alias: "Water ornament - voice"
+          {% endif %}
+        entity_id: input_boolean.domo_gardenlight
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.gardenlight
+  ## Switch fountain lights on and off
+  - alias: "waterbollen aan-uit"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id:
-        - binary_sensor.habridge_water_ornament
+      entity_id: 
+        - switch.habridge_waterornament
+        - input_boolean.waterornament
     action:
       - service_template: >-
-          {% if is_state('binary_sensor.habridge_water_ornament', 'on') %}
+          {% if is_state(trigger.entity_id, 'on') %}
             homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_water_ornament', 'off') %}
+          {% elif is_state(trigger.entity_id, 'off') %}
             homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_water_ornament
+          {% endif %}
+        entity_id: input_boolean.domo_waterornament
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.waterornament
 
   ## Switch on gardenlights at sunset but only if someone is home
   - alias: "Tuinverlichting bij zonsondergang"
@@ -116,7 +150,7 @@ automation:
           state: 'off'
     action:
       - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_garden_light
+        entity_id: input_boolean.gardenlight
 
   ## Added V1.6.0  
   ## Switch on gardenlights before sunrise but only if someone is home
@@ -140,7 +174,7 @@ automation:
           state: 'below_horizon'
     action:
       - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_garden_light
+        entity_id: input_boolean.gardenlight
 
   ## Added V1.6.0
   ## Switch off gardenlights at sunrise but only if someone is home
@@ -162,7 +196,7 @@ automation:
           state: 'off'
     action:
       - service: homeassistant.turn_off
-        entity_id: input_boolean.domo_garden_light
+        entity_id: input_boolean.gardenlight
 
   ## Switch gardenlights at home coming but only when dark and before 23:00
   - alias: "Tuinverlichting bij thuiskomst"
@@ -195,7 +229,7 @@ automation:
               state: 'Just Arrived'
     action:
       - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_garden_light
+        entity_id: input_boolean.gardenlight
 
   ## Start and stop sunscreen based on toggle pause/start from frontend 
   - alias: "Pauzeer zonnescherm"

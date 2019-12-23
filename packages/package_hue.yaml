@@ -13,8 +13,9 @@
 ## V1.1.0:  Added group living_room_hue_lights (from groups) 
 ## V1.1.1:  Cleanup code
 ## V1.2.0:  Added scrips for controlling hue lamps direct (without using scenes)
+## V1.3.0:  Moved in input select for hue modes (from package_livingroom)
 
-## Notes: Scenes are stored in the Hue Bridge and can be 
+## Notes: Scenes are stored in the Hue Bridge and can be
 ## edited with the Hue V1 and/or V2 App
 
 ###############################################################################
@@ -66,6 +67,15 @@ input_select:
       - Woonkamer
       - Keuken
     initial: Woonkamer
+  ## Mode selector for the lights in the livingroom
+  ## used for the modes the light can be set in from media center
+  livingroom_lights_mode:
+    name: Verlichtsmode Woonkamer
+    options:
+      - Normaal
+      - Video
+    initial: Normaal
+    icon: mdi:lightbulb
 
 ###############################################################################
 ##  Groups
@@ -81,7 +91,7 @@ group:
       - input_select.hue_scenes
       - input_select.hue_groups
       - script.set_hue_scene
-  living_room_hue_lights:
+  living_room_hue_lights_all:
     name: Verlichting woonkamer
     entities:
       - light.lage_kast_links
@@ -89,13 +99,13 @@ group:
       - light.staande_lamp_links
       - light.staande_lamp_rechts
   ## Added V1.2.0
-  living_room_low_cabinets:
+  living_room_hue_lights_low_cabinets:
     name: Verlichting lage kasten
     entities:
       - light.lage_kast_links
       - light.lage_kast_rechts
   ## Added V1.2.0
-  living_room_standing_lamps:
+  living_room_hue_lights_standing_lamps:
     name: Verlichting staande lampen
     entities:
       - light.staande_lamp_links
@@ -137,21 +147,21 @@ script:
   ## Added V1.2.0
   ## Script for setting Hue lamps in video mode
   ## used in package_media_center
-  hue_mode_video:
-    alias: Licht aanpassen voor video mode
-    sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_low_cabinets
-          brightness: 90
-          xy_color: [0.502, 0.414]
-          transition: 5
-      - service: light.turn_on
-        data_template:
-          entity_id:  group.living_room_standing_lamps
-          brightness: 100
-          xy_color: [0.502, 0.414]
-          transition: 5
+  # hue_mode_video:
+  #   alias: Licht aanpassen voor video mode
+  #   sequence:
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_low_cabinets
+  #         brightness: 90
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id:  group.living_room_hue_lights_standing_lamps
+  #         brightness: 100
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
 
 # [0.502, 0.414] releax
 # [0.459, 0.411] normal
@@ -159,24 +169,24 @@ script:
   ## Added V1.2.0
   ## Script for setting Hue lamps in normal mode
   ## used in package_media_center
-  hue_mode_normal:
-    alias: Licht aanpassen voor video mode
-    sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_low_cabinets
-          brightness: 100
-          xy_color: [0.502, 0.414]
-          transition: 5
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_standing_lamps
-          brightness: 150
-          xy_color: [0.502, 0.414]
-          transition: 5
+  # hue_mode_normal:
+  #   alias: Licht aanpassen voor normal mode
+  #   sequence:
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_low_cabinets
+  #         brightness: 100
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_standing_lamps
+  #         brightness: 150
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
 
   ## Added V1.2.0
-  ## Script for setting Hue lamps in normal mode
+  ## Script for setting Hue lamps in video or normal mode
   ## used in package_media_center
   hue_mode_change:
     alias: Licht aanpassen voor video of normale mode
@@ -209,75 +219,74 @@ script:
             {% endif %}
           transition: 5
 
-
   ## Added V1.2.0
   ## Script for setting Hue lamps in relax mode
-  hue_mode_relax:
-    alias: Licht aanpassen voor relax mode
-    sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_low_cabinets
-          brightness: 100
-          xy_color: [0.502, 0.414]
-          transition: 5
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_standing_lamps
-          brightness: 150
-          xy_color: [0.502, 0.414]
-          transition: 5
+  # hue_mode_relax:
+  #   alias: Licht aanpassen voor relax mode
+  #   sequence:
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_low_cabinets
+  #         brightness: 100
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_standing_lamps
+  #         brightness: 150
+  #         xy_color: [0.502, 0.414]
+  #         transition: 5
 
   ## Added V1.2.0
   ## Script for setting Hue lamps at sunset
   ## used in package_livingroom
-  hue_sunset_mode:
-    alias: Licht aan bij zonsondergang
-    sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_hue_lights
-          brightness: 1
-          xy_color: [0.459, 0.411]
-      - delay:
-            seconds: 1
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_low_cabinets
-          brightness: 100
-          xy_color: [0.459, 0.411]
-          transition: 1800
-      - service: light.turn_on
-        data_template:
-          entity_id: group.living_room_standing_lamps
-          brightness: 150
-          xy_color: [0.459, 0.411]
-          transition: 1800
+  # hue_sunset_mode:
+  #   alias: Licht aan bij zonsondergang
+  #   sequence:
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_all
+  #         brightness: 1
+  #         xy_color: [0.459, 0.411]
+  #     - delay:
+  #           seconds: 1
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_low_cabinets
+  #         brightness: 100
+  #         xy_color: [0.459, 0.411]
+  #         transition: 1800
+  #     - service: light.turn_on
+  #       data_template:
+  #         entity_id: group.living_room_hue_lights_standing_lamps
+  #         brightness: 150
+  #         xy_color: [0.459, 0.411]
+  #         transition: 1800
 
   set_hue_scene_transition:
     alias: Set hue mode automatisch
     sequence:
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_low_cabinets
+          entity_id: group.living_room_hue_lights_low_cabinets
           brightness: "{{ brightness_start_group_1 }}"
           profile: "{{ profile_start_1 }}"
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_standing_lamps
+          entity_id: group.living_room_hue_lights_standing_lamps
           brightness: "{{ brightness_start_group_2 }}"
           profile: "{{ profile_start_2 }}"
       - delay:
             seconds: 1
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_low_cabinets
+          entity_id: group.living_room_hue_lights_low_cabinets
           brightness: "{{ brightness_stop_group_1 }}"
           profile: "{{ profile_stop_1 }}"
           transition: "{{ transition|float }}"
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_standing_lamps
+          entity_id: group.living_room_hue_lights_standing_lamps
           brightness: "{{ brightness_stop_group_2 }}"
           profile: "{{ profile_stop_2 }}"
           transition: "{{ transition|float }}"
@@ -287,13 +296,13 @@ script:
     sequence:
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_low_cabinets
+          entity_id: group.living_room_hue_lights_low_cabinets
           brightness: "{{ brightness_stop_group_1 }}"
           profile: "{{ profile_stop_1 }}"          
           transition: "{{ transition|float }}"
       - service: light.turn_on
         data_template:
-          entity_id: group.living_room_standing_lamps
+          entity_id: group.living_room_hue_lights_standing_lamps
           brightness: "{{ brightness_stop_group_2 }}"
           profile: "{{ profile_stop_2 }}"
           transition: "{{ transition|float }}"

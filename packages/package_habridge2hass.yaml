@@ -11,6 +11,7 @@
 ## V0.3.2:  Added binary sensor for media PowerOff, removed friendly name Television, dupplicate
 ## V0.3.3:  Cleanup code
 ## V0.4.0:  Added away habridge scene
+## V0.5.0:  Changed binary_sensor.xx to switch.xx 
 
 ###############################################################################
 ##  Homeassistant settings
@@ -92,6 +93,8 @@ binary_sensor:
     off_delay: 2
     payload_on: 'on'
     payload_off: 'off'
+
+  ## Switches for living room lights (as a scene)
   - platform: mqtt
     name: habridge_livingroom_lights_on
     state_topic: 'scene/livingroom_lights_on'
@@ -106,45 +109,104 @@ binary_sensor:
     payload_off: 'off'
 
   ## Sensors from HA Bridge for switching entities on and off
-  - platform: mqtt
-    name: habridge_bar_light
-    state_topic: 'switch/bar_light'
-    payload_on: 'on'
-    payload_off: 'off'
-  - platform: mqtt
-    name: habridge_garden_light
-    state_topic: 'switch/garden_light'
-    payload_on: 'on'
-    payload_off: 'off'
-  - platform: mqtt
-    name: habridge_water_ornament
-    state_topic: 'switch/water_ornament'
-    payload_on: 'on'
-    payload_off: 'off'
-  - platform: mqtt
+  # - platform: mqtt
+  #   name: habridge_bar_light
+  #   state_topic: 'switch/bar_light'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+  # - platform: mqtt
+  #   name: habridge_garden_light
+  #   state_topic: 'switch/garden_light'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+  # - platform: mqtt
+  #   name: habridge_water_ornament
+  #   state_topic: 'switch/water_ornament'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+  # - platform: mqtt
+  #   name: habridge_christmastree
+  #   state_topic: 'switch/christmastree'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+  # - platform: mqtt
+  #   name: habridge_hallway_light
+  #   state_topic: 'switch/hallway_light'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+  # - platform: mqtt
+  #   name: habridge_porch_light
+  #   state_topic: 'switch/porch_light'
+  #   payload_on: 'on'
+  #   payload_off: 'off'
+
+## Added V0.5.0
+switch:
+  ## Switch for Christmastree (from HA Bridge)
+  - platform: "mqtt"
     name: habridge_christmastree
     state_topic: 'switch/christmastree'
-    payload_on: 'on'
-    payload_off: 'off'
-  - platform: mqtt
-    name: habridge_hallway_light
-    state_topic: 'switch/hallway_light'
-    payload_on: 'on'
-    payload_off: 'off'
-  - platform: mqtt
-    name: habridge_porch_light
-    state_topic: 'switch/porch_light'
-    payload_on: 'on'
-    payload_off: 'off'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/christmastree'
+  - platform: "mqtt"
+    name: habridge_barlight
+    state_topic: 'switch/barlight'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/barlight'
+  - platform: "mqtt"
+    name: habridge_gardenlight
+    state_topic: 'switch/gardenlight'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/gardenlight'
+  - platform: "mqtt"
+    name: habridge_waterornament
+    state_topic: 'switch/waterornament'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/waterornament'
+  - platform: "mqtt"
+    name: habridge_hallwaylight
+    state_topic: 'switch/hallwaylight'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/hallwaylight'
+  - platform: "mqtt"
+    name: habridge_porchlight
+    state_topic: 'switch/porchlight'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/porchlight'
+  - platform: "mqtt"
+    name: habridge_highcabinets
+    state_topic: 'switch/highcabinets'
+    payload_on: "on"
+    payload_off: "off"
+    command_topic: 'switch/highcabinets'
+
+  ##----------------------------------------------
+  ## Test entities >> Remove ASAP after testing 
+  ##----------------------------------------------
+
+light:
+  - platform: "mqtt"
+    name: habridge_barlight
+    state_topic: 'light/barlight'
+    payload_on: "on"
+    payload_off: "off"
+    brightness_state_topic: 'light/barlight/level'
+    command_topic: 'light/barlight'
 
 ###############################################################################
 ##  Groups
 ###############################################################################
-group:
-  media_sensors_habridge:
-    name: Media states (HA-Bridge)
-    entities:
-      - binary_sensor.habridge_television
+# group:
+#   media_sensors_habridge:
+#     name: Media states (HA-Bridge)
+#     entities:
+#       - binary_sensor.habridge_television
 
 ###############################################################################
 ##  Automations

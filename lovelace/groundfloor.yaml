@@ -239,7 +239,7 @@ cards:
           font-weight: 'bold'
       ## Porch light
       - type: image
-        entity: input_boolean.domo_porch_light
+        entity: input_boolean.porchlight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -253,7 +253,7 @@ cards:
           width: 2.5%
       ## Hallway light
       - type: image
-        entity: input_boolean.domo_hallway_light
+        entity: input_boolean.hallwaylight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -320,7 +320,7 @@ cards:
           width: 2.5%
       ## Bar lights 
       - type: image
-        entity: input_boolean.domo_bar_light
+        entity: input_boolean.barlight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -335,7 +335,7 @@ cards:
       ## High cabinet lights 
       - type: image
         # entity: switch.tradfri_high_cabinets_switch
-        entity: input_boolean.domo_kitchen_cabinets
+        entity: input_boolean.highcabinets
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png

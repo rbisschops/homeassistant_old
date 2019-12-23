@@ -1,4 +1,4 @@
-Last update: August 25th, 2019
+Last update: December 14th, 2019
 
 ![](https://img.shields.io/badge/Home%20Assistant-0.96.5-blue.svg)
 ![](https://img.shields.io/github/last-commit/rbisschops/homeassistant.svg)
@@ -30,14 +30,15 @@ Here's my [Home Assistant](https://home-assistant.io/) configuration. I have ins
 * [Zigbee2MQTT](https://koenkk.github.io/zigbee2mqtt/), great development for getting rid of most of the propietary bridges. I use it for all my ZigBee devices except for Hue.
 * [Mosquitto](https://mosquitto.org/), my favorite MQTT Broker. Used for exchanging data between a lot of applications and from the outside world (through the reverse proxy).
 * [Domoticz](https://www.domoticz.com/), for test mainly, not really made for containerizing so stopped moving there with Domoticz.
-[Node-RED](https://nodered.org), flow based programming, an intuitive addition to both Home Assistant and Domoticz (or any other home automation system).
-* [InfluxDB](https://www.influxdata.com/), a time series database. Installed, tested with Domoticz but not used yet.
-* [Grafana](https://grafana.com/), analytics and monitoring. Installed, tested with Domoticz but not used yet.
+* [ESPHome](https://esphome.io/), for connecting all kinds of sensors to Home Assistant. Intend to add a lot of ESP32 based sensors with this (for example for Bluetooth devices)
+* [Node-RED](https://nodered.org), flow based programming, an intuitive addition to both Home Assistant and Domoticz (or any other home automation system).
+* [InfluxDB](https://www.influxdata.com/), a time series database. Installed, tested but not used yet.
+* [Grafana](https://grafana.com/), analytics and monitoring. Installed, tested but not used yet.
 * [Traefik](https://traefik.io/), reverse proxy for secure access from the outside world.
 * [Unifi Controller](https://www.ui.com/), for managing my Ubiquiti Access points.
-* [Portainer](https://www.portainer.io/), makes managing my Docker containers easy.  
+* [Portainer](https://www.portainer.io/), makes managing my Docker containers easy.
 
-I plan to move everything to a dedicated NUC in time. Docker should make this simple.
+I plan to move everything to a dedicated PC in time. Docker and hass.io should make this simple.
 
 When I find the time I will write a blog or something alike about my Home server.
 
@@ -51,7 +52,7 @@ Home Assistant and Domoticz are running in parallel at the moment. I spent quite
 ## Home Assistant setup
 
 ### Home Assistant configuration
-After looking at a ton of configurations and playing around with them I decided to go for packages. All my configurations are now in packages grouped as logical collections of components, entities automations etc.
+After looking at a ton of configurations and playing around with them I decided to go for packages. All my configurations are now in packages grouped as logical collections of components, entities automations etc. ,mostly room based
 
 For example package_notification contains the applied notification components (prowl and pushsafer currently), the associated entities for example the input_boolean that controls if notifications are enabled) and scripts. Scripts are used by many other packages that require  notifications.   
 
@@ -75,7 +76,6 @@ When things are progressing I will upload some screenshots of my UI.
   * [Fibaro smoke sensors](https://www.fibaro.com/en/) The best looking smoke detectors on the market (IMHO).
 
 * Zigbee:
-  * [Xiaomi Aqara bridge](https://www.aliexpress.com) The bridge is connected to Domoticz. As Home Assistant is running inside a container, the bridge won't connect (I don't want Home Assistant to run as host on Docker). Sensor values are exchanged through MQTT for now. When I have a better zigbee2mqtt controller (with better radio sensitivity), I will move all over to Home Assistant and retire the bridge (and the privacy unfrienly Chinese app).
   * [Xiaomi Aqara sensors](https://www.aliexpress.com) I use motion sensors, door/window sensors, temp/hum/pressure sensors, a magic cube (nice gadget!) and some buttons. All sensors are connected to Home Assistant (through Zigbee2mqtt)
   * [Philips Hue](https://www2.meethue.com) Philips Hue bulbs used in the house. Operated through the Hue Bridge as I use the scenes in the Bridge for setting the ambiance.
   * [Tradfri](https://www.ikea.com) Cheap ZigBee compatible smart home devices. Currently I only use Wireless control outlets for the more critical switches (replacement of Click-On-Click-Off units). I'm not convinced with the quality and the performance.
@@ -108,12 +108,13 @@ When things are progressing I will upload some screenshots of my UI.
 Some projects I have planned:
 * MySensors:
   * Water meter sensor version 2.0
-  * Light sensor to support better sunscreen control
-  * Water temperature sensors for monitoring and tuning the heating system
+  * Light sensor to support better sunscreen control based on ESP32
+  * Presence sensors for the garbage binds based on ESP32 with Bluetooth beacons
+  * Water temperature sensors for monitoring and tuning the heating system (aka zone based heating system)
 * Add camera's for home security
 * Add motion sensors and automations to switch on lights for orientation at night time
 
-Many ideas. Too little time! I will add some more projects later.
+Many ideas, too little time! I will add some more projects later.
 
 # [Development](#development)
 

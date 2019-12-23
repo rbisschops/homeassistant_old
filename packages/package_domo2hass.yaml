@@ -33,20 +33,20 @@ homeassistant:
 ###############################################################################
 input_boolean:
   ## Light switches
-  domo_garden_light:
+  domo_gardenlight:
     name: Verlichting tuin
-  domo_porch_light:
+  domo_porchlight:
     name: Buiten lamp
-  domo_hallway_light:
+  domo_hallwaylight:
     name: Verlichting halletje
-  domo_kitchen_cabinets:
+  domo_highcabinets:
     name: Verlichting hoge kasten (KaKu)
-  domo_bar_light:
+  domo_barlight:
     name: Verlichting bar
   domo_christmastree:
     name: Kerstboom
   ## Other switches
-  domo_water_ornament:
+  domo_waterornament:
     name: Waterbollen tuin
   domo_sunscreen:
     name: Zonnescherm
@@ -70,13 +70,13 @@ automation:
   #     platform: state
   #     entity_id:
         # - input_boolean.domo_entertainment
-        # - input_boolean.domo_garden_light
-        # - input_boolean.domo_porch_light
-        # - input_boolean.domo_hallway_light
-        # - input_boolean.domo_kitchen_cabinets
+        # - input_boolean.domo_gardenlight
+        # - input_boolean.domo_porchlight
+        # - input_boolean.domo_hallwaylight
+        # - input_boolean.highcabinets
         # - input_boolean.domo_christmastree
-        # - input_boolean.domo_bar_light
-        # - input_boolean.domo_water_ornament
+        # - input_boolean.domo_barlight
+        # - input_boolean.domo_waterornament
         # - input_boolean.domo_sunscreen
     # condition:
     # action:
@@ -115,7 +115,7 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - input_boolean.domo_garden_light
+        - input_boolean.domo_gardenlight
     condition:
     action:
       - service: mqtt.publish
@@ -134,7 +134,7 @@ automation:
     trigger:     
       platform: state
       entity_id:
-        - input_boolean.domo_porch_light
+        - input_boolean.domo_porchlight
     condition:
     action:
       - service: mqtt.publish
@@ -153,7 +153,7 @@ automation:
     trigger:     
       platform: state
       entity_id:
-        - input_boolean.domo_hallway_light
+        - input_boolean.domo_hallwaylight
     condition:
     action:
       - service: mqtt.publish
@@ -172,7 +172,7 @@ automation:
     trigger:     
       platform: state
       entity_id:
-        - input_boolean.domo_kitchen_cabinets
+        - input_boolean.highcabinets
     condition:
     action:
       - service: mqtt.publish
@@ -184,14 +184,14 @@ automation:
              "idx": 23,
              "switchcmd": trigger.to_state.state|capitalize
             }|tojson }}
-  ## Publish kitchen cabinets light switch to Domoticz
+  ## Publish bar light switch to Domoticz
   - alias: Domoticz publish - Lampen bar
     hide_entity: false
     initial_state: 'on'
     trigger:     
       platform: state
       entity_id:
-        - input_boolean.domo_bar_light
+        - input_boolean.domo_barlight
     condition:
     action:
       - service: mqtt.publish
@@ -210,7 +210,7 @@ automation:
     trigger:     
       platform: state
       entity_id:
-        - input_boolean.domo_water_ornament
+        - input_boolean.domo_waterornament
     condition:
     action:
       - service: mqtt.publish
@@ -333,12 +333,38 @@ automation:
       - condition: template
         value_template: '{{ trigger.payload_json.dtype == "RFXMeter" }}'
       - condition: template
-        value_template: '{{ trigger.payload_json.name == "Water" }}'        
+        value_template: '{{ trigger.payload_json.name == "Water" }}'
     action: 
       - service: script.domoticz_water
         data_template:
           device: '{{ trigger.payload_json.name }}'
           usage: '{{ trigger.payload_json.svalue1 }}' 
+
+  ##----------------------------------------------
+  ## Test automations >> Remove ASAP after testing 
+  ##----------------------------------------------
+
+  ## Publish bar lamps light switch to Domoticz with dim level
+  # - alias: Domoticz publish - Lampen bar dim level
+  #   hide_entity: false
+  #   initial_state: 'on'
+  #   trigger:     
+  #     platform: state
+  #     entity_id:
+  #       - input_boolean.domo_barlight
+  #   condition:
+  #   action:
+  #     - service: mqtt.publish
+  #       data_template:
+  #         topic: 'domoticz/in'
+  #         payload_template: >-
+  #           {{ {
+  #            "command": "switchlight",
+  #            "idx": 27,
+  #            "switchcmd":set,
+  #            "level": 50
+  #           }|tojson }}
+
 
 ###############################################################################
 ##  Templates

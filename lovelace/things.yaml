@@ -129,8 +129,8 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_kitchen_cabinets
-        - entity: input_boolean.domo_bar_light
+        - entity: input_boolean.highcabinets
+        - entity: input_boolean.barlight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -140,7 +140,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_christmastree   
+        - entity: input_boolean.christmastree   
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -156,7 +156,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_garden_light
+        - entity: input_boolean.gardenlight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -166,7 +166,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_water_ornament
+        - entity: input_boolean.waterornament
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -193,8 +193,8 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_porch_light
-        - entity: input_boolean.domo_hallway_light
+        - entity: input_boolean.porchlight
+        - entity: input_boolean.hallwaylight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:

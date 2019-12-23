@@ -45,24 +45,24 @@ homeassistant:
 
     ## Media devices from Harmony
     switch.poweroff:
-      friendly_name: PowerOff      
+      friendly_name: PowerOff
     switch.television:
-      friendly_name: Televisie    
+      friendly_name: Televisie
     switch.mediaplayer:
-      friendly_name: Mediaplayer    
+      friendly_name: Mediaplayer
     switch.appletv:
-      friendly_name: Apple-TV    
+      friendly_name: Apple-TV
     switch.radio:
-      friendly_name: Radio    
+      friendly_name: Radio
     switch.music:
-      friendly_name: Muziek    
+      friendly_name: Muziek
     switch.dvd:
-      friendly_name: DVD    
+      friendly_name: DVD
     switch.teletext:
-      friendly_name: Teletekst    
+      friendly_name: Teletekst
     switch.smarttv:
       friendly_name: Smart-TV
-    ## Added in V0.2.4    
+    ## Added in V0.2.4
     switch.netflix:
       friendly_name: Netflix
     switch.spotify:
@@ -259,7 +259,7 @@ switch:
           service: remote.turn_on
           data:
             entity_id: remote.bisschops
-            activity: ''            
+            activity: ''
       music:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Muziek') }}"
         turn_on:
@@ -295,7 +295,7 @@ switch:
           service: remote.turn_on
           data:
             entity_id: remote.bisschops
-            activity: ''                                        
+            activity: ''
       smarttv:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Smart-TV') }}"
         turn_on:
@@ -308,7 +308,7 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      ## Added in V0.2.4       
+      ## Added in V0.2.4
       netflix:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Netflix') }}"
         turn_on:
@@ -343,7 +343,7 @@ group:
     name: Afstandsbediening
     entities:
       - remote.bisschops
-  ## Group for manual selectors          
+  ## Group for manual selectors
   input_media_modes:
     name: Media modes (inputs)
     entities:
@@ -409,7 +409,7 @@ automation:
         - input_boolean.teletext
         - input_boolean.smarttv
         - input_boolean.netflix
-        - input_boolean.spotify        
+        - input_boolean.spotify
       to: 'on'
     action:
       - service: script.media_mode
@@ -439,14 +439,14 @@ automation:
         - binary_sensor.habridge_smarttv
         - binary_sensor.habridge_netflix
         - binary_sensor.habridge_spotify
-        - binary_sensor.habridge_poweroff  
+        - binary_sensor.habridge_poweroff
       to: 'on'
     action:
       - service: script.set_media_input
         data_template:
           name: '{{ trigger.to_state.object_id }}'  
       # - service: homeassistant.turn_on
-      #   data_template:        
+      #   data_template:
       #     entity_id: >-
       #       {% set name = name|replace('habridge_','') %}
       #       {% set entity = ["input_boolean",name]|join(".") %}
@@ -477,7 +477,7 @@ automation:
           name: '{{ trigger.to_state.object_id }}'
           type: 'harmony'   
       # - service: homeassistant.turn_on
-      #   data_template:        
+      #   data_template:
       #     entity_id: >-
       #       {% set entity = ["input_boolean",name]|join(".") %}
       #       {{ entity }}
@@ -642,10 +642,10 @@ script:
           device: Versterker
           command:
             - ModeStereo
-      - service: media_player.select_source
-        data:
-          entity_id: media_player.living_room_tv
-          source: Spotify Music - Luister gratis op LG TV
+      # - service: media_player.select_source
+      #   data:
+      #     entity_id: media_player.living_room_tv
+      #     source: Spotify Music - Luister gratis op LG TV
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
@@ -665,13 +665,13 @@ script:
     alias: Aanvullende media settings Netflix
     sequence:
       - delay: '00:00:05' 
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeDolbyPLII
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeDolbyPLII
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv
@@ -694,13 +694,13 @@ script:
   media_mode_radio:
     alias: Aanvullende media settings Radio
     sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeStereo
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeStereo
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
@@ -719,13 +719,13 @@ script:
   media_mode_music:
     alias: Aanvullende media settings Music
     sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeStereo
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeStereo
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
@@ -762,13 +762,13 @@ script:
   media_mode_video:
     alias: Aanvullende media settings video
     sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeDolbyPLII
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeDolbyPLII
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
@@ -784,6 +784,7 @@ script:
       - service: script.hue_mode_change
 
   ## Script for audio mode settings when music modes are selected 
+  ## Not used, romove?
   amplifier_mode_music:
     alias: Set device mode muziek
     sequence:
@@ -796,6 +797,7 @@ script:
           device: Versterker
 
   ## Script for audio mode settings when video modes are selected 
+  ## Not used, romove?
   amplifier_mode_dolby:
     alias: Set device mode Dolby
     sequence:

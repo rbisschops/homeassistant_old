@@ -46,6 +46,9 @@ cards:
       - entity: input_boolean.recording_mode
         name: Recorder mode
         icon: 'mdi:video'
+      - entity: input_boolean.livingroom_lights_status
+        name: Licht aan status
+        icon: 'mdi:lightbulb'
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:

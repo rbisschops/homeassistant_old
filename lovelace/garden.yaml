@@ -50,7 +50,7 @@ cards:
           font-weight: 'bold'
       ## Controls for the garden
       - type: image
-        entity: input_boolean.domo_garden_light
+        entity: input_boolean.gardenlight
         tap_action:
           action: toggle
         image: /local/custom_icons/customlight48_on.png
@@ -63,7 +63,7 @@ cards:
           position: absolute
           width: 2.5%                                                 
       - type: image
-        entity: input_boolean.domo_water_ornament
+        entity: input_boolean.waterornament
         tap_action:
           action: toggle
         image: /local/custom_icons/fountain48_on.png

@@ -8,6 +8,9 @@
 ## V0.2.0:  Moved in automations from package_livingroom
 ## V0.3.0:  Added inputs for timers hallwatlight, changed hallwaylight timers to variables.
 ##          Moved in homeasstant settings from package_presence
+## V0.4.0:  Changed automations for hallway lights,
+##          Added input_booleans for hallway lights, 
+##          Added groups for hallway lights
 
 ###############################################################################
 ##  Homeassistant settings
@@ -21,6 +24,12 @@ homeassistant:
 ###############################################################################
 ##  Entities
 ###############################################################################
+
+## Added V0.4.0
+input_boolean:
+  hallwaylight:
+    name: Verlichting halletje
+
 ## Added V0.3.0
 input_text:
   timer_minutes_hallwaylight_short:
@@ -38,6 +47,13 @@ input_text:
 ##  Groups
 ###############################################################################
 
+## Added V0.4.0
+group:
+  hallwaylight:
+    name: Verlichting halletje
+    entities:
+      - switch.habridge_hallwaylight
+      - input_boolean.hallwaylight
 
 ###############################################################################
 ##  Automations
@@ -98,14 +114,14 @@ automation:
       condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.domo_porch_light
+          entity_id: input_boolean.porchlight
           state: 'on'
         - condition: sun
           after: sunset
           after_offset: "00:15:00"
     action:
       - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_hallway_light
+        entity_id: input_boolean.hallwaylight
       - service: timer.start
         data_template:
           entity_id: timer.hallwaylight
@@ -123,24 +139,33 @@ automation:
     condition:
     action:
     - service: homeassistant.turn_off
-      entity_id: input_boolean.domo_hallway_light
-
-  ## Switch hallway lights on an off from HA-Bridge
-  - alias: "Hallway lights - voice"
+      entity_id: input_boolean.hallwaylight
+  
+  ## Added V0.4.0
+  ## Switch hallway light on and off
+  - alias: "Verlichting halletje aan-uit"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id:
-        - binary_sensor.habridge_hallway_light
+      entity_id: 
+        - switch.habridge_hallwaylight
+        - input_boolean.hallwaylight
     action:
       - service_template: >-
-          {% if is_state('binary_sensor.habridge_hallway_light', 'on') %}
+          {% if is_state(trigger.entity_id, 'on') %}
             homeassistant.turn_on
-          {% elif is_state('binary_sensor.habridge_hallway_light', 'off') %}
+          {% elif is_state(trigger.entity_id, 'off') %}
             homeassistant.turn_off
-          {% endif%}
-        entity_id: input_boolean.domo_hallway_light
+          {% endif %}
+        entity_id: input_boolean.domo_hallwaylight
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.hallwaylight
 
 ###############################################################################
 ##  Templates

@@ -88,13 +88,13 @@ cards:
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.domo_kitchen_cabinets
+            - entity: input_boolean.highcabinets
             - name: Hoge kasten
             - icon: lightbulb
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.domo_garden_light
+            - entity: input_boolean.gardenlight
             - name: Tuin 
             - icon: lightbulb
     - type: horizontal-stack
@@ -102,19 +102,19 @@ cards:
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.domo_bar_light
+            - entity: input_boolean.barlight
             - name: Bar 
             - icon: lightbulb
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.domo_hallway_light 
+            - entity: input_boolean.hallwaylight 
             - name: Halletje
             - icon: lightbulb
         - type: custom:decluttering-card
           template: light_button_large
           variables: 
-            - entity: input_boolean.domo_porch_light 
+            - entity: input_boolean.porchlight 
             - name: Buitenlamp 
             - icon: lightbulb
     ## Added V0.4.0
@@ -137,7 +137,7 @@ cards:
           - type: custom:decluttering-card
             template: light_button_large
             variables: 
-              - entity: input_boolean.domo_christmastree
+              - entity: input_boolean.christmastree
               - name: Kerstboom 
               - icon: pine-tree
           - type: custom:button-card

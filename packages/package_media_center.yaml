@@ -515,7 +515,7 @@ script:
     sequence:
       - condition: template
         value_template: >-
-          {% if newstate != oldstate %}
+          {% if new_state == old_state %}
             false
           {% else %}
             true

@@ -14,6 +14,7 @@
 ## V1.2.0:  Added binary sensors for alarm states
 ## V1.2.1:  Added input booleans for garbage bins
 ## V1.2.2:  Code cleanup and changes to entities, package ready for migration to new homeserver
+## V1.3.0:  Added icons to input_booleans, added soem windows
 
 ###############################################################################
 ##  Homeassistant settings
@@ -51,45 +52,70 @@ input_boolean:
   ## Groundfloor
   front_window:
     name: Voorraam
+    icon: mdi:window-closed-variant
   garden_door:
     name: Tuindeur
+    icon: mdi:door-closed
   hallway_livingroom_door:
     name: Tussendeur woonkamer
+    icon: mdi:door-closed
   hallway_storage_door:
     name: Tussendeur berging
+    icon: mdi:door-closed
   metering_cabinet_door:
     name: Meterkast deur
+    icon: mdi:door-closed
   toilet_door:
     name: Toiletdeur
+    icon: mdi:door-closed
   freezer:
     name: Vriezerdeur
+    icon: mdi:door-closed
   ## First floor
   bath_room_door:
     name: Badkamer deur
+    icon: mdi:door-closed
   bed_room_door:
     name: Slaapkamer deur
+    icon: mdi:door-closed
+  bed_room_window_l:
+    name: Slaapkamer raam links
+    icon: mdi:window-closed-variant
+  bed_room_window_r:
+    name: Slaapkamer raam rechts
+    icon: mdi:window-closed-variant
   hallway_door:
     name: Tussendeur
+    icon: mdi:door-closed
   office_door:
     name: Kantoor deur
+    icon: mdi:door-closed
   office_window:
     name: Kantoor raam
+    icon: mdi:window-closed-variant
   side_room_window:
     name: Kastenkamer raam
+    icon: mdi:window-closed-variant
   ## Second floor
   heating_room_door:
     name: Ketelkast deur
+    icon: mdi:door-closed
   top_floor_room: #rename!!
     name: Kamer Kim
-  bedroom_window_l:
-    name: Slaapkamer raam links
-  bedroom_window_r:
-    name: Slaapkamer raam rechts
+    icon: mdi:door-closed
+  top_floor_window_l:
+    name: Kamer Kim raam links
+    icon: mdi:window-closed-variant
+  top_floor_window_r:
+    name: Kamer Kim raam rechts
+    icon: mdi:window-closed-variant
   ## Special pupose test switches
   bio_bin:
     name: GFT bak
+    icon: mdi:delete-outline
   plastic_bin:
     name: PMD bak
+    icon: mdi:delete-outline
 
 binary_sensor:
   ## Door/window sensors (Xiaomi)

@@ -90,14 +90,17 @@ input_boolean:
   ## Used in multiple automations and scripts
   christmastree:
     name: Kertstboom
+    icon: mdi:pine-tree
   ## Barlight switch
   ## Used in multiple automations and scripts
   barlight:
     name: Verlichting bar
+    icon: mdi:lightbulb
   ## High cabinets switch
   ## Used in multiple automations and scripts
   highcabinets:
     name: Verlichting hoge kasten (KaKu)
+    icon: mdi:lightbulb
 
 switch:
   ## Switch for high cabinets (Tradfri via Zigbee2MQTT)

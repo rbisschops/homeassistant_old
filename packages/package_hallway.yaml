@@ -29,6 +29,7 @@ homeassistant:
 input_boolean:
   hallwaylight:
     name: Verlichting halletje
+    icon: mdi:lightbulb
 
 ## Added V0.3.0
 input_text:

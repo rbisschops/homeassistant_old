@@ -178,7 +178,7 @@ group:
   presence_geofence:
     name: Aanwezigheid (Geofence)
     entities:
-      - device_tracker.owntracks_anneke_s7
+      - device_tracker.anneke_s7
       - device_tracker.kimberly_iphone8
       - device_tracker.ralph_iphone7
   presence_states:
@@ -195,7 +195,7 @@ group:
     name: Aanwezigheid Anneke
     entities:
       - device_tracker.wifi_anneke_s7
-      - device_tracker.owntracks_anneke_s7 
+      - device_tracker.anneke_s7 
   kimberly:
     name: Aanwezigheid Kimberly
     entities:

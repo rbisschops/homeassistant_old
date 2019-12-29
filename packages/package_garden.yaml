@@ -47,14 +47,17 @@ input_boolean:
   ## Test switch for sunscreen. Removed when all automations work ok
   sunscreen_test:
     name: Test zonnescherm
+    icon: mdi:blinds
   ## Manual mode switch for the sunscreen 
   sunscreen_manual:
     name: Zonnescherm handmatig  
   ## Added V1.7.0
   gardenlight:
     name: Tuin verlichting
+    icon: mdi:lightbulb
   waterornament:
     name: Waterbollen
+    icon: mdi:fountain
 
 ###############################################################################
 ##  Groups

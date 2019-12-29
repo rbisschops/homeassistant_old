@@ -15,6 +15,7 @@
 ## V0.3.0:  Major UI changes based on Decluttering card
 ## V0.4.0:  Added new precense items for test
 ## V0.4.1:  Added input booleans for garbage bins
+## V0.5.0:  Removed obsolete entities, added windows
 
 title: Test
 icon: 'mdi:test-tube'
@@ -41,16 +42,6 @@ cards:
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
-        - title: HA-Bridge commands
-    - type: entities
-      show_state: false
-      show_name: false
-      show_header_toggle: false
-      entities:
-        - entity: binary_sensor.habridge_bed_time
-    - type: custom:decluttering-card
-      template: custom_markdown_card_small
-      variables:
         - title: Z-Wave devices
     - type: entities
       show_state: false
@@ -70,16 +61,6 @@ cards:
       entities:
         - entity: timer.hallwaylight
         - entity: timer.porchlight
-    - type: custom:decluttering-card
-      template: custom_markdown_card_small
-      variables:
-        - title: Toilet verwarming (dummy)
-    - type: entities
-      show_state: false
-      show_name: false
-      show_header_toggle: false
-      entities:
-        - entity: input_select.toilet_heating_dummy  
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -182,6 +163,8 @@ cards:
       show_header_toggle: false
       entities:
         - entity: input_boolean.bed_room_door
+        - entity: input_boolean.bed_room_window_l
+        - entity: input_boolean.bed_room_window_r
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -240,3 +223,5 @@ cards:
       show_header_toggle: false
       entities:
         - entity: input_boolean.top_floor_room
+        - entity: input_boolean.top_floor_window_l
+        - entity: input_boolean.top_floor_window_r

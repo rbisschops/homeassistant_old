@@ -73,7 +73,7 @@ cards:
       - type: horizontal-stack
         cards:
           - type: picture-entity
-            entity: device_tracker.owntracks_anneke_s7
+            entity: device_tracker.anneke_s7
             image: /local/anneke_off.png
             show_name: false
             state_image:
@@ -204,7 +204,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - input_select.toilet_heating
+        - input_select.restroom_heating
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:

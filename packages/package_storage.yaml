@@ -36,6 +36,7 @@ homeassistant:
 input_boolean:
   porchlight:
     name: Buitenlamp
+    icon: mdi:lightbulb
 
 ## Added V0.4.0
 input_text:

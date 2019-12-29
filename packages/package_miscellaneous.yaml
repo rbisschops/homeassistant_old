@@ -21,7 +21,9 @@
 ## V0.9.0:  Added leaving autoamtions and scripts
 ## V0.10.0: Added extended away script
 ## V0.11.0: Added hallway and porchlight on with timer to leaving script
-## V0.12.0  Added sunset automations and scripts
+## V0.12.0: Added sunset automations and scripts
+## V0.13.0: Updated all hue light related scripts
+##          Updated all climate rlated scripts
 
 ###############################################################################
 ##  Homeassistant settings
@@ -138,7 +140,7 @@ automation:
         entity_id: script.bedtime
 
   ## Automation for running the coming home script
-  ## Called by the door sensor
+  ## Called by the front door sensor
   - alias: "Coming home mode ingeschakeld"
     hide_entity: false
     initial_state: 'on'
@@ -260,7 +262,7 @@ script:
       ## Change the climate settings for the toilet heating
       - service: input_select.select_option
         data:
-          entity_id: input_select.toilet_heating
+          entity_id: input_select.restroom_heating
           option: 'Spaarstand'
       - condition: state
         entity_id: input_boolean.recording_mode
@@ -268,7 +270,7 @@ script:
       - service: homeassistant.turn_off
         entity_id: switch.tradfri_media_switch
 
-  ## Added V0.9.0
+  ## Added V0.9.0, Updated V0.13.0
   ## Script when leaving home, also called when everybody is away (from package_presence)
   leaving:
     alias: Leaving script
@@ -282,13 +284,9 @@ script:
       ## Change the climate settings for the toilet heating
       - service: input_select.select_option
         data_template:
-          entity_id: input_select.toilet_heating
+          entity_id: input_select.restroom_heating
           option: >
-            {% if (states.input_select.toilet_heating.state != 'Uit') %}
-              Spaarstand
-            {% else %}
-              Uit
-            {% endif %}
+            {{ 'Uitgeschakeld' if is_state('input_select.restroom_heating','Uitgeschakeld') else 'Spaarstand' }}
       - service_template: >
           {% if (states.input_boolean.recording_mode.state == 'off') %}
             homeassistant.turn_off
@@ -314,20 +312,17 @@ script:
           entity_id: timer.hallwaylight
           duration: '00:{{ states.input_text.timer_minutes_hallwaylight_long.state | int }}:00'
 
-  ## Added V0.9.0
+  ## Added V0.9.0, Updated V0.13.0
+  ## Script when someone comes home
   coming_home:
     alias: Coming home script
     sequence:
       ## Change the climate settings for the toilet heating  
       - service: input_select.select_option
         data_template:
-          entity_id: input_select.toilet_heating
+          entity_id: input_select.restroom_heating
           option: >
-            {% if (states.input_select.toilet_heating.state != 'Uit') %}
-              Verwarmen
-            {% else %}
-              Uit
-            {% endif %}
+            {{ 'Uitgeschakeld' if is_state('input_select.restroom_heating','Uitgeschakeld') else 'Verwarmen' }}
       ## Turn on lighting, but only when dark
       - condition: state
         entity_id: sun.sun
@@ -343,20 +338,10 @@ script:
       #   entity_id: input_boolean.livingroom_lights
       - service: script.set_hue_scene_auto
         data_template:
-          brightness_stop_group_1: 100 
-          brightness_stop_group_2: 150
-          profile_stop_1: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_1'
-            {% else %}
-              'normal_1'
-            {% endif %}
-          profile_stop_2: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_2'
-            {% else %}
-              'normal_2'
-            {% endif %}
+          brightness_value: >
+            {{ '100,150' }}
+          profile_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
           transition: 2
       ## Turn on the high cabinets lights
       - service: homeassistant.turn_on
@@ -375,19 +360,20 @@ script:
         entity_id: 
           - input_boolean.christmastree
 
-  ## Added V0.10.0
+  ## Added V0.10.0, updated V0.13.0
   ## Script everybody extended away
   extended_away:
     alias: Iedereen langere tijd weg script
     sequence:
       - service: input_select.select_option
         data:
-          entity_id: input_select.toilet_heating
-          option: 'Uit'
+          entity_id: input_select.restroom_heating
+          option: 'Uitgeschakeld'
       - service: homeassistant.turn_on
         entity_id: input_boolean.holiday_mode
 
-  ## Added V0.12.0
+  ## Added V0.12.0, updated V0.13.0
+  ## Script running at sunset
   sunset:
     alias: Zonsondergang
     sequence:
@@ -406,44 +392,14 @@ script:
       ## start hue lampen met de juiste mode
       - service: script.set_hue_scene_transition
         data_template:
-          brightness_start_group_1: 1
-          brightness_start_group_2: 1
-          brightness_stop_group_1: >
-            {% if (states.input_select.livingroom_lights_mode.state == 'Video') %}
-              90
-            {% else %}
-              100
-            {% endif %}
-          brightness_stop_group_2: >
-            {% if (states.input_select.livingroom_lights_mode.state == 'Video') %}
-              100
-            {% else %}
-              150
-            {% endif %}
-          profile_start_1: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_1'
-            {% else %}
-              'normal_1'
-            {% endif %}
-          profile_start_2: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_2'
-            {% else %}
-              'normal_2'
-            {% endif %}
-          profile_stop_1: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_1'
-            {% else %}
-              'normal_1'
-            {% endif %}
-          profile_stop_2: >
-            {% if (states.input_boolean.christmas_mode.state == 'on') %}
-              'christmas_normal_2'
-            {% else %}
-              'normal_2'
-            {% endif %}
+          brightness_start_value: >
+            {{ '1,1' }}
+          brightness_stop_value: >
+            {{ '90,100' if is_state('input_select.livingroom_lights_mode','Video') else '100,150' }}
+          profile_start_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
+          profile_stop_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
           transition: 1800
       # - service: script.hue_sunset_mode
       ## start timer for kitchen cabinets, will switch on after xx hour
@@ -473,17 +429,28 @@ script:
     alias: hue test
     sequence:
       ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_transition
+        data_template:
+          brightness_start_value: >
+            {{ '1,1' }}
+          brightness_stop_value: >
+            {{ '100,150' }}
+          profile_start_value: concentrate
+          profile_stop_value: relax
+          transition: 5
+
+  ## Added V0.13.0
+  hue_test_auto:
+    alias: hue test
+    sequence:
+      ## start hue lampen met de juiste mode
       - service: script.set_hue_scene_auto
         data_template:
-          brightness_start_group_1: 1
-          brightness_start_group_2: 1
-          brightness_stop_group_1: 100 
-          brightness_stop_group_2: 150
-          profile_start_1: "concentrate_1"
-          profile_start_2: "concentrate_2"
-          profile_stop_1: "relax_1"
-          profile_stop_2: "relax_2"
-          transition: 30
+          brightness_value: >
+            {{ '50,50' if is_state('input_select.livingroom_lights_mode','Video') else '100,150' }}
+          profile_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'concentrate' }}
+          transition: 5
 
 ###############################################################################
 ##  Timers

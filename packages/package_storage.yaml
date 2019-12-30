@@ -1,0 +1,244 @@
+## Package file for Home Assistant, used for the storage area
+## Type: Home Assistant yaml file
+## Date: 17-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Code cleaning
+## V0.2.0:  Moved in automations and timers from package_presence
+## V0.3.0:  Moved in automations from package_livingroom
+## V0.4.0:  Added inputs for timers porchlight, changed porchlight timers to variables.
+##          Moved in homeasstant settings from package_presence
+## V0.4.1:  Removed test automation for porchlight
+## V0.5.0:  Changed automations for porch light,
+##          Added input_booleans for porch light, 
+##          Added groups for porch light
+
+###############################################################################
+##  Homeassistant settings
+###############################################################################
+
+homeassistant:
+  customize:
+    ## Sensors 
+    sensor.mailbox:
+      friendly_name: Brievenbus
+    ## Timers
+    timer.porchlight:
+      friendly_name: Buitenlamp
+
+
+###############################################################################
+##  Entities
+###############################################################################
+## Added V0.5.0
+input_boolean:
+  porchlight:
+    name: Buitenlamp
+    icon: mdi:lightbulb
+
+## Added V0.4.0
+input_text:
+  timer_minutes_porch_long:
+    name:  Buitenlamp lang (min)
+    initial: 10
+    min: 1
+    max: 60
+  timer_minutes_porch_short:
+    name: Buitenlamp kort (min)
+    initial: 5
+    max: 60
+    min: 1
+
+sensor:
+  ## Mailbox vibration sensor
+  - platform: "mqtt"
+    name: mailbox
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    icon: "mdi:gesture-double-tap"
+    value_template: "{{ value_json.action }}"
+  - platform: "mqtt"
+    name: mailbox_all
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    icon: "mdi:gesture-double-tap"
+    value_template: "{{ value_json }}"
+  - platform: "mqtt"
+    name: mailbox_battery
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "%"
+    device_class: "battery"
+    value_template: "{{ value_json.battery }}"
+  - platform: "mqtt"
+    name: mailbox_linkquality
+    state_topic: "zigbee2mqtt/aqara_mailbox"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unit_of_measurement: "-"
+    value_template: "{{ value_json.linkquality }}"
+
+###############################################################################
+##  Groups
+###############################################################################
+
+## Added V0.5.0
+group:
+  porchlight:
+    name: Buitenlamp
+    entities:
+      - switch.habridge_porchlight
+      - input_boolean.porchlight
+
+###############################################################################
+##  Automations
+###############################################################################
+automation:
+  ## Added V0.4.0
+  ## Test min and max settings on long porch light timer input 
+  - alias: "Valideer buitenlamp timer lang"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_porch_long
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_porch_long
+          value: >
+            {% if (states.input_text.timer_minutes_porch_long.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_porch_long.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_porch_long.state | int }}
+            {% endif %}
+
+  ## Added V0.4.0
+  ## Test min and max settings on short porch light timer input 
+  - alias: "Valideer buitenlamp timer kort"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_porch_short
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_porch_short
+          value: >
+            {% if (states.input_text.timer_minutes_porch_short.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_porch_short.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_porch_short.state | int }}
+            {% endif %}
+
+  ## Switch on porch light when someone arrives home
+  ## Upgraded to use advanced presense (V1.4.0)
+  - alias: "Buitenlamp bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+        from: 'Away'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+        from: 'Extended Away'
+        to: 'Just Arrived'
+    condition:  
+      condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.porchlight
+      - service: timer.start
+        data_template:
+          entity_id: timer.porchlight
+          duration: '00:{{ states.input_text.timer_minutes_porch_long.state | int }}:00'
+
+  ## Switch off porchlight based on timer
+  - alias: "Buitenlamp uit xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.porchlight
+    action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.porchlight
+
+  ## Added V0.5.0
+  ## Switch Bar lights on and off
+  - alias: "Verlichting bar aan-uit"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+        - switch.habridge_porchlight
+        - input_boolean.porchlight
+    action:
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: input_boolean.domo_porchlight
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.porchlight
+
+  ## Actions to perform on mailbox motion
+  - alias: "Post ontvangen"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: sensor.mailbox
+      to: 'vibration'  
+    action:
+      - service: script.notify_telegram_ralph
+        data_template:
+          value1: 'Er is post'
+          value2: ' '
+          value3: ' '
+          prio: -2
+      - service: script.notify_telegram_anneke
+        data_template:
+          value1: 'Er is post'
+          value2: ' '
+          value3: ' '
+          prio: -2
+          
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################
+timer:
+  porchlight:

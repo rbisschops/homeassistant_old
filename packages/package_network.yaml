@@ -62,7 +62,9 @@ homeassistant:
       icon: 'mdi:satellite-variant'
     sensor.nc_ipad:
       icon: 'mdi:tablet-ipad'  
-    sensor.nc_laptop_kim: 
+    sensor.nc_laptop_kim_prive: 
+      icon: 'mdi:laptop'
+    sensor.nc_laptop_kim_werk: 
       icon: 'mdi:laptop'
     sensor.nc_laptop_rediscript:
       icon: 'mdi:laptop'  
@@ -182,11 +184,17 @@ sensor:
         entity_id:
           - device_tracker.ipadvandiscript
         value_template: "{{ 'on' if is_state('device_tracker.ipadvandiscript', 'home') else 'off' }}"  
-      nc_laptop_kim:
-        friendly_name: 'Laptop Kim' 
+      nc_laptop_kim_prive:
+        friendly_name: 'Laptop Kim (prive)' 
         entity_id:
           - device_tracker.windellu0981qd
         value_template: "{{ 'on' if is_state('device_tracker.windellu0981qd', 'home') else 'off' }}"  
+      nc_laptop_kim_werk:
+        friendly_name: 'Laptop Kim (werk)' 
+        entity_id:
+          - device_tracker.nl_56fxvt2
+        value_template: "{{ 'on' if is_state('device_tracker.nl_56fxvt2', 'home') else 'off' }}"  
+
       nc_laptop_ralph:
         friendly_name: 'Laptop Ralph' 
         entity_id:

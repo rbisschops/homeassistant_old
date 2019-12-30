@@ -1,23 +1,25 @@
-# Lovelace-UI file for Home Assistant, Media player view
-# Type: Home Assistant yaml file
-# Date: 30-03-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V1.0.0:  First version
-# V1.1.0:  Added Tradfri switch to replace domo entertainment switch  
-# V1.2.0:  Added buttons for media center modes
-# V1.3.0:  Added conditional buttons for Radio and Television
-# V1.3.1:  Added one empty row under media mode selector (unconditional), saves code
-# V1.4.0:  Implemented decluttering-card for buttons
+## Lovelace-UI file for Home Assistant, Media player view
+## Type: Home Assistant yaml file
+## Date: 30-03-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V1.0.0:  First version
+## V1.1.0:  Added Tradfri switch to replace domo entertainment switch  
+## V1.2.0:  Added buttons for media center modes
+## V1.3.0:  Added conditional buttons for Radio and Television
+## V1.3.1:  Added one empty row under media mode selector (unconditional), saves code
+## V1.4.0:  Implemented decluttering-card for buttons
+## V1.5.0:  Major revamp of all condtional buttons. Added new ones as well
 
 title: Media
 icon: 'mdi:television'
 background: "#e3e3e3"
 cards:
-  ## Selection part for media modes.
   - type: vertical-stack
     cards:
+
+## Selection part for media modes.
     ## Mode selection, first row 
     - type: horizontal-stack
       cards:
@@ -95,18 +97,16 @@ cards:
             - entity: input_boolean.poweroff
             - name: Uit
             - icon: power
-
     ## Conditional buttons. 1st row (empty as seperator)
     - type: horizontal-stack
       cards: 
         - type: custom:button-card
           color_type: blank-card
-
     ## Conditional buttons for Television
     - type: conditional
       conditions:
         - entity: 'switch.television'
-          state: 'on' 
+          state: 'on'
       card:
         type: vertical-stack
         cards:
@@ -115,7 +115,7 @@ cards:
             cards: 
               - type: custom:button-card
                 color_type: blank-card
-          ## Conditional buttons for Televion. 2nd row
+          ## Conditional buttons for television. 2nd row
           - type: horizontal-stack
             cards: 
               - type: custom:decluttering-card
@@ -125,6 +125,125 @@ cards:
                   - icon: volume-plus
                   - device: Versterker
                   - command: VolumeUp
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Menu
+                  - device: Humax
+                  - command: Menu
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: arrow-up-bold
+                  - device: Humax
+                  - command: DirectionUp
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Exit
+                  - device: Humax
+                  - command: Exit
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: CH+
+                  - device: Humax
+                  - command: ChannelUp
+          ## Conditional buttons for television. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: arrow-left-bold 
+                  - device: Humax
+                  - command: DirectionLeft
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: OK
+                  - device: Humax
+                  - command: OK
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: arrow-right-bold
+                  - device: LG TV
+                  - command: DirectionRight
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: CH-
+                  - device: Humax
+                  - command: ChannelDown
+          ## Conditional buttons for Televiosion. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Media
+                  - device: Humax
+                  - command: Media
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: arrow-down-bold
+                  - device: LG TV
+                  - command: DirectionDown
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Guide
+                  - device: Humax
+                  - command: Guide
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: TV/Radio
+                  - device: Humax
+                  - command: TvRadio
+          ## Conditional buttons for Televion. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 6th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Dolby
+                  - device: Versterker
+                  - command: ModeDolbyPLII
               - type: custom:decluttering-card
                 template: media_button_small_text_1
                 variables:
@@ -147,22 +266,22 @@ cards:
                   - device: Humax
                   - command: 3
               - type: custom:decluttering-card
-                template: media_button_small_text_2
+                template: media_button_small_text_3
                 variables:
                   - switch: television
-                  - name: CH+
+                  - name: Info
                   - device: Humax
-                  - command: ChannelUp
-          ## Conditional buttons for Televion. 3rd row
+                  - command: Info
+          ## Conditional buttons for Televion. 7th row
           - type: horizontal-stack
             cards: 
               - type: custom:decluttering-card
-                template: media_button_small_icon
+                template: media_button_small_text_3
                 variables:
                   - switch: television
-                  - icon: volume-minus
+                  - name: DTS
                   - device: Versterker
-                  - command: VolumeDown
+                  - command: ModeDolbyPLIICinema
               - type: custom:decluttering-card
                 template: media_button_small_text_1
                 variables:
@@ -184,23 +303,18 @@ cards:
                   - name: 6
                   - device: Humax
                   - command: 6
-              - type: custom:decluttering-card
-                template: media_button_small_text_2
-                variables:
-                  - switch: television
-                  - name: CH1
-                  - device: Humax
-                  - command: ChannelDown
-          ## Conditional buttons for Televion. 4th row
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 8th row
           - type: horizontal-stack
             cards: 
               - type: custom:decluttering-card
-                template: media_button_small_icon
+                template: media_button_small_text_3
                 variables:
                   - switch: television
-                  - icon: volume-mute
+                  - name: Stereo
                   - device: Versterker
-                  - command: Mute
+                  - command: ModeStereo
               - type: custom:decluttering-card
                 template: media_button_small_text_1
                 variables:
@@ -222,30 +336,15 @@ cards:
                   - name: 9
                   - device: Humax
                   - command: 9
-              - type: custom:decluttering-card
-                template: media_button_small_text_3
-                variables:
-                  - switch: television
-                  - name: Dolby PLII
-                  - device: Versterker
-                  - command: ModeDolbyPLII
-          ## Conditional buttons for Televion. 5th row
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 9th row
           - type: horizontal-stack
             cards: 
-              - type: custom:decluttering-card
-                template: media_button_small_text_3
-                variables:
-                  - switch: television
-                  - name: TV/Radio
-                  - device: Humax
-                  - command: TvRadio
-              - type: conditional
-                conditions:
-                  - entity: switch.television
-                    state: 'on'
-                card:    
-                  type: custom:button-card
-                  color_type: blank-card
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:button-card
+                color_type: blank-card
               - type: custom:decluttering-card
                 template: media_button_small_text_1
                 variables:
@@ -253,21 +352,16 @@ cards:
                   - name: '0'
                   - device: Humax
                   - command: 0
-              - type: conditional
-                conditions:
-                  - entity: switch.television
-                    state: 'on'
-                card:    
-                  type: custom:button-card
-                  color_type: blank-card
-              - type: custom:decluttering-card
-                template: media_button_small_text_3
-                variables:
-                  - switch: television
-                  - name: DTS
-                  - device: Versterker
-                  - command: ModeDolbyPLIICinema
-          ## Conditional buttons for Televion. 6th row
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 10th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 11th row
           - type: horizontal-stack
             cards: 
               - type: custom:decluttering-card
@@ -277,13 +371,6 @@ cards:
                   - icon: rewind
                   - device: Humax
                   - command: Rewind
-              - type: custom:decluttering-card
-                template: media_button_small_icon
-                variables:
-                  - switch: television
-                  - icon: pause
-                  - device: Humax
-                  - command: Pause
               - type: custom:decluttering-card
                 template: media_button_small_icon
                 variables:
@@ -298,6 +385,66 @@ cards:
                   - icon: fast-forward
                   - device: Humax
                   - command: FastForward
+          ## Conditional buttons for Televion. 12th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_text_3_red
+                variables:
+                  - switch: television
+                  - name: REC
+                  - device: Humax
+                  - command: Record
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: pause
+                  - device: Humax
+                  - command: Pause
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: stop
+                  - device: Humax
+                  - command: Stop
+          ## Conditional buttons for Televion. 13th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 14th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon_red
+                variables:
+                  - switch: television
+                  - icon: record
+                  - device: Humax
+                  - command: Red
+              - type: custom:decluttering-card
+                template: media_button_small_icon_green
+                variables:
+                  - switch: television
+                  - icon: record
+                  - device: Humax
+                  - command: Green
+              - type: custom:decluttering-card
+                template: media_button_small_icon_yellow
+                variables:
+                  - switch: television
+                  - icon: record
+                  - device: Humax
+                  - command: Yellow
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: record
+                  - device: Humax
+                  - command: Blue
 
     ## Conditional buttons for Netflix
     - type: conditional
@@ -307,26 +454,315 @@ cards:
       card:
         type: vertical-stack
         cards:
-          ## Conditional buttons for television. 1st row (empty as seperator)
+          ## Conditional buttons for netflix. 1st row (empty as seperator)
           - type: horizontal-stack
             cards: 
               - type: custom:button-card
                 color_type: blank-card
-          ## Conditional buttons for Televion. 2nd row
+          ## Conditional buttons for Netflix. 2nd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: volume-plus
+                  - device: Versterker
+                  - command: VolumeUp
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: netflix
+                  - icon: arrow-up-bold
+                  - device: LG TV
+                  - command: DirectionUp
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: home
+                  - device: LG TV
+                  - command: Home
+          ## Conditional buttons for Netflix. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: netflix
+                  - icon: arrow-left-bold 
+                  - device: LG TV
+                  - command: DirectionLeft
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: netflix
+                  - name: OK
+                  - device: LG TV
+                  - command: OK
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: netflix
+                  - icon: arrow-right-bold
+                  - device: LG TV
+                  - command: DirectionRight
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: backup-restore
+                  - device: LG TV
+                  - command: Back
+          ## Conditional buttons for Netflix. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: netflix
+                  - icon: arrow-down-bold
+                  - device: LG TV
+                  - command: DirectionDown
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: netflix
+                  - name: Dolby
+                  - device: Versterker
+                  - command: ModeDolbyPLII
+          ## Conditional buttons for Spotify. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Netflix. 6th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: rewind
+                  - device: LG TV
+                  - command: Rewind
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: play
+                  - device: LG TV
+                  - command: Play
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: fast-forward
+                  - device: LG TV
+                  - command: FastForward
+          ## Conditional buttons for Netflix. 7th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: pause
+                  - device: LG TV
+                  - command: Pause
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: netflix
+                  - icon: stop
+                  - device: LG TV
+                  - command: Stop
 
-          ## Conditional buttons for Televion. 3rd row
-
-          ## Conditional buttons for Televion. 4th row
-
-          ## Conditional buttons for Televion. 5th row
-
-          ## Conditional buttons for Televion. 6th row
+    ## Conditional buttons for Spotify
+    - type: conditional
+      conditions:
+        - entity: 'switch.spotify'
+          state: 'on' 
+      card:
+        type: vertical-stack
+        cards:
+          ## Conditional buttons for Spotify. 1st row (empty as seperator)
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Spotify. 2nd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: volume-plus
+                  - device: Versterker
+                  - command: VolumeUp
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: spotify
+                  - icon: arrow-up-bold
+                  - device: LG TV
+                  - command: DirectionUp
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: home
+                  - device: LG TV
+                  - command: Home
+          ## Conditional buttons for Spotify. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: spotify
+                  - icon: arrow-left-bold 
+                  - device: LG TV
+                  - command: DirectionLeft
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: OK
+                  - device: LG TV
+                  - command: OK
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: television
+                  - icon: arrow-right-bold
+                  - device: LG TV
+                  - command: DirectionRight
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: backup-restore
+                  - device: LG TV
+                  - command: Back
+          ## Conditional buttons for Spotify. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon_blue
+                variables:
+                  - switch: spotify
+                  - icon: arrow-down-bold
+                  - device: LG TV
+                  - command: DirectionDown
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Stereo
+                  - device: Versterker
+                  - command: ModeStereo
+          ## Conditional buttons for Spotify. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Spotify. 6th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: rewind
+                  - device: LG TV
+                  - command: Rewind
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: play
+                  - device: LG TV
+                  - command: Play
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: fast-forward
+                  - device: LG TV
+                  - command: FastForward
+          ## Conditional buttons for Spotify. 7th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: pause
+                  - device: LG TV
+                  - command: Pause
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: spotify
+                  - icon: stop
+                  - device: LG TV
+                  - command: Stop
 
     ## Conditional buttons for Radio
     - type: conditional
       conditions:
         - entity: 'switch.radio'
-          state: 'on' 
+          state: 'on'
       card:
         type: vertical-stack
         cards:
@@ -367,7 +803,7 @@ cards:
                   - device: Humax
                   - command: 3
               - type: custom:decluttering-card
-                template: media_button_small_text_2
+                template: media_button_small_text_3
                 variables:
                   - switch: radio
                   - name: CH+
@@ -405,7 +841,7 @@ cards:
                   - device: Humax
                   - command: 6
               - type: custom:decluttering-card
-                template: media_button_small_text_2
+                template: media_button_small_text_3
                 variables:
                   - switch: radio
                   - name: CH1
@@ -459,13 +895,13 @@ cards:
                   - name: TV/Radio
                   - device: Humax
                   - command: TvRadio
-              - type: conditional
-                conditions:
-                  - entity: switch.radio
-                    state: 'on'
-                card:    
-                  type: custom:button-card
-                  color_type: blank-card
+              # - type: conditional
+              #   conditions:
+              #     - entity: switch.radio
+              #       state: 'on'
+              #   card:    
+              - type: custom:button-card
+                color_type: blank-card
               - type: custom:decluttering-card
                 template: media_button_small_text_1
                 variables:
@@ -473,13 +909,13 @@ cards:
                   - name: '0'
                   - device: Humax
                   - command: 0
-              - type: conditional
-                conditions:
-                  - entity: switch.radio
-                    state: 'on'
-                card:    
-                  type: custom:button-card
-                  color_type: blank-card
+              # - type: conditional
+              #   conditions:
+              #     - entity: switch.radio
+              #       state: 'on'
+              #   card:    
+              - type: custom:button-card
+                color_type: blank-card
               - type: custom:decluttering-card
                 template: media_button_small_text_3
                 variables:
@@ -488,7 +924,8 @@ cards:
                   - device: Versterker
                   - command: ModeDirect
 
-  ## Additional selectors and information stack  
+  ## Additional selectors and information stack 
+  ## (hidden for normal use)
   - type: vertical-stack
     cards:
     - type: entities
@@ -521,82 +958,11 @@ cards:
         - entity: switch.music
         - entity: switch.poweroff
 
-###############################################################
-# Code kept for reference:
-        # - type: custom:button-card
-        #   entity: input_boolean.television
-        #   icon: mdi:television
-        #   size: 40%
-        #   color_type: card
-        #   color: rgb(255, 131, 0)
-        #   action: toggle
-        #   name: Televisie
-        #   style:
-        #     - font-size: 1.2em
-        #     - font-weight: normal
-        #     - border-radius: 10px
 
-        # - type: conditional
-        #   conditions:
-        #     - entity: switch.radio
-        #       state: 'on'
-        #   card:
-        #     type: custom:button-card
-        #     color_type: card
-        #     color: rgb(84, 84, 84)            
-        #     action: service
-        #     service:
-        #       domain: remote
-        #       action: send_command
-        #       data: 
-        #         entity_id: remote.bisschops
-        #         device: Versterker
-        #         command: 'VolumeUp'
-        #     icon: mdi:volume-plus
-        #     size: 80% 
-        #     style:
-        #       - height: 40px
-
-        # - type: conditional
-        #   conditions:
-        #     - entity: switch.radio
-        #       state: 'on'
-        #   card:
-        #     type: custom:button-card
-        #     color_type: card
-        #     color: rgb(255, 131, 0)            
-        #     action: service
-        #     service:
-        #       domain: remote
-        #       action: send_command
-        #       data: 
-        #         entity_id: remote.bisschops
-        #         device: Humax
-        #         command: '1'
-        #     name: '1'
-        #     style:
-        #       - font-size: 2.0em
-        #       - font-weight: normal
-        #       - height: 40px
-
-        # - type: conditional
-        #   conditions:
-        #     - entity: switch.radio
-        #       state: 'on'
-        #   card:
-        #     type: custom:button-card
-        #     color_type: card
-        #     color: rgb(84, 84, 84)            
-        #     action: service
-        #     service:
-        #       domain: remote
-        #       action: send_command
-        #       data: 
-        #         entity_id: remote.bisschops
-        #         device: Humax
-        #         command: 'ChannelUp'
-        #     name: 'CH+'
-        #     style:
-        #       - font-size: 1.5em
-        #       - font-weight: normal
-        #       - height: 40px
+# Experimental line to import from file. Not working yet
+  #  - !include mediaplayer_modes.yaml
+  #  - !include mediaplayer_television.yaml
+  #  - !include mediaplayer_netflix.yaml
+  #  - !include mediaplayer_spotify.yaml
+  #  - !include mediaplayer_radio.yaml
+  #  - !include mediaplayer_additional.yaml

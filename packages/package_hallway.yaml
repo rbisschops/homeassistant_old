@@ -1,0 +1,199 @@
+## Package file for Home Assistant, used for presence  
+## Type: Home Assistant yaml file
+## Date: 17-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version, moved in automations and timers from package_presence
+## V0.2.0:  Moved in automations from package_livingroom
+## V0.3.0:  Added inputs for timers hallwatlight, changed hallwaylight timers to variables.
+##          Moved in homeasstant settings from package_presence
+## V0.4.0:  Changed automations for hallway lights,
+##          Added input_booleans for hallway lights, 
+##          Added groups for hallway lights
+
+###############################################################################
+##  Homeassistant settings
+###############################################################################
+homeassistant:
+  customize:
+    ## Timers
+    timer.hallwaylight:
+      friendly_name: Halletje
+
+###############################################################################
+##  Entities
+###############################################################################
+
+## Added V0.4.0
+input_boolean:
+  hallwaylight:
+    name: Verlichting halletje
+    icon: mdi:lightbulb
+
+## Added V0.3.0
+input_text:
+  timer_minutes_hallwaylight_short:
+    name: Halletje kort (min)
+    initial: 2
+    min: 1
+    max: 60
+  timer_minutes_hallwaylight_long:
+    name: Halletje lang (min)
+    initial: 5
+    min: 1
+    max: 60
+
+###############################################################################
+##  Groups
+###############################################################################
+
+## Added V0.4.0
+group:
+  hallwaylight:
+    name: Verlichting halletje
+    entities:
+      - switch.habridge_hallwaylight
+      - input_boolean.hallwaylight
+
+###############################################################################
+##  Automations
+###############################################################################
+automation:
+  ## Added V0.3.0
+  ## Test min and max settings on long hallwaylight timer input 
+  - alias: "Valideer halletje timer lang"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_hallwaylight_long
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_hallwaylight_long
+          value: >
+            {% if (states.input_text.timer_minutes_hallwaylight_long.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_hallwaylight_long.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_hallwaylight_long.state | int }}
+            {% endif %}
+  
+  ## Added V0.3.0
+  ## Test min and max settings on short hallwaylight timer input 
+  - alias: "Valideer halletje timer kort"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_text.timer_minutes_hallwaylight_short
+    action:
+      - service: input_text.set_value
+        data_template:
+          entity_id: input_text.timer_minutes_hallwaylight_short
+          value: >
+            {% if (states.input_text.timer_minutes_hallwaylight_short.state | int) > 60 %}
+              60
+            {% elif (states.input_text.timer_minutes_hallwaylight_short.state | int) < 1 %}
+              1
+            {% else %}
+              {{ states.input_text.timer_minutes_hallwaylight_short.state | int }}
+            {% endif %}
+
+  ## Switch on hallway light when someone arrives home
+  - alias: "Halletje aan bij thuiskomst"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.neo_coolcam_front_door
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.porchlight
+          state: 'on'
+        - condition: sun
+          after: sunset
+          after_offset: "00:15:00"
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.hallwaylight
+      - service: timer.start
+        data_template:
+          entity_id: timer.hallwaylight
+          duration: '00:{{ states.input_text.timer_minutes_hallwaylight_short.state | int }}:00'
+
+  ## Switch off hallway light based on timer
+  - alias: "Halletje uit xx minuten na trigger"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.hallwaylight
+    condition:
+    action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.hallwaylight
+  
+  ## Added V0.4.0
+  ## Switch hallway light on and off
+  - alias: "Verlichting halletje aan-uit"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+        - switch.habridge_hallwaylight
+        - input_boolean.hallwaylight
+    action:
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: input_boolean.domo_hallwaylight
+      - service_template: >-
+          {% if is_state(trigger.entity_id, 'on') %}
+            homeassistant.turn_on
+          {% elif is_state(trigger.entity_id, 'off') %}
+            homeassistant.turn_off
+          {% endif %}
+        entity_id: group.hallwaylight
+
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################
+
+###############################################################################
+##  Templates
+###############################################################################
+
+
+###############################################################################
+##  Scripts
+###############################################################################
+
+
+###############################################################################
+##  Timers
+###############################################################################
+timer:
+  hallwaylight:

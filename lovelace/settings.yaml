@@ -1,16 +1,18 @@
-# Lovelace-UI file for Home Assistant, Settings view
-# Type: Home Assistant yaml file
-# Date: 12-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Removed lighting settings (moved to lighting tab)
-# V0.3.0:  Added Zigbee2mqtt settings
-# V0.4.0:  Changed some configs
-# V0.4.1:  Changed UI layout
-# V0.5.0:  Changed layout of wifi and gps home buttons due to change of owntracks location  in HA 0.95
-# V0.6.0:  Major UI changes based on Decluttering card
+## Lovelace-UI file for Home Assistant, Settings view
+## Type: Home Assistant yaml file
+## Date: 07-12-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Removed lighting settings (moved to lighting tab)
+## V0.3.0:  Added Zigbee2mqtt settings
+## V0.4.0:  Changed some configs
+## V0.4.1:  Changed UI layout
+## V0.5.0:  Changed layout of wifi and gps home buttons due to change of owntracks location  in HA 0.95
+## V0.6.0:  Major UI changes based on Decluttering card
+## V0.7.0:  Added timer settings
+## v0.8.0:  Added christmas setting
 
 title: Settings
 icon: 'mdi:settings'
@@ -22,6 +24,10 @@ cards:
       template: custom_markdown_card
       variables:
         - title: Instellingen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Algemeen
     - type: entities
       show_state: false
       show_name: false
@@ -33,42 +39,33 @@ cards:
       - entity: input_boolean.holiday_mode 
         name: Vakantie mode
         icon: 'mdi:briefcase'
+      ## Added V0.8.0
+      - entity: input_boolean.christmas_mode
+        name: Kerst mode
+        icon: 'mdi:pine-tree'
       - entity: input_boolean.recording_mode
         name: Recorder mode
         icon: 'mdi:video'
-
-  - type: vertical-stack
-    cards:
+      - entity: input_boolean.livingroom_lights_status
+        name: Licht aan status
+        icon: 'mdi:lightbulb'
     - type: custom:decluttering-card
-      template: custom_markdown_card
+      template: custom_markdown_card_small
       variables:
-        - title: Automatiseringen
+        - title: Timers
     - type: entities
       show_state: false
       show_name: false
       show_header_toggle: false
       entities:
-      - entity: automation.buitenlamp_bij_thuiskomst
-        name: Buitenlamp bij thuiskomst
-      - entity: automation.er_komt_iemand_thuis
-        name: Er komt iemand thuis
-      - entity: automation.iedereen_is_weg  
-        name: Iedereen is weg
-      - entity: automation.tuinverlichting_bij_thuiskomst
-        name: Tuinverlichting aan bij thuiskomst
-      - entity: automation.tuinverlichting_bij_zonsondergang 
-        name: Tuinverlichting aan bij zonsondergang
-      - entity: automation.toilet_verwarming_aan_volgens_schema_niet_werkdagen
-        name: Toilet verwarming aan volgens schema - niet werkdagen
-      - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
-        name: Toilet verwarming aan volgens schema - werkdagen
-
-  - type: vertical-stack
-    cards:
+        - entity: input_text.timer_minutes_porch_long
+        - entity: input_text.timer_minutes_porch_short
+        - entity: input_text.timer_minutes_hallwaylight_long
+        - entity: input_text.timer_minutes_hallwaylight_short
     - type: custom:decluttering-card
-      template: custom_markdown_card
+      template: custom_markdown_card_small
       variables:
-        - title: Zigbee2mqtt instellingen
+        - title: Zigbee2mqtt
     - type: entities
       show_state: false
       show_name: false
@@ -80,5 +77,108 @@ cards:
         name: Zigbee2mqtt permit join
       - entity: timer.zigbee_permit_join
         name: Resterende join tijd
-
-
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Automatiseringen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Alarmen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.koelkast_alarm
+        name: Koelkast alarm
+      - entity: automation.alarm_gereset
+        name: Alarm gereset
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Aanwezigheid
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.buitenlamp_bij_thuiskomst
+        name: Buitenlamp bij thuiskomst
+      - entity: automation.er_komt_iemand_thuis
+        name: Er komt iemand thuis
+      - entity: automation.iedereen_is_weg  
+        name: Iedereen is weg
+      - entity: automation.mark_person_as_just_arrived
+        name: Markeer persoon als net thuis
+      - entity: automation.mark_person_as_home
+        name: Markeer persoon als thuis
+      - entity: automation.mark_person_as_just_left
+        name: Markeer persoon als net weg
+      - entity: automation.mark_person_as_away
+        name: Markeer persoon als weg
+      - entity: automation.mark_person_as_extended_away
+        name: Markeer persoon als langer weg
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Tuin
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.tuinverlichting_bij_thuiskomst
+        name: Tuinverlichting aan bij thuiskomst
+      - entity: automation.tuinverlichting_bij_zonsondergang 
+        name: Tuinverlichting aan bij zonsondergang
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Toilet verwarming
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.toilet_verwarming_aan_volgens_schema_niet_werkdagen
+        name: Toilet verwarming aan volgens schema - niet werkdagen
+      - entity: automation.toilet_verwarming_aan_volgens_schema_werkdagen
+        name: Toilet verwarming aan volgens schema - werkdagen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Domoticz
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+      - entity: automation.domoticz_publish_buitenlamp
+        name: Publiceer buitenlamp naar Domoticz
+      - entity: automation.domoticz_publish_halletje
+        name: Publiceer verl. halletje naar Domoticz
+      - entity: automation.domoticz_publish_hoge_kasten
+        name: Publiceer verl.hoge kasten naar Domoticz
+      - entity: automation.domoticz_publish_kerstboom
+        name: Publiceer kerstboom naar Domoticz
+      - entity: automation.domoticz_publish_lampen_bar
+        name: Publiceer lampen bar naar Domoticz
+      - entity: automation.domoticz_publish_tuinverlichting
+        name: Publiceer tuinverlcihting naar Domoticz
+      - entity: automation.domoticz_publish_waterbollen
+        name: Publiceer waterbollen naar Domoticz
+      - entity: automation.domoticz_publish_zonnescherm
+        name: Publiceer zonnescherm naar Domoticz
+      - entity: automation.read_domoticz_zigbee_switch_via_mqtt
+        name: Lees zigbee schakelaar
+      - entity: automation.read_domoticz_coco_switch_via_mqtt
+        name: Lees klik-aan-klik-uit schakelaar
+      - entity: automation.domoticz_elektra_waarden_via_mqtt
+        name: Lees waarden elektriciteit
+      - entity: automation.domoticz_gas_waarden_via_mqtt
+        name: Lees waarden gas
+      - entity: automation.domoticz_water_waarden_via_mqtt
+        name: Lees waarden water

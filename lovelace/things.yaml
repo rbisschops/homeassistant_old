@@ -1,16 +1,16 @@
-# Lovelace-UI file for Home Assistant, Lighting view
-# Type: Home Assistant yaml file
-# Date: 12-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added toilet heating manual control
-# V0.2.1:  Changed UI layout
-# V0.2.2:  Added rooms for future use
-# V0.2.3:  Added input_boolean.sunscreen_manual (moved)
-#          Removed switch.tradfri_high_cabinets_switch (moved)
-# V0.3.0:  Major UI changes based on Decluttering card
+## Lovelace-UI file for Home Assistant, Lighting view
+## Type: Home Assistant yaml file
+## Date: 12-07-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added toilet heating manual control
+## V0.2.1:  Changed UI layout
+## V0.2.2:  Added rooms for future use
+## V0.2.3:  Added input_boolean.sunscreen_manual (moved)
+##          Removed switch.tradfri_high_cabinets_switch (moved)
+## V0.3.0:  Major UI changes based on Decluttering card
 
 title: Entities
 icon: 'mdi:cogs'
@@ -49,19 +49,19 @@ cards:
       - type: horizontal-stack
         cards:
           - type: picture-entity
-            entity: device_tracker.anneke_s7
+            entity: device_tracker.wifi_anneke_s7
             image: /local/anneke_off.png
             show_name: false
             state_image:
               'home': /local/anneke_on.png
           - type: picture-entity
-            entity: device_tracker.kimberly_s7
+            entity: device_tracker.wifi_kimberly_iphone8
             image: /local/kimberly_off.png
             show_name: false
             state_image:
               'home': /local/kimberly_on.png
           - type: picture-entity
-            entity: device_tracker.ralph_iphone7
+            entity: device_tracker.wifi_ralph_iphone7
             image: /local/ralph_off.png
             show_name: false
             state_image:
@@ -73,19 +73,19 @@ cards:
       - type: horizontal-stack
         cards:
           - type: picture-entity
-            entity: device_tracker.owntracks_anneke_s7
+            entity: device_tracker.anneke_s7
             image: /local/anneke_off.png
             show_name: false
             state_image:
               'home': /local/anneke_on.png
           - type: picture-entity
-            entity: device_tracker.owntracks_kimberly_s7
+            entity: device_tracker.kimberly_iphone8
             image: /local/kimberly_off.png
             show_name: false
             state_image:
               'home': /local/kimberly_on.png
           - type: picture-entity
-            entity: device_tracker.owntracks_ralph_iphone7
+            entity: device_tracker.ralph_iphone7
             image: /local/ralph_off.png
             show_name: false
             state_image:
@@ -129,8 +129,8 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_kitchen_cabinets
-        - entity: input_boolean.domo_bar_light
+        - entity: input_boolean.highcabinets
+        - entity: input_boolean.barlight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -140,7 +140,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_christmastree   
+        - entity: input_boolean.christmastree   
   - type: vertical-stack
     cards:
     - type: custom:decluttering-card
@@ -156,7 +156,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_garden_light
+        - entity: input_boolean.gardenlight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -166,7 +166,7 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_water_ornament
+        - entity: input_boolean.waterornament
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -193,8 +193,8 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - entity: input_boolean.domo_porch_light
-        - entity: input_boolean.domo_hallway_light
+        - entity: input_boolean.porchlight
+        - entity: input_boolean.hallwaylight
     - type: custom:decluttering-card
       template: custom_markdown_card_small
       variables:
@@ -204,9 +204,18 @@ cards:
       show_name: false
       show_header_toggle: false
       entities:
-        - input_select.toilet_heating
-        - script.manual_set_toilet_heating      
-  
+        - input_select.restroom_heating
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Diversen
+    - type: entities
+      show_state: false
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - sensor.mailbox
+
   # - type: vertical-stack
   #   cards:
   #   - type: entities

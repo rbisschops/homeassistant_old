@@ -1,53 +1,100 @@
-# Package file for Home Assistant, used for presence  
-# Type: Home Assistant yaml file
-# Date: 14-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Added hallway light based on trigger frontdoor sensor 
-# V1.2.0:  Fixed Bug #005
-# V1.2.1:  Fixed wrong status presence sensor
+## Package file for Home Assistant, used for presence  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Added hallway light based on trigger frontdoor sensor 
+## V1.2.0:  Fixed Bug #005
+## V1.2.1:  Fixed wrong status presence sensor
+## V1.3.0:  Added entities and logic for advanced presence
+## V1.4.0:  Migrated to the use of advanced presence
+## V1.4.1:  minor update notify text coming home
+## V1.4.2:  code cleanup
+## V1.5.0:  Moved out several automations and times to dedicated room/area
+## V1.6.0:  Added everybody away sensor
+##          Added service to automation
+## V1.7.0:  Added everybody extended away sensor
+## V1.8.0:  Added comming home script to automation "Er komt iemand thuis"
+## V1.8.1: Removed initial state from input_select
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 homeassistant:
   customize:
-    ### Timers
-    timer.porchlight:
-      friendly_name: Buitenlamp
-    timer.hallwaylight:
-      friendly_name: Halletje
+    ## Added V1.3.0
+    ## Customizations for advanced presence states
+    sensor.ralph_status:
+      entity_picture: /local/custom_icons/ralph48_on.png
+    sensor.anneke_status:
+      entity_picture: /local/custom_icons/anneke48_on.png
+    sensor.kimberly_status:
+      entity_picture: /local/custom_icons/kimberly48_on.png
 
 ## Settings for owntracks
 owntracks:
   max_gps_accuracy: 200
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 binary_sensor:
   ## Anyone home sensor
+  ## Upgraded to use advanced presense (V1.4.0)
   - platform: template
     sensors:
       people_home:
         friendly_name: Iemand thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
-            or is_state('device_tracker.owntracks_kimberly_s7', 'home')
-            or is_state('device_tracker.owntracks_ralph_iphone7', 'home') }}
+          {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.ralph_status_dropdown', 'Just Arrived')
+            or is_state('input_select.ralph_status_dropdown', 'Just Left')
+            or is_state('input_select.anneke_status_dropdown', 'Home')
+            or is_state('input_select.anneke_status_dropdown', 'Just Arrived')
+            or is_state('input_select.anneke_status_dropdown', 'Just Left')
+            or is_state('input_select.kimberly_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Arrived')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+  ## Added V1.6.0
+  ## Everybody is away
+  - platform: template
+    sensors:
+      everybody_away:
+        friendly_name: Niemand thuis (kort)
+        value_template: >-
+          {{ is_state('input_select.ralph_status_dropdown', 'Away')
+            and is_state('input_select.anneke_status_dropdown', 'Away')
+            and is_state('input_select.kimberly_status_dropdown', 'Away') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+
+  ## Added V1.7.0
+  ## Everybody is extended away
+  - platform: template
+    sensors:
+      everybody_extended_away:
+        friendly_name: Niemand thuis (lang)
+        value_template: >-
+          {{ is_state('input_select.ralph_status_dropdown', 'Extended Away')
+            and is_state('input_select.anneke_status_dropdown', 'Extended Away')
+            and is_state('input_select.kimberly_status_dropdown', 'Extended Away') }}
+        entity_picture_template: >-
+          {{ '/local/custom_icons/people48_' ~ states.binary_sensor.people_home.state ~ '.png' }}
+
   ## Anneke home sensor
   - platform: template
     sensors:
       anneke_home:
         friendly_name: Anneke thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_anneke_s7', 'home')
-            or is_state('device_tracker.anneke_s7', 'home') }}
+          {{ is_state('input_select.anneke_status_dropdown', 'Home')
+            or is_state('input_select.anneke_status_dropdown', 'Just Arrived')
+            or is_state('input_select.anneke_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/anneke48_' ~ states.binary_sensor.anneke_home.state ~ '.png' }}
   ## kimberly home sensor
@@ -56,8 +103,9 @@ binary_sensor:
       kimberly_home:
         friendly_name: Kimberly thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_kimberly_s7', 'home')
-            or is_state('device_tracker.kimberly_s7', 'home') }}
+          {{ is_state('input_select.kimberly_status_dropdown', 'Home')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Arrived')
+            or is_state('input_select.kimberly_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/kimberly48_' ~ states.binary_sensor.kimberly_home.state ~ '.png' }}
   ## Ralph home sensor
@@ -66,52 +114,309 @@ binary_sensor:
       ralph_home:
         friendly_name: Ralph thuis
         value_template: >-
-          {{ is_state('device_tracker.owntracks_ralph_iphone7', 'home')
-            or is_state('device_tracker.ralph_iphone7', 'home') }}
+          {{ is_state('input_select.ralph_status_dropdown', 'Home')
+            or is_state('input_select.ralph_status_dropdown', 'Just Arrived')
+            or is_state('input_select.ralph_status_dropdown', 'Just Left') }}
         entity_picture_template: >-
           {{ '/local/custom_icons/ralph48_' ~ states.binary_sensor.ralph_home.state ~ '.png' }}
 
+## Added input select for advanced presence states (V1.3.0)
+input_select:
+  ## Ralph advanced home sensor
+  ralph_status_dropdown:
+    name: Ralph
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+  ## Anneke advanced home sensor
+  anneke_status_dropdown:
+    name: Anneke
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+  ## Kimberly advanced home sensor
+  kimberly_status_dropdown:
+    name: Kimberly
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+
+## Added sensors for advanced presence states (V1.3.0)
+sensor:
+  - platform: template
+    sensors:
+      ralph_status:
+        value_template: '{{ states.input_select.ralph_status_dropdown.state }}'
+        friendly_name: 'Ralph'
+      anneke_status:
+        value_template: '{{ states.input_select.anneke_status_dropdown.state }}'
+        friendly_name: 'Anneke'
+      kimberly_status:
+        value_template: '{{ states.input_select.kimberly_status_dropdown.state }}'
+        friendly_name: 'Kimberly'
+
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
   presence_devices:
     name: Aanwezigheid (Netwerk)
     entities:
-      - device_tracker.anneke_s7
-      - device_tracker.kimberly_s7
-      - device_tracker.ralph_iphone7
+      - device_tracker.wifi_anneke_s7
+      # - device_tracker.wifi_kimberly_s7
+      - device_tracker.wifi_kimberly_iphone8 
+      - device_tracker.wifi_ralph_iphone7
   presence_geofence:
     name: Aanwezigheid (Geofence)
     entities:
-      - device_tracker.owntracks_anneke_s7
-      - device_tracker.owntracks_kimberly_s7
-      - device_tracker.owntracks_ralph_iphone7
+      - device_tracker.anneke_s7
+      - device_tracker.kimberly_iphone8
+      - device_tracker.ralph_iphone7
   presence_states:
     name: Aanwezigheid
     entities:
       - binary_sensor.people_home
-  presence_timers:
-    name: Aanwezigheid timers
+  ## Added group for advanced presence states (V1.3.0)
+  ralph:
+    name: Aanwezigheid Ralph
     entities:
-      - timer.porchlight
-      - timer.hallwaylight
+      - device_tracker.wifi_ralph_iphone7
+      - device_tracker.ralph_iphone7
+  anneke:
+    name: Aanwezigheid Anneke
+    entities:
+      - device_tracker.wifi_anneke_s7
+      - device_tracker.anneke_s7 
+  kimberly:
+    name: Aanwezigheid Kimberly
+    entities:
+      - device_tracker.wifi_kimberly_iphone8
+      - device_tracker.kimberly_iphone8
+
+  people_status:                  # Currently not working need update or remove
+    name: People Status
+    entities:
+      - sensor.ralph_status
+      - sensor.anneke_status
+      - sensor.kimberly_status
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
+  ## Added automations for advanced presence states (V1.3.0)
+  - alias: Mark person as just arrived
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: group.ralph
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: group.anneke
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: group.kimberly
+        from: 'not_home'
+        to: 'home'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'group.anneke' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              {% if states.input_select.ralph_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}
+            {% elif trigger.entity_id == 'group.anneke' %}  
+              {% if states.input_select.anneke_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}          
+            {% else %}
+              {% if states.input_select.kimberly_status_dropdown.state == 'Just Left' %}
+                Home
+              {% else %}
+                Just Arrived
+              {% endif %}
+            {% endif %}
+
+  - alias: Mark person as home
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+          seconds: 15
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Just Arrived'
+        for:
+          minutes: 10
+          seconds: 30
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        from: 'Just Left'
+        to: 'Just Arrived'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Home
+
+  - alias: Mark person as just left
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: group.ralph
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: group.anneke
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: group.kimberly
+        from: 'home'
+        to: 'not_home'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'group.ralph' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'group.anneke' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Just Left
+
+  - alias: Mark person as away
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+          seconds: 15
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Just Left'
+        for:
+          minutes: 5
+          seconds: 30
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Away
+  
+  - alias: Mark person as extended away
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: input_select.ralph_status_dropdown
+        to: 'Away'
+        for:
+          hours: 23
+          minutes: 59
+      - platform: state
+        entity_id: input_select.anneke_status_dropdown
+        to: 'Away'
+        for:
+          hours: 24
+          minutes: 0
+      - platform: state
+        entity_id: input_select.kimberly_status_dropdown
+        to: 'Away'
+        for:
+          hours: 24
+          minutes: 1
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: >
+            {% if trigger.entity_id == 'input_select.ralph_status_dropdown' %}
+              input_select.ralph_status_dropdown
+            {% elif trigger.entity_id == 'input_select.anneke_status_dropdown' %}
+              input_select.anneke_status_dropdown
+            {% else %}
+              input_select.kimberly_status_dropdown
+            {% endif %}
+          option: Extended Away
+  ## Updated V1.6.0
   ## Test if everybody is away and perform actions
   - alias: "Iedereen is weg"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: group.presence_geofence
-      to: 'not_home'
-    condition:
-
+      entity_id: binary_sensor.everybody_away
+      to: 'on'
     action:
+      - service: script.turn_on
+        entity_id: script.leaving
       - service: script.notify_prowl
         data_template:
           value1: 'Afwezigheidsmelding: '
@@ -120,120 +425,35 @@ automation:
           who: 'ralph'
           prio: -2
 
+  ## Updated V1.8.0
   ## Test if anybody comes home and perform actions
+  ## Upgraded to use advanced presense (V1.4.0)
   - alias: "Er komt iemand thuis"
     hide_entity: false
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
-      from: 'not_home'
-      to: 'home'
-    condition:
-
+      entity_id: input_select.ralph_status_dropdown, input_select.anneke_status_dropdown, input_select.kimberly_status_dropdown
+      to: 'Home'
     action:
       - service: script.notify_prowl
         data_template:
           value1: 'Aanwezigheidsmelding: '
           value2: '{{ trigger.to_state.attributes.friendly_name }}'
-          value3: ' komt thuis'
+          value3: ' is thuis'
           who: 'ralph'
           prio: -2
 
-  ## Switch on porch light when someone arrives home
-  - alias: "Buitenlamp bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id: device_tracker.owntracks_anneke_s7, device_tracker.owntracks_kimberly_s7, device_tracker.owntracks_ralph_iphone7
-      from: 'not_home'
-      to: 'home'
-    condition:  
-      condition: or
-      conditions:     
-        - condition: sun
-          after: sunset
-        - condition: sun
-          before: sunrise
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_porch_light
-      - service: timer.start
-        data:
-          entity_id: timer.porchlight
-
-  ## Switch on hallway light when someone arrives home
-  - alias: "Halletje aan bij thuiskomst"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: 
-          - binary_sensor.neo_coolcam_front_door
-        to: 'on'
-    condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.domo_porch_light
-          state: 'on'
-        - condition: sun
-          after: sunset
-          after_offset: "00:15:00"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: input_boolean.domo_hallway_light
-      - service: timer.start
-        data:
-          entity_id: timer.hallwaylight     
-
-  ## Switch off porchlight based on timer
-  - alias: "Buitenlamp uit xx minuten na trigger"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.porchlight
-    condition:
-
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.domo_porch_light
-
-   ## Switch off hallway light based on timer
-  - alias: "Halletje uit xx minuten na trigger"
-    hide_entity: false
-    initial_state: 'on'
-    trigger:
-      platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.hallwaylight
-    condition:
-
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.domo_hallway_light
-
-
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
-timer:
-  porchlight:
-    duration: '00:10:00'
-  hallwaylight:
-    duration: '00:02:00'

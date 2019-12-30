@@ -1,0 +1,165 @@
+## Conditional buttons for Radio
+- type: conditional
+  conditions:
+    - entity: 'switch.radio'
+      state: 'on' 
+  card:
+    type: vertical-stack
+    cards:
+      ## Conditional buttons for radio. 1st row (empty as seperator)
+      - type: horizontal-stack
+        cards: 
+          - type: custom:button-card
+            color_type: blank-card
+      ## Conditional buttons for Radio. 2nd row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: radio
+              - icon: volume-plus
+              - device: Versterker
+              - command: VolumeUp
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 1 
+              - device: Humax
+              - command: 1
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 2
+              - device: Humax
+              - command: 2
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 3
+              - device: Humax
+              - command: 3
+          - type: custom:decluttering-card
+            template: media_button_small_text_2
+            variables:
+              - switch: radio
+              - name: CH+
+              - device: Humax
+              - command: ChannelUp
+      ## Conditional buttons for Radio. 3rd row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: radio
+              - icon: volume-minus
+              - device: Versterker
+              - command: VolumeDown
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 4 
+              - device: Humax
+              - command: 4
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 5
+              - device: Humax
+              - command: 5
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 6
+              - device: Humax
+              - command: 6
+          - type: custom:decluttering-card
+            template: media_button_small_text_2
+            variables:
+              - switch: radio
+              - name: CH1
+              - device: Humax
+              - command: ChannelDown
+      ## Conditional buttons for Radio. 4th row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_icon
+            variables:
+              - switch: radio
+              - icon: volume-mute
+              - device: Versterker
+              - command: Mute
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 7 
+              - device: Humax
+              - command: 7
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 8
+              - device: Humax
+              - command: 8
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: 9
+              - device: Humax
+              - command: 9
+          - type: custom:decluttering-card
+            template: media_button_small_text_3
+            variables:
+              - switch: radio
+              - name: Stereo
+              - device: Versterker
+              - command: ModeStereo
+      ## Conditional buttons for Radio. 5th row
+      - type: horizontal-stack
+        cards: 
+          - type: custom:decluttering-card
+            template: media_button_small_text_3
+            variables:
+              - switch: radio
+              - name: TV/Radio
+              - device: Humax
+              - command: TvRadio
+          - type: conditional
+            conditions:
+              - entity: switch.radio
+                state: 'on'
+            card:    
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_text_1
+            variables:
+              - switch: radio
+              - name: '0'
+              - device: Humax
+              - command: 0
+          - type: conditional
+            conditions:
+              - entity: switch.radio
+                state: 'on'
+            card:    
+              type: custom:button-card
+              color_type: blank-card
+          - type: custom:decluttering-card
+            template: media_button_small_text_3
+            variables:
+              - switch: radio
+              - name: Direct
+              - device: Versterker
+              - command: ModeDirect

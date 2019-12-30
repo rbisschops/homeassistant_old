@@ -1,22 +1,23 @@
-# Package file for Zigbee2mqtt control from Home Assistant
-# Type: Home Assistant yaml file
-# Date: 18-05-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
+## Package file for Zigbee2mqtt control from Home Assistant
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Code cleaning
 
 ###############################################################################
-#                               Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 
-# Input select for Zigbee2mqtt debug level
 input_select:
+  ## Input select for Zigbee2mqtt debug level
   zigbee2mqtt_log_level:
     name: Zigbee2mqtt Log Level
     options:
@@ -27,22 +28,22 @@ input_select:
     initial: info
     icon: mdi:format-list-bulleted
 
-# Input boolean for enabling/disabling joining
 input_boolean:
+  ## Input boolean for enabling/disabling joining
   zigbee_permit_join:
     name: Allow devices to join
     initial: off
     icon: mdi:cellphone-wireless
 
-# Sensor for monitoring the bridge state
 sensor:
+  ## Sensor for monitoring the bridge state
   - platform: mqtt
     name: Zigbee2mqtt Bridge state
     state_topic: "zigbee2mqtt/bridge/state"
     icon: mdi:router-wireless
 
-# Switch for enabling joining
 switch:
+  ## Switch for enabling joining
   - platform: mqtt
     name: "Zigbee2mqtt Main join"
     state_topic: "zigbee2mqtt/bridge/config/permit_join"
@@ -51,7 +52,7 @@ switch:
     payload_off: "false"
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
   zigbee_group:
@@ -70,7 +71,7 @@ group:
       - automation.zigbee2mqtt_log_level
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
   - alias: Zigbee2mqtt Log Level
@@ -144,21 +145,21 @@ automation:
         entity_id: input_boolean.zigbee_permit_join
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 
-# Timer for joining time remaining (120 sec = 2 min)
 timer:
+  ## Timer for joining time remaining (120 sec = 2 min)
   zigbee_permit_join:
     name: Time remaining
     duration: 120

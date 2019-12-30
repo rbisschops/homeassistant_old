@@ -1,0 +1,19 @@
+## Device trackers configuration file for Home Assistant  
+## Type: Home Assistant yaml file
+## Date: 04-04-2018
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Clean-up
+## V0.3.0:  Moved to homeassistant root
+
+###############################################################################
+##  Homeassistant settings
+###############################################################################
+- platform: netgear
+  host: !secret ip_netgear
+  password: !secret netgear_password
+  exclude: 
+    - !secret mac_ubiquiti_ap_1
+    - !secret mac_homeserver

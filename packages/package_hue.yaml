@@ -1,22 +1,28 @@
-# Package file for Home Assistant, used for setting the Hue scenes  
-# Type: Home Assistant yaml file
-# Date: 27-02-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.1.1:  Minor comments updates
-# V0.1.2:  Update group name
-# V0.1.3:  Removed Verlichting uit as its not a real Hue scene 
-# V0.2.0:  Major update for HA 
-# V1.0.0:  Production version 1.0.0
-# V1.1.0:  Added group living_room_hue_lights (from groups) 
+## Package file for Home Assistant, used for setting the Hue scenes  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Minor comments updates
+## V0.1.2:  Update group name
+## V0.1.3:  Removed Verlichting uit as its not a real Hue scene 
+## V0.2.0:  Major update for HA 
+## V1.0.0:  Production version 1.0.0
+## V1.1.0:  Added group living_room_hue_lights (from groups) 
+## V1.1.1:  Cleanup code
+## V1.2.0:  Added scrips for controlling hue lamps direct (without using scenes)
+## V1.3.0:  Moved in input select for hue modes (from package_livingroom)
+## V1.4.0   Added light groups for hue lamps as light.xxx
+## V1.5.0:  Added manual control over custom Hue scenes (not using the Hue bridge)
+## V1.6.0:  Changed code for a number of scripts and automations (simplifying code)
 
-# Notes: Scenes are stored in the Hue Bridge and can be 
-# edited with the Hue V1 and/or V2 App
+## Notes: Scenes are also stored in the Hue Bridge and can be
+## edited with the Hue V1 and/or V2 App
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 homeassistant:
@@ -31,16 +37,74 @@ hue:
       filename: phue_bridge.conf
       allow_unreachable: true
       allow_hue_groups: true
-#    - host: !secret ip_ha_bridge
-#      filename: phue_emulator.conf
-#      allow_unreachable: true
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 
-# Input selectors for scenes and Rooms
+input_boolean:
+  ## Added V1.5.0
+  ## Input booleans used for selecting the scene for the Hue lamps
+  ## Used in the UI and in the script hue_set
+  scene_normal:
+    name: Normaal
+  scene_relax:
+    name: Ontspannen
+  scene_reading:
+    name: Lezen
+  scene_concentrate:
+    name: Concentratie
+  scene_cleaning:
+    name: Schoonmaken
+  scene_dimmed:
+    name: Gedimd
+  scene_energy:
+    name: Energie
+  scene_clear:
+    name: Helder
+  scene_nightlight:
+    name: Nachtlampje
+  scene_christmas:
+    name: Kerst
+
+## Input selectors for scenes and Rooms
 input_select:
+  ## Added V1.5.0
+  ## Selector for setting the previous state of selector switches. Used for toggling them
+  ## off when a new scene is selected. Used in the script hue_set.
+  scene_old_status:
+    name: Oude hue scene
+    icon: mdi:lightbulb
+    options:
+      - normal
+      - relax
+      - reading
+      - concentrate
+      - cleaning
+      - dimmed
+      - energy
+      - clear
+      - nightlight
+      - christmas
+  ## Added V1.5.0
+  ## Selector for setting the current state of selector switches. Used for toggling them
+  ## on when a new scene is selected. Used in the script hue_set.
+  scene_current_status:
+    name: Nieuwe hue scene
+    icon: mdi:lightbulb
+    options:
+      - normal
+      - relax
+      - reading
+      - concentrate
+      - cleaning
+      - dimmed
+      - energy
+      - clear
+      - nightlight
+      - christmas
+  ## Classic selectors for scenes and Rooms (used to manage the HUe bridge scenes)
+  ## Depricated selectors 
   hue_scenes:
     name: Licht scenes woonkamer
     icon: mdi:lightbulb
@@ -55,6 +119,7 @@ input_select:
       - Schoonmaken
       - TV mode
       - Verlichting aan
+      - Zonsondergang
     initial: Verlichting aan
   hue_groups:
     name: Ruimte
@@ -63,12 +128,43 @@ input_select:
       - Woonkamer
       - Keuken
     initial: Woonkamer
+  ## Mode selector for the lights in the livingroom.
+  ## Used for the modes the light can be set to from media center
+  livingroom_lights_mode:
+    name: Verlichtsmode Woonkamer
+    options:
+      - Normaal
+      - Video
+    initial: Normaal
+    icon: mdi:lightbulb
+
+## Added V1.4.0
+light:
+  ## light groups for setting the Hue lights. Present itself as light.xxx 
+  - platform: group
+    name: Woonkamer Hue
+    entities:  
+      - light.lage_kast_links
+      - light.lage_kast_rechts
+      - light.staande_lamp_links
+      - light.staande_lamp_rechts
+  - platform: group
+    name: Lage kasten Hue
+    entities:
+      - light.lage_kast_links
+      - light.lage_kast_rechts
+  - platform: group
+    name: Staande lampen Hue
+    entities:
+      - light.staande_lamp_links
+      - light.staande_lamp_rechts
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
-# Group with the Scenes, Rooms and script, used in the UI
+## Group with the Scenes, Rooms and script, used in the UI
+## Deprcicated group
 group:
   hue_light_control:
     name: Verlichting
@@ -78,31 +174,81 @@ group:
       - input_select.hue_scenes
       - input_select.hue_groups
       - script.set_hue_scene
-  living_room_hue_lights:
-    name: Verlichting woonkamer
-    entities:
-      - light.lage_kast_links
-      - light.lage_kast_rechts
-      - light.staande_lamp_links
-      - light.staande_lamp_rechts
-      - group.hue_light_control     
 
 ###############################################################################
-#                              Automations
+##  Automations
+###############################################################################
+automation:
+  ## Added V1.5.0
+  ## Automation for selecting the Hue scenes form the UI
+  - alias: "Scene verlichting woonkamer"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id:
+        - input_boolean.scene_normal
+        - input_boolean.scene_relax
+        - input_boolean.scene_reading
+        - input_boolean.scene_concentrate
+        - input_boolean.scene_cleaning
+        - input_boolean.scene_dimmed
+        - input_boolean.scene_energy
+        - input_boolean.scene_clear
+        - input_boolean.scene_nightlight
+        - input_boolean.scene_christmas
+      to: 'on'
+    action:
+      - service: script.scene_set
+        data_template:
+          new_scene: >
+            {% set trigger = trigger.to_state.object_id|replace("scene_","") %}
+            {{ trigger }}
+          old_scene: '{{ states.input_select.scene_current_status.state }}'
+
+###############################################################################
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Templates
+##  Scripts
 ###############################################################################
 
-
-###############################################################################
-#                              Scripts
-###############################################################################
-
-## Script for setting the Hue scene manual
 script:
+  ## Added V1.5.0
+  ## Set hue scene based on button from lovelace home tab
+  ## Called form automation.scene_verlichting_woonkamer
+  scene_set:
+    alias: Set Hue scenes vanuit home knoppen
+    sequence:
+      - condition: template
+        value_template: >-
+          {% if new_scene == old_scene %}
+            false
+          {% else %}
+            true
+          {% endif %}
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.scene_old_status
+          option: '{{ old_scene }}'
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.scene_current_status
+          option: '{{ new_scene }}'
+      - service: input_boolean.turn_off
+        data_template:
+          entity_id: >-
+            {% set entity = "input_boolean.scene_" ~ old_scene %}
+            {{ entity }}
+      - service: script.set_hue_scene_manual
+        data_template:
+          profile_value: >
+            {{ new_scene }}
+
+  ## Script for setting the Hue scene manual
+  ## Deprecated script
   manual_set_hue_scene:
     alias: Set Hue scenes handmatig
     sequence: 
@@ -111,8 +257,9 @@ script:
           group: '{{ states.input_select.hue_groups.state }}'
           name: '{{ states.input_select.hue_scenes.state }}'
 
-## Script for setting the Hue scene manual
-# used by multiple packages (media_center)
+  ## Script for setting the Hue scene manual
+  ## used by multiple packages (media_center)
+  ## Deprecated script
   set_hue_scene:
     alias: Send Hue scene naar Hue Bridge
     sequence: 
@@ -121,7 +268,128 @@ script:
           group_name: '{{ group }}'
           scene_name: '{{ name }}'
 
+  ## Added V1.2.0, Updated V1.6.0
+  ## Script for setting Hue lamps in video or normal mode
+  ## used in package_media_center
+  hue_mode_change:
+    alias: Licht aanpassen voor video of normale mode
+    sequence:
+      - service: script.set_hue_scene_auto
+        data_template:
+          brightness_value: >
+            {{ '90,100' if is_state('input_select.livingroom_lights_mode','Video') else '100,150' }}
+          profile_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
+          transition: 5
+
+  ## Updated V1.6.0
+  ## Script for setting Hue lamps from a mode into a new mode
+  ## Usage: call this script from any other automation or script.
+  ## Variables: brightness_start_value, brightness_stop_value, profile_value
+  set_hue_scene_transition:
+    alias: Set hue mode automatisch
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          brightness: >
+            {{ brightness_start_value.split(',')[0]|int }}
+          profile: >
+            {{ '{}_1'.format(profile_start_value) }}
+      - service: light.turn_on
+        data_template:
+          entity_id: light.staande_lampen_hue
+          brightness: >
+            {{ brightness_start_value.split(',')[1]|int }}
+          profile: >
+            {{ '{}_2'.format(profile_start_value) }}
+      - delay:
+          seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          brightness: >
+            {{ brightness_stop_value.split(',')[0]|int }}
+          profile: >
+            {{ '{}_1'.format(profile_stop_value) }}
+          transition: "{{ transition|float }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: light.staande_lampen_hue
+          brightness: >
+            {{ brightness_stop_value.split(',')[1]|int }}
+          profile: >
+            {{ '{}_2'.format(profile_stop_value) }}
+          transition: "{{ transition|float }}"
+
+  ## Updated V1.6.0
+  ## Script for setting Hue lamps into a new mode (from off)
+  ## Usage: call this script from any other automation or script.
+  ## Variables: brightness_value, profile_value
+  set_hue_scene_auto:
+    alias: Set hue mode overgang naar andere scene
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          brightness: >
+            {{ brightness_value.split(',')[0]|int }}
+          profile: >
+            {{ '{}_1'.format(profile_value) }}
+          transition: "{{ transition|float }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: light.staande_lampen_hue
+          brightness: >
+            {{ brightness_value.split(',')[1]|int }}
+          profile: >
+            {{ '{}_2'.format(profile_value) }}
+          transition: "{{ transition|float }}"
+
+  ## Added V1.5.0, Updated V1.6.0
+  ## Script for setting Hue lamps into a new mode (manually initiated for UI)
+  ## Usage: call this script from any other automation or script. 
+  ## Variables: profile_value
+  set_hue_scene_manual:
+    alias: Set hue mode handmatig
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          profile: >
+            {{ '{}_1'.format(profile_value) }}
+          transition: 2
+      - service: light.turn_on
+        data_template:
+          entity_id: light.staande_lampen_hue
+          profile: >
+            {{ '{}_2'.format(profile_value) }}
+          transition: 2
+
+  ##----------------------------------------------
+  ## Test scripts >> Remove ASAP after testing 
+  ##----------------------------------------------
+
+  ## Added V1.2.0
+  ## Test script for setting Hue lamps
+  ## used in package_livingroom
+  lights_adjust_test:
+    alias: licht test aanpassen
+    sequence:
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          brightness: 1
+          xy_color: [0.3698, 0.3723]
+      - delay:
+          seconds: 1
+      - service: light.turn_on
+        data_template:
+          entity_id: light.lage_kasten_hue
+          brightness: 255
+          transition: 10
+
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 

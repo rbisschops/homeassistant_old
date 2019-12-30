@@ -1,36 +1,37 @@
-# Package file for Home Assistant, used for weather  
-# Type: Home Assistant yaml file
-# Date: 14-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added buienradar camera
-# V0.3.0:  Removed DarkSky
-# V1.0.0:  Production version 1.0
-# V1.1.0:  Added tiemframe for buienradar sensor
+## Package file for Home Assistant, used for weather  
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added buienradar camera
+## V0.3.0:  Removed DarkSky
+## V1.0.0:  Production version 1.0
+## V1.1.0:  Added timeframe for buienradar sensor
+## V1.1.1:  Code cleaning
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 
 camera:
-  ## CAMERA USED FOR BUIENRADAR
+  ## Camera used for buienradar
   - platform: generic
     name: buienradar
     still_image_url: 'https://api.buienradar.nl/image/1.0/RadarMapNL?w=256h=256'
 
 weather:
-  ## WEATHER PLATFORM
+  ## Weather platform
   - platform: buienradar  
 
 sensor:
-  # BUIENRADAR
+  ## Buienradar
   - platform: buienradar
     timeframe: 10
     monitored_conditions:
@@ -54,7 +55,7 @@ sensor:
       - irradiance
       - precipitation_forecast_average
       - precipitation_forecast_total
-      # Forecast
+      ## Forecast
       - rainchance_1d
       - rainchance_2d
       - rainchance_3d
@@ -72,25 +73,25 @@ sensor:
       - symbol_5d
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################

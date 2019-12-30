@@ -1,44 +1,260 @@
-# Lovelace-UI file for Home Assistant, Home page view
-# Type: Home Assistant yaml file
-# Date: 13-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added waste bin icons
+## Lovelace-UI file for Home Assistant, Home page view
+## Type: Home Assistant yaml file
+## Date: 07-12-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added waste bin icons
+## V0.3.0:  Updated presence sensors
+## v0.4.0:  Added christmas buttons (conditional)
+## V0.5.0:  Added scenes for Hue lamps (as selector)
 
 title: Home
 icon: 'mdi:home'
 theme: nest
 
-#background: center / cover no-repeat url("/local/background_grey.jpg") fixed
+# background: center / cover no-repeat url("/local/background_grey.jpg") fixed
 background: "#e3e3e3"
 cards:
+  ## Presence cards
   - type: vertical-stack
     cards:
-      - type: glance
-        show_state: false
-        entities:
-        - entity: binary_sensor.alarm
-        - entity: binary_sensor.doors
-        - entity: binary_sensor.windows
-      - type: glance
-        show_state: false
-        show_name: true
-        entities:
-        - entity: binary_sensor.gft
-        - entity: binary_sensor.pmd
-      - type: glance
-        show_state: false
-        show_name: false
-        entities:
-        - entity: binary_sensor.people_home
-        - entity: binary_sensor.anneke_home
-        - entity: binary_sensor.kimberly_home
-        - entity: binary_sensor.ralph_home
-  - type: vertical-stack
-    cards:
-      - type: weather-forecast
-        title: Weer
-        entity: weather.br_unknown_station
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Aanwezigheid
+    - type: glance
+      show_state: false
+      show_name: false
+      entities:
+      - entity: binary_sensor.people_home
+      - entity: binary_sensor.anneke_home
+      - entity: binary_sensor.kimberly_home
+      - entity: binary_sensor.ralph_home
 
+  ## Alarm cards
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Huis status
+    - type: horizontal-stack
+      cards:
+      - type: vertical-stack
+        cards:
+        - type: custom:decluttering-card
+          template: custom_markdown_card_small
+          variables:
+            - title: Alarmen
+        - type: glance
+          show_state: false
+          entities:
+          - entity: binary_sensor.alarm
+          - entity: binary_sensor.doors
+          - entity: binary_sensor.windows
+      - type: vertical-stack
+        cards:
+        - type: custom:decluttering-card
+          template: custom_markdown_card_small
+          variables:
+            - title: Vuilnisbakken
+        - type: glance
+          show_state: false
+          show_name: true
+          entities:
+          - entity: binary_sensor.gft
+          - entity: binary_sensor.pmd
+
+  ## Control cards
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Bedienen
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichting
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.livingroom_lights
+            - name: Woonkamer 
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.highcabinets
+            - name: Hoge kasten
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.gardenlight
+            - name: Tuin 
+            - icon: lightbulb
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.barlight
+            - name: Bar 
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.hallwaylight 
+            - name: Halletje
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.porchlight 
+            - name: Buitenlamp 
+            - icon: lightbulb
+
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Verlichtings mode
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_normal
+            - name: Normaal 
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_relax
+            - name: Ontspannen
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_reading
+            - name: Lezen 
+            - icon: lightbulb
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_concentrate
+            - name: Concentratie
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_cleaning 
+            - name: Schoonmaken
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_dimmed 
+            - name: Gedimd
+            - icon: lightbulb
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_energy
+            - name: Energie
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_clear
+            - name: Helder
+            - icon: lightbulb
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: input_boolean.scene_nightlight
+            - name: Nachtlampje
+            - icon: lightbulb
+    - type: conditional
+      conditions:
+        - entity: 'input_boolean.christmas_mode'
+          state: 'on' 
+      card:
+        type: horizontal-stack
+        cards:
+          - type: custom:decluttering-card
+            template: light_button_large
+            variables: 
+              - entity: input_boolean.scene_christmas
+              - name: Kerst
+              - icon: lightbulb
+          - type: custom:button-card
+            color_type: blank-card
+          - type: custom:button-card
+            color_type: blank-card
+
+
+
+    ## Added V0.4.0
+    - type: conditional
+      conditions:
+        - entity: 'input_boolean.christmas_mode'
+          state: 'on' 
+      card:
+        type: custom:decluttering-card
+        template: custom_markdown_card_small
+        variables:
+          - title: Kerstversiering
+    - type: conditional
+      conditions:
+        - entity: 'input_boolean.christmas_mode'
+          state: 'on' 
+      card:
+        type: horizontal-stack
+        cards:
+          - type: custom:decluttering-card
+            template: light_button_large
+            variables: 
+              - entity: input_boolean.christmastree
+              - name: Kerstboom 
+              - icon: pine-tree
+          - type: custom:button-card
+            color_type: blank-card
+          - type: custom:button-card
+            color_type: blank-card
+
+    - type: custom:decluttering-card
+      template: custom_markdown_card_small
+      variables:
+        - title: Diversen
+    - type: horizontal-stack
+      cards:
+        - type: custom:decluttering-card
+          template: light_button_large
+          variables: 
+            - entity: switch.tradfri_media_switch 
+            - name: Media center 
+            - icon: television
+        - type: custom:button-card
+          color_type: blank-card
+        - type: custom:button-card
+          color_type: blank-card
+
+  ## Weather card
+  - type: vertical-stack
+    cards:
+    - type: custom:decluttering-card
+      template: custom_markdown_card
+      variables:
+        - title: Weer
+    - type: weather-forecast
+      title: Weer
+      entity: weather.br_unknown_station

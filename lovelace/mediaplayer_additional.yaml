@@ -1,0 +1,113 @@
+## Additional selectors and information stack 
+## (hidden for normal use)
+- type: vertical-stack
+  cards:
+  - type: entities
+    show_state: false
+    show_name: false
+    show_header_toggle: false
+    title: Media Center
+    entities:
+      - type: section
+        label: Afstandsbediening
+      - entity: remote.bisschops
+      - type: section
+        label: Instellingen
+      - entity: input_select.harmony_livingroom
+      - entity: input_select.test_old_status
+      - type: section
+        label: Homeassistant entities
+      - entity: switch.tradfri_media_switch
+      - entity: input_boolean.enable_media_buttons
+      - entity: timer.media_center_delay
+      - type: section
+        label: Schakelaars Harmony
+      - entity: switch.television
+      - entity: switch.smarttv
+      - entity: switch.netflix
+      - entity: switch.spotify
+      - entity: switch.mediaplayer
+      - entity: switch.appletv
+      - entity: switch.radio
+      - entity: switch.music
+      - entity: switch.poweroff
+
+###############################################################
+# Code kept for reference:
+# - type: custom:button-card
+#   entity: input_boolean.television
+#   icon: mdi:television
+#   size: 40%
+#   color_type: card
+#   color: rgb(255, 131, 0)
+#   action: toggle
+#   name: Televisie
+#   style:
+#     - font-size: 1.2em
+#     - font-weight: normal
+#     - border-radius: 10px
+
+# - type: conditional
+#   conditions:
+#     - entity: switch.radio
+#       state: 'on'
+#   card:
+#     type: custom:button-card
+#     color_type: card
+#     color: rgb(84, 84, 84)            
+#     action: service
+#     service:
+#       domain: remote
+#       action: send_command
+#       data: 
+#         entity_id: remote.bisschops
+#         device: Versterker
+#         command: 'VolumeUp'
+#     icon: mdi:volume-plus
+#     size: 80% 
+#     style:
+#       - height: 40px
+
+# - type: conditional
+#   conditions:
+#     - entity: switch.radio
+#       state: 'on'
+#   card:
+#     type: custom:button-card
+#     color_type: card
+#     color: rgb(255, 131, 0)            
+#     action: service
+#     service:
+#       domain: remote
+#       action: send_command
+#       data: 
+#         entity_id: remote.bisschops
+#         device: Humax
+#         command: '1'
+#     name: '1'
+#     style:
+#       - font-size: 2.0em
+#       - font-weight: normal
+#       - height: 40px
+
+# - type: conditional
+#   conditions:
+#     - entity: switch.radio
+#       state: 'on'
+#   card:
+#     type: custom:button-card
+#     color_type: card
+#     color: rgb(84, 84, 84)            
+#     action: service
+#     service:
+#       domain: remote
+#       action: send_command
+#       data: 
+#         entity_id: remote.bisschops
+#         device: Humax
+#         command: 'ChannelUp'
+#     name: 'CH+'
+#     style:
+#       - font-size: 1.5em
+#       - font-weight: normal
+#       - height: 40px

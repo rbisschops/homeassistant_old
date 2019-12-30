@@ -1,46 +1,62 @@
-# Package file for Home Assistant, used for alarms 
-# Type: Home Assistant yaml file
-# Date: 22-03-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added bed time automation and scripts
-# V0.2.1:  Changed bed time script
-# V0.2.2:  Changed domoticz entertainment switch to Tradfri
-# V0.3.0:  Moved input select toliet heating to package_toilet
-# V0.3.1:  Added Tradfri testswitch
-# V0.3.2:  Minor code clean
-# V0.4.0:  Removed Tradfri testswitch
-# V0.4.1:  Added condition recording mode in bedtime script 
-# V0.5.0:  Added test services in script for toilet heating
-# V0.5.1:  Added toilet heating settings to the the bed time script 
-# V0.6.0:  Added template sensors for waste bin schedular 
+## Package file for Home Assistant, used for miscellaneous configs
+## Type: Home Assistant yaml file
+## Date: 06-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added bed time automation and scripts
+## V0.2.1:  Changed bed time script
+## V0.2.2:  Changed domoticz entertainment switch to Tradfri
+## V0.3.0:  Moved input select toliet heating to package_toilet
+## V0.3.1:  Added Tradfri testswitch
+## V0.3.2:  Minor code clean
+## V0.4.0:  Removed Tradfri testswitch
+## V0.4.1:  Added condition recording mode in bedtime script 
+## V0.5.0:  Added test services in script for toilet heating
+## V0.5.1:  Added toilet heating settings to the the bed time script 
+## V0.6.0:  Added template sensors for waste bin schedular 
+## V0.7.0:  Added comments and some code cleaning
+## V0.8.0:  Remover Domo Virtual heating from script
+## V0.9.0:  Added leaving autoamtions and scripts
+## V0.10.0: Added extended away script
+## V0.11.0: Added hallway and porchlight on with timer to leaving script
+## V0.12.0: Added sunset automations and scripts
+## V0.13.0: Updated all hue light related scripts
+##          Updated all climate rlated scripts
 
 ###############################################################################
-#                               Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
   
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_boolean:
-## Holiday mode toggle switch, used for setting when on holiday 
-## Several automations depend on this
+  ## Holiday mode toggle switch, used for setting when on holiday 
+  ## Several automations depend on this
   holiday_mode:
     name: Vakantie mode aan
     icon: mdi:toggle-switch
-    initial: off
 
-## Definition of workdays with the workday sensor
-## Used in several automations
+  ## Christmas mode toggle switch, used for setting when on ehem the holiday season is there 
+  ## Several automations depend on this
+  christmas_mode:
+    name: Kerst periode
+    icon: mdi:toggle-switch
+
 binary_sensor:
+  ## Definition of workdays with the workday sensor
+  ## Used in several automations
   - platform: workday
     country: NL
     workdays: [mon, tue, wed, thu, fri, sat]
     excludes: [sun]
 
+  ## Definition of the GFT (Bio) garbage bin
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put the bin out" notifications
   - platform: template
     sensors:
       gft:
@@ -60,6 +76,9 @@ binary_sensor:
         entity_picture_template: >-
           {{ '/local/custom_icons/gft48_' ~ states.binary_sensor.gft.state ~ '.png' }}
 
+  ## Definition of the PMD (Platic and metal) garbage bin
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put the bin out" notifications
   - platform: template
     sensors:
       pmd:
@@ -79,15 +98,35 @@ binary_sensor:
         entity_picture_template: >-
           {{ '/local/custom_icons/pmd48_' ~ states.binary_sensor.pmd.state ~ '.png' }}
 
+  ## Definition of the PMD and GFT (Plastic and metal and bio) garbage bins
+  ## Depends on google calendar for afval_kalender
+  ## Used for sending "put both bins out" notifications
+  - platform: template
+    sensors:
+      gft_pmd:
+        friendly_name: 'GFT en PMD'
+        value_template: >-
+          {% if is_state('calendar.afval_kalender', 'on') %}
+            {% if state_attr('calendar.afval_kalender', 'message') == 'GFT + PMD' %}
+              true
+            {% else %}
+              false
+            {% endif %}
+          {% else %}
+            false
+          {% endif %}
+
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 
 
 ###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
+  ## Automation for runnning the bed time script 
+  ## Called by Alexa via HA Bridge
   - alias: "Bed mode ingeschakeld"
     hide_entity: false
     initial_state: 'on'
@@ -100,35 +139,320 @@ automation:
       - service: script.turn_on
         entity_id: script.bedtime
 
+  ## Automation for running the coming home script
+  ## Called by the front door sensor
+  - alias: "Coming home mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - binary_sensor.neo_coolcam_front_door
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.livingroom_lights
+          state: 'off'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_select.ralph_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.anneke_status_dropdown
+              state: 'Just Arrived'
+            - condition: state
+              entity_id: input_select.kimberly_status_dropdown
+              state: 'Just Arrived'
+    action:
+      - service: script.turn_on
+        entity_id: script.coming_home
+
+  ## Automation for runnning the leaving script
+  ## Called by Alexa via HA Bridge
+  - alias: "Leaving mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.habridge_leaving
+      to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.leaving
+
+  ## Added V0.10.0
+  ## Automation for runnning the extended away script
+  ## Called from binary sensor Extended Away
+  ## Note: Potentially replace binary_sensor.everybody_extended_away with a group
+  - alias: "Extended away mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.everybody_extended_away
+      to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.extended_away
+
+  ## Automation for running the sunset script
+  ## Triggered based on sunset minus offset 
+  - alias: "Zonsondergang mode ingeschakeld"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '-01:00:00'
+    action:
+      - service: script.turn_on
+        entity_id: script.sunset
+
+  ## Automation to run when the garbage bins need to go out for collection
+  ## Tiggered by sensors based on Google calendar entries
+  - alias: "Vuilnisbak aan de straat"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: 
+      - binary_sensor.gft
+      - binary_sensor.pmd
+      - binary_sensor.gft_pmd
+      to: 'on'
+    action:
+      - service: script.notify_telegram_ralph
+        data_template:
+          value1: 'Vandaag moet de '
+          value2: '{{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' bak buiten worden gezet'
+      - service: script.notify_telegram_anneke
+        data_template:
+          value1: 'Vandaag moet de '
+          value2: '{{ trigger.to_state.attributes.friendly_name }}'
+          value3: ' bak buiten worden gezet'
+
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 script:
+  ## Script running when we go to bed, sets the house in sleep mode
   bedtime:
     alias: Bedtime script
     sequence:
+      ## Switch off the outdoor lighting
       - service: homeassistant.turn_off
-        entity_id: input_boolean.domo_garden_light
+        entity_id: input_boolean.gardenlight
+      ## Switch off the christmastree
       - service: homeassistant.turn_off
-        entity_id: input_boolean.domo_virtual_heating        
+        entity_id: input_boolean.christmastree
+        ## Switch off the living room lights
       - service: homeassistant.turn_off
-        entity_id: input_boolean.livingroom_lights_status
-      ## Service added for climate settings toilet  
-      - service: script.set_toilet_heating_mode
-        data_template:
-          mode: 'Energy Heat'
+        entity_id: input_boolean.livingroom_lights
+      ## Change the climate settings for the toilet heating
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.restroom_heating
+          option: 'Spaarstand'
       - condition: state
         entity_id: input_boolean.recording_mode
         state: 'off'
       - service: homeassistant.turn_off
         entity_id: switch.tradfri_media_switch
 
+  ## Added V0.9.0, Updated V0.13.0
+  ## Script when leaving home, also called when everybody is away (from package_presence)
+  leaving:
+    alias: Leaving script
+    sequence:
+      ## Switch off the outdoor lighting
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.gardenlight
+      ## Switch off the living room lights
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.livingroom_lights
+      ## Change the climate settings for the toilet heating
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.restroom_heating
+          option: >
+            {{ 'Uitgeschakeld' if is_state('input_select.restroom_heating','Uitgeschakeld') else 'Spaarstand' }}
+      - service_template: >
+          {% if (states.input_boolean.recording_mode.state == 'off') %}
+            homeassistant.turn_off
+          {% else %}
+            homeassistant.turn_on
+          {% endif %}
+        entity_id: switch.tradfri_media_switch
+      ## Turn on lighting, but only when dark
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      ## Switch on the outdoor lighting
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.porchlight
+      - service: timer.start
+        data_template:
+          entity_id: timer.porchlight
+          duration: '00:{{ states.input_text.timer_minutes_porch_short.state | int }}:00'
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.hallwaylight
+      - service: timer.start
+        data_template:
+          entity_id: timer.hallwaylight
+          duration: '00:{{ states.input_text.timer_minutes_hallwaylight_long.state | int }}:00'
+
+  ## Added V0.9.0, Updated V0.13.0
+  ## Script when someone comes home
+  coming_home:
+    alias: Coming home script
+    sequence:
+      ## Change the climate settings for the toilet heating  
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.restroom_heating
+          option: >
+            {{ 'Uitgeschakeld' if is_state('input_select.restroom_heating','Uitgeschakeld') else 'Verwarmen' }}
+      ## Turn on lighting, but only when dark
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      ## Switch on the outdoor lighting
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.gardenlight
+      - service: homeassistant.turn_on
+        entity_id:
+          - input_boolean.livingroom_lights_status
+      ## Switch on the living room lights
+      # - service: homeassistant.turn_on
+      #   entity_id: input_boolean.livingroom_lights
+      - service: script.set_hue_scene_auto
+        data_template:
+          brightness_value: >
+            {{ '100,150' }}
+          profile_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
+          transition: 2
+      ## Turn on the high cabinets lights
+      - service: homeassistant.turn_on
+        entity_id: 
+          - input_boolean.highcabinets
+          # - switch.tradfri_high_cabinets_switch
+      ## Switch on the living room lights switch
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights
+      ## check if it is christmas time
+      - condition: state
+        entity_id: input_boolean.christmas_mode
+        state: 'on'
+      ## Switch on the chritmas tree lights
+      - service: homeassistant.turn_on
+        entity_id: 
+          - input_boolean.christmastree
+
+  ## Added V0.10.0, updated V0.13.0
+  ## Script everybody extended away
+  extended_away:
+    alias: Iedereen langere tijd weg script
+    sequence:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.restroom_heating
+          option: 'Uitgeschakeld'
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.holiday_mode
+
+  ## Added V0.12.0, updated V0.13.0
+  ## Script running at sunset
+  sunset:
+    alias: Zonsondergang
+    sequence:
+      - condition: state
+        entity_id: binary_sensor.people_home
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.holiday_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.livingroom_lights_status
+        state: 'off'
+      ## Switch on the living room lights switch
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights_status
+      ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_transition
+        data_template:
+          brightness_start_value: >
+            {{ '1,1' }}
+          brightness_stop_value: >
+            {{ '90,100' if is_state('input_select.livingroom_lights_mode','Video') else '100,150' }}
+          profile_start_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
+          profile_stop_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'normal' }}
+          transition: 1800
+      # - service: script.hue_sunset_mode
+      ## start timer for kitchen cabinets, will switch on after xx hour
+      - service: timer.start
+        data_template:
+          entity_id: timer.kitchencabinets_on
+          duration: '00:30:00'
+      ## Switch on the living room lights switch
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.livingroom_lights
+      ## check if it is christmas time
+      - condition: state
+        entity_id: input_boolean.christmas_mode
+        state: 'on'
+      ## start timer for christmas tree, will switch on after xx hour
+      - service: timer.start
+        data_template:
+          entity_id: timer.christmastree_on
+          duration: '00:30:00'
+
+  ##----------------------------------------------
+  ## Test scripts >> Remove ASAP after testing 
+  ##----------------------------------------------
+  
+  ## Added V0.12.0
+  hue_test:
+    alias: hue test
+    sequence:
+      ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_transition
+        data_template:
+          brightness_start_value: >
+            {{ '1,1' }}
+          brightness_stop_value: >
+            {{ '100,150' }}
+          profile_start_value: concentrate
+          profile_stop_value: relax
+          transition: 5
+
+  ## Added V0.13.0
+  hue_test_auto:
+    alias: hue test
+    sequence:
+      ## start hue lampen met de juiste mode
+      - service: script.set_hue_scene_auto
+        data_template:
+          brightness_value: >
+            {{ '50,50' if is_state('input_select.livingroom_lights_mode','Video') else '100,150' }}
+          profile_value: >
+            {{ 'christmas' if is_state('input_boolean.christmas_mode','on') else 'concentrate' }}
+          transition: 5
+
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 

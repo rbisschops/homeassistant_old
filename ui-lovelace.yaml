@@ -1,26 +1,31 @@
-# Lovelace-UI file for Home Assistant
-# Type: Home Assistant yaml file
-# Date: 01-02-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added Utilities view
-# V0.3.0:  Added Decluttering-card V0.2.0
-#          Updated button card to V1.11.1
-#          Added templates for buttn card
-# V0.3.1:  Fix for #0033, button-card action behaviour
+## Lovelace-UI file for Home Assistant
+## Type: Home Assistant yaml file
+## Date: 14-12-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added Utilities view
+## V0.3.0:  Added Decluttering-card V0.2.0
+##          Updated button card to V1.11.1
+##          Added templates for buttn card
+## V0.3.1:  Fix for ##0033, button-card action behaviour
+## V0.4.0:  Added new styles for buttons
+## V0.5.0:  Updated buttoncard V1.1.11 > V3.0.0
+##          Updated mini graph card V0.3.0 > V0.8.2
+##          Updated Custom compact header V1.1.0 > V1.4.9
+##          decluttering card = upto date, card-mod will be updated after migration to V0.10x
 
 ###############################################################################
-#                         Additional resources used
+##  Additional resources used
 ###############################################################################
 
 resources:
-  - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.3.0
+  - url: /local/custom_cards/mini-graph-card-bundle.js?v=0.8.2
     type: module
-  - url: /local/custom_cards/button-card.js?v=1.11.1
+  - url: /local/custom_cards/button-card.js?v=3.0.0
     type: module
-  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js
+  - url: /local/custom_cards/compact-custom-header/compact-custom-header.js?V1.4.9
     type: module
   - url: /local/custom_cards/decluttering-card.js?v=0.2.0
     type: module
@@ -28,8 +33,8 @@ resources:
     type: module
 
 ###############################################################################
-#                      Custom compact header settings
-#             https://github.com/maykar/compact-custom-header
+##  Custom compact header settings
+##  https://github.com/maykar/compact-custom-header
 ###############################################################################
 
 cch:
@@ -44,8 +49,8 @@ cch:
   disable: false
 
 ###############################################################################
-#                      Custom button card templates
-#             https://github.com/custom-cards/button-card
+##  Custom button card templates
+##  https://github.com/custom-cards/button-card
 ###############################################################################
 
 button_card_templates:
@@ -68,6 +73,42 @@ button_card_templates:
         # - background-color: rgb(84, 84, 84)
       icon:
         - color: rgb(84, 84, 84)
+  media_button_small_icon_red:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(140, 0, 0)
+  media_button_small_icon_yellow:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(255, 255, 54)
+  media_button_small_icon_green:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(16, 160, 0)
+  media_button_small_icon_blue:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(84, 84, 84)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(0, 0, 255)
   media_button_small_text_1:
     styles:
       card:
@@ -98,6 +139,46 @@ button_card_templates:
       name:
         - font-size: 1.2em
         - font-weight: bold
+  media_button_small_text_3_red:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(140, 0, 0)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: bold
+  media_button_small_text_3_yellow:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(255, 255, 54)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: bold
+  media_button_small_text_3_blue:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(0, 0, 255)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: bold
+  media_button_small_text_3_green:
+    styles:
+      card:
+        - border-radius: 5px
+        - color: rgb(16, 160, 0)
+        - height: 50px
+        # - background-color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: bold
   stats_button_card_small_icon:
     styles:
       card:
@@ -106,9 +187,20 @@ button_card_templates:
         - font-size: 1.0em
         - font-weight: normal
 
+  light_button_large:
+    styles:
+      card:
+        - border-radius: 10px
+        - color: rgb(84, 84, 84)
+      icon:
+        - color: rgb(84, 84, 84)
+      name:
+        - font-size: 1.2em
+        - font-weight: normal
+
 ###############################################################################
-#                           Settings for Declustering-card
-#               https://github.com/custom-cards/decluttering-card
+##  Settings for Declustering-card
+##  https://github.com/custom-cards/decluttering-card
 ###############################################################################
 
 decluttering_templates:
@@ -140,7 +232,6 @@ decluttering_templates:
         ha-markdown.markdown.no-header {
           padding: 0;
         }
-
   media_button_large:
     card:
       type: custom:button-card
@@ -167,6 +258,54 @@ decluttering_templates:
     card:
       type: custom:button-card
       template: media_button_small_icon
+      icon: 'mdi:[[icon]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_icon_red:
+    card:
+      type: custom:button-card
+      template: media_button_small_icon_red
+      icon: 'mdi:[[icon]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_icon_yellow:
+    card:
+      type: custom:button-card
+      template: media_button_small_icon_yellow
+      icon: 'mdi:[[icon]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_icon_blue:
+    card:
+      type: custom:button-card
+      template: media_button_small_icon_blue
+      icon: 'mdi:[[icon]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_icon_green:
+    card:
+      type: custom:button-card
+      template: media_button_small_icon_green
       icon: 'mdi:[[icon]]'
       tap_action:
         action: call-service
@@ -203,6 +342,54 @@ decluttering_templates:
     card:
       type: custom:button-card
       template: media_button_small_text_3
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_3_red:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_3_red
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_3_yellow:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_3_yellow
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_3_green:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_3_green
+      name: '[[name]]'
+      tap_action:
+        action: call-service
+        service: remote.send_command
+        service_data: 
+          entity_id: remote.bisschops
+          device: '[[device]]'
+          command: '[[command]]'
+  media_button_small_text_3_blue:
+    card:
+      type: custom:button-card
+      template: media_button_small_text_3_blue
       name: '[[name]]'
       tap_action:
         action: call-service
@@ -256,8 +443,31 @@ decluttering_templates:
             icon:
               - color: rgb(56, 150, 56)
 
+  light_button_large:
+    card:
+      type: custom:button-card
+      template:  light_button_large
+      entity: '[[entity]]'
+      icon: 'mdi:[[icon]]'
+      size: 30%
+      show_state: false
+      tap_action:
+        action: toggle
+      name: '[[name]]'
+      state:
+        - value: 'off'
+          styles:
+            card:
+              - color: rgb(84, 84, 84)
+        - value: 'on'
+          styles:
+            card:
+              - color: rgb(56, 150, 56)
+            icon:
+              - color: rgb(56, 150, 56)
+
 ###############################################################################
-#                              Main Lovemace settings
+##  Main Lovemace settings
 ###############################################################################
 
 title: Bisschops Mansion

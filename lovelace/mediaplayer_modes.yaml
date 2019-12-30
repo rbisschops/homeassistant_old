@@ -1,0 +1,83 @@
+## Selection part for media modes.
+## Mode selection, first row 
+- type: horizontal-stack
+  cards:
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.television 
+        - name: Televisie 
+        - icon: television
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.netflix 
+        - name: Netflix 
+        - icon: netflix
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.spotify 
+        - name: Spotify 
+        - icon: spotify
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.smarttv
+        - name: Smart-TV 
+        - icon: television
+## Mode selection, second row
+- type: horizontal-stack
+  cards:
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.mediaplayer 
+        - name: Mediaspeler 
+        - icon: movie
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.appletv 
+        - name: Apple-TV 
+        - icon: apple
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.radio 
+        - name: Radio 
+        - icon: radio
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.music
+        - name: Muziek 
+        - icon: music
+## Mode selection, third row
+- type: horizontal-stack
+  cards:
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables:
+        - entity: input_boolean.dvd
+        - name: DVD
+        - icon: movie
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables:
+        - entity: input_boolean.teletext
+        - name: Teletext
+        - icon: comment-text-outline
+    - type: custom:button-card
+      color_type: blank-card
+    - type: custom:decluttering-card
+      template: media_button_large
+      variables: 
+        - entity: input_boolean.poweroff
+        - name: Uit
+        - icon: power
+## Conditional buttons. 1st row (empty as seperator)
+- type: horizontal-stack
+  cards: 
+    - type: custom:button-card
+      color_type: blank-card

@@ -1,14 +1,14 @@
-# Lovelace-UI file for Home Assistant, Secondfloor view
-# Type: Home Assistant yaml file
-# Date: 30-05-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Moved overleays to the top in the code (see remarks)
-# V.02.1:  Added hallway env sensor 2nd floor
-# V0.3.0:  Changed layout
-# v0.3.1:  Minor color update
+## Lovelace-UI file for Home Assistant, Secondfloor view
+## Type: Home Assistant yaml file
+## Date: 30-05-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Moved overleays to the top in the code (see remarks)
+## V.02.1:  Added hallway env sensor 2nd floor
+## V0.3.0:  Changed layout
+## v0.3.1:  Minor color update
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -20,7 +20,7 @@ cards:
   - type: picture-elements
     image: /local/floorplans/second_floor.png
     elements:
-      # Doors and windows overlays
+      ## Doors and windows overlays
       - type: image
         entity: input_boolean.heating_room_door
         tap_action:
@@ -43,7 +43,7 @@ cards:
           left: 0%
           position: absolute
           transform: translate(0%, 0%)
-      # Outdoor temperature (buienradar)
+      ## Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
         prefix: 'Buiten temperatuur: '
@@ -52,7 +52,6 @@ cards:
           left: 25%
           font-size: 100%
           font-weight: 'bold'
-#          color: var(--text-primary-color)
       - type: state-label
         entity: sensor.rotterdam_humidity
         prefix: 'Relatieve luchtvochtigheid: '
@@ -61,8 +60,7 @@ cards:
           left: 25%
           font-size: 100%  
           font-weight: 'bold'
-#          color: var(--text-primary-color)
-      # Indoor temerature and humdity sensors
+      ## Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_kim
         style:

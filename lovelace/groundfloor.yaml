@@ -1,18 +1,21 @@
-# Lovelace-UI file for Home Assistant, Downstairs view
-# Type: Home Assistant yaml file
-# Date: 12-07-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V1.0.0:  First version
-# V1.1.0:  Added Tradfri switch to replace domo entertainment switch 
-# V1.2.0:  Added Tradfri switch to replace domo high kitchen cabinets
-# V1.2.1:  Minor layout update
-# V1.2.2:  Replaced Trafri switch with domo high kitchen cabinets
-# V1.3.0:  Moved overleays to the top in the code (see remarks)
-# V1.4.0:  Changed layout and updated icons for lamps
-# V1.4.1:  Changed lamp icons
-# V1.4.2:  Minor color updates
+## Lovelace-UI file for Home Assistant, Downstairs view
+## Type: Home Assistant yaml file
+## Date: 12-07-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V1.0.0:  First version
+## V1.1.0:  Added Tradfri switch to replace domo entertainment switch 
+## V1.2.0:  Added Tradfri switch to replace domo high kitchen cabinets
+## V1.2.1:  Minor layout update
+## V1.2.2:  Replaced Trafri switch with domo high kitchen cabinets
+## V1.3.0:  Moved overleays to the top in the code (see remarks)
+## V1.4.0:  Changed layout and updated icons for lamps
+## V1.4.1:  Changed lamp icons
+## V1.4.2:  Minor color updates
+## V1.4.3:  Added overlays for garbage bins
+## V1.5.0:  Updated presence sensors
+## V1.6.0:  Changed everybody away badge to use everybody away instead of people home
 
 ## Remarks:
 ## overlays for doors and other elements need to be on top in the code, otherwise
@@ -24,7 +27,30 @@ cards:
   - type: picture-elements
     image: /local/floorplans/groundfloor.png
     elements:
-      # Appliance doors overlays
+      ## Garbage bins overlays
+      - type: image
+        entity: input_boolean.plastic_bin
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/pmd_bin.png
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      - type: image
+        entity: input_boolean.bio_bin
+        tap_action:
+          action: none
+        state_image:
+          'on': /local/floorplans/overlays/gft_bin.png
+        style:
+          top: 0%
+          left: 0%
+          position: absolute
+          transform: translate(0%, 0%)
+      ## Appliance doors overlays
       - type: image
         entity: binary_sensor.refrigerator_door
         tap_action:
@@ -47,7 +73,7 @@ cards:
           left: 0%
           position: absolute
           transform: translate(0%, 0%)
-      ## Doors and windows overlays
+      ### Doors and windows overlays
       - type: image
         entity: binary_sensor.neo_coolcam_front_door
         tap_action:
@@ -60,7 +86,7 @@ cards:
           position: absolute
           transform: translate(0%, 0%)
       - type: image
-        entity: input_boolean.storage_door
+        entity: binary_sensor.neo_coolcam_storage_door
         tap_action:
           action: none
         state_image:
@@ -137,7 +163,7 @@ cards:
           position: absolute
           transform: translate(0%, 0%)         
 
-      # Outdoor temperature (buienradar)
+      ## Outdoor temperature (buienradar)
       - type: state-label
         entity: sensor.rotterdam_temperature
         prefix: 'Buiten temperatuur: '
@@ -156,7 +182,7 @@ cards:
           font-size: 100%   
           font-weight: 'bold'
 #          color: var(--text-primary-color)
-      # Indoor temerature and humdity sensors
+      ## Indoor temerature and humdity sensors
       - type: state-label
         entity: sensor.room_temp_livingroom
         style:
@@ -211,9 +237,9 @@ cards:
           font-size: 12px
 #          color: '#FFFFFF'
           font-weight: 'bold'
-      # Porch light
+      ## Porch light
       - type: image
-        entity: input_boolean.domo_porch_light
+        entity: input_boolean.porchlight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -225,9 +251,9 @@ cards:
           left: 92%
           position: absolute
           width: 2.5%
-      # Hallway light
+      ## Hallway light
       - type: image
-        entity: input_boolean.domo_hallway_light
+        entity: input_boolean.hallwaylight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -239,7 +265,7 @@ cards:
           left: 71%
           position: absolute
           width: 2.5%
-      # Livingroom lights 
+      ## Livingroom lights 
       - type: image
         entity: light.lage_kast_links
         tap_action:
@@ -292,9 +318,9 @@ cards:
           left: 30%
           position: absolute
           width: 2.5%
-      # Bar lights 
+      ## Bar lights 
       - type: image
-        entity: input_boolean.domo_bar_light
+        entity: input_boolean.barlight
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -306,10 +332,10 @@ cards:
           left: 37%
           position: absolute
           width: 2.5%
-      # High cabinet lights 
+      ## High cabinet lights 
       - type: image
         # entity: switch.tradfri_high_cabinets_switch
-        entity: input_boolean.domo_kitchen_cabinets
+        entity: input_boolean.highcabinets
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_on.png
@@ -323,7 +349,7 @@ cards:
           width: 2.5%
 
 
-      # Home states
+      ## Home states
       - type: image
         entity: input_boolean.holiday_mode
         tap_action:
@@ -352,15 +378,16 @@ cards:
           position: absolute
           transform: translate(0%, -50%)
           width: 3%              
-      # People home/away badges 
+      ## People home/away badges
+      ## Updated V1.6.0 
       - type: image
-        entity: binary_sensor.people_home
+        entity: binary_sensor.everybody_away
         tap_action:
           action: none
         image: /local/custom_icons/people48_on.png
         state_image:
-          'on': /local/custom_icons/people48_on.png
-          'off': /local/custom_icons/people48_off.png 
+          'on': /local/custom_icons/people48_off.png
+          'off': /local/custom_icons/people48_on.png 
         style:
           top: 7%
           left: 48%
@@ -409,9 +436,9 @@ cards:
           position: absolute
           transform: translate(0%, -50%)
           width: 3%
-      # Master switches
+      ## Master switches
       - type: image
-        entity: input_boolean.livingroom_lights_status
+        entity: input_boolean.livingroom_lights
         tap_action:
           action: toggle
         image: /local/custom_icons/lightbulb48_off.png
@@ -424,7 +451,7 @@ cards:
           position: absolute
           transform: translate(0%, -50%)
           width: 3%
-      # Media center status
+      ## Media center status
       - type: image
         entity: switch.tradfri_media_switch
         tap_action:
@@ -439,7 +466,7 @@ cards:
           position: absolute
           width: 2.5% 
 
-      # Alarms
+      ## Alarms
       - type: image
         entity: input_boolean.alarm
         tap_action:

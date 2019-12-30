@@ -1,0 +1,197 @@
+    ## Conditional buttons for Television
+    - type: conditional
+      conditions:
+        - entity: 'switch.television'
+          state: 'off' 
+      card:
+        type: vertical-stack
+        cards:
+          ## Conditional buttons for television. 1st row (empty as seperator)
+          - type: horizontal-stack
+            cards: 
+              - type: custom:button-card
+                color_type: blank-card
+          ## Conditional buttons for Televion. 2nd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-plus
+                  - device: Versterker
+                  - command: VolumeUp
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 1 
+                  - device: Humax
+                  - command: 1
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 2
+                  - device: Humax
+                  - command: 2
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 3
+                  - device: Humax
+                  - command: 3
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: television
+                  - name: CH+
+                  - device: Humax
+                  - command: ChannelUp
+          ## Conditional buttons for Televion. 3rd row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-minus
+                  - device: Versterker
+                  - command: VolumeDown
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 4 
+                  - device: Humax
+                  - command: 4
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 5
+                  - device: Humax
+                  - command: 5
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 6
+                  - device: Humax
+                  - command: 6
+              - type: custom:decluttering-card
+                template: media_button_small_text_2
+                variables:
+                  - switch: television
+                  - name: CH-
+                  - device: Humax
+                  - command: ChannelDown
+          ## Conditional buttons for Televion. 4th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: volume-mute
+                  - device: Versterker
+                  - command: Mute
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 7 
+                  - device: Humax
+                  - command: 7
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 8
+                  - device: Humax
+                  - command: 8
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: 9
+                  - device: Humax
+                  - command: 9
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: Dolby PLII
+                  - device: Versterker
+                  - command: ModeDolbyPLII
+          ## Conditional buttons for Televion. 5th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: TV/Radio
+                  - device: Humax
+                  - command: TvRadio
+              - type: conditional
+                conditions:
+                  - entity: switch.television
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_1
+                variables:
+                  - switch: television
+                  - name: '0'
+                  - device: Humax
+                  - command: 0
+              - type: conditional
+                conditions:
+                  - entity: switch.television
+                    state: 'on'
+                card:    
+                  type: custom:button-card
+                  color_type: blank-card
+              - type: custom:decluttering-card
+                template: media_button_small_text_3
+                variables:
+                  - switch: television
+                  - name: DTS
+                  - device: Versterker
+                  - command: ModeDolbyPLIICinema
+          ## Conditional buttons for Televion. 6th row
+          - type: horizontal-stack
+            cards: 
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: rewind
+                  - device: Humax
+                  - command: Rewind
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: pause
+                  - device: Humax
+                  - command: Pause
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: play
+                  - device: Humax
+                  - command: Play
+              - type: custom:decluttering-card
+                template: media_button_small_icon
+                variables:
+                  - switch: television
+                  - icon: fast-forward
+                  - device: Humax
+                  - command: FastForward
+

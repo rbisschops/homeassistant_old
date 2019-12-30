@@ -1,180 +1,175 @@
-# Package file for Home Assistant, used for the toilet
-# Type: Home Assistant yaml file
-# Date: 21-03-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.1.1:  Updated automation
-# V0.2.0:  Added test input and services in automations, 
-#          for testing commented actual climate entity in all automations 
-# V0.2.1:  Added script for manual control of the toilet heating
-# V0.3.0:  updated automations and script for automated ontrol of the toilet heating  
+## Package file for Home Assistant, used for the toilet
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.1.1:  Updated automation
+## V0.2.0:  Added test input and services in automations, 
+##          for testing commented actual climate entity in all automations 
+## V0.2.1:  Added script for manual control of the toilet heating
+## V0.3.0:  updated automations and script for automated control of the toilet heating
+## V0.3.1:  Minor updates in comments
+## V0.3.2:  Code cleaning
+## V0.4.0:  Changed control for toilet heating
+## V0.5.0:  Updated code for climate settings with HA version 0.103
 
 ###############################################################################
-#                               Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
-
+climate:
+  - platform: zwave
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_select:
-## Electrical toilet heating controlled by Z-Wave Thermostat
-## Used for manual control of the toilet heating
-  toilet_heating:
+  ## Electrical toilet heating controlled by Z-Wave Thermostat
+  ## Used for manual control of the toilet heating
+  restroom_heating:
     name: Verwarming toilet
     options:
-      - 'heat'
-      - 'Energy Heat'
-      - 'off'  
-    initial: 'off'
-    icon: mdi:thermometer
-  toilet_heating_dummy:
-    name: Verwarming toilet dummy
-    options:
-      - 'heat'
-      - 'Energy Heat'
-      - 'off'  
-    initial: 'off'
+      - 'Verwarmen'
+      - 'Spaarstand'
+      - 'Uitgeschakeld'
     icon: mdi:thermometer
 
+###############################################################################
+##  Groups
+###############################################################################
+
 
 ###############################################################################
-#                               Groups
-###############################################################################
-
-
-###############################################################################
-#                               Automations
+##  Automations
 ###############################################################################
 automation:
-  ## Switch toilet heating based on time for workdays 
+  ## Updated V0.4.0, V0.5.0
+  ## Switch restroom heating based on time for work days
   - alias: "Toilet verwarming aan volgens schema - werkdagen"
     hide_entity: false
     initial_state: 'on'
     trigger:
-      platform: time
-      at: '06:30:00'
+      - platform: time
+        at: '06:00:00'
     condition:
       condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.workday_sensor
           state: 'on'
+        - condition: state
+          entity_id: binary_sensor.everybody_away
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: template
+          value_template: >
+            {{ not is_state('input_select.restroom_heating','Uitgeschakeld') }}
     action:
-      ## kick of the script for setting the heating mode
-      - service: script.set_toilet_heating_mode
-        data_template:
-          mode: 'heat'
-      ## Set the manual input selector to match current state
+      # Set the input selector to new state
       - service: input_select.select_option
         data_template:
-          entity_id: input_select.toilet_heating
-          option: 'heat'
+          entity_id: input_select.restroom_heating
+          option: 'Verwarmen'
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Toilet verwarming geschakeld. '
+          value2: 'Trigger = Werkdag '
+          value3: ' '
+          who: 'ralph'
+          prio: -2
 
-  ## Switch toilet heating based on time for non-workingdays 
+  ## Updated V0.4.0, V0.5.0
+  ## Switch restroom heating based on time for non-working days
   - alias: "Toilet verwarming aan volgens schema - niet werkdagen"
     hide_entity: false
     initial_state: 'on'
     trigger:
-      platform: time
-      at: '07:30:00'
+      - platform: time
+        at: '06:30:00'
     condition:
       condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.workday_sensor
           state: 'off'
+        - condition: state
+          entity_id: binary_sensor.everybody_away
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: template
+          value_template: >
+            {{ not is_state('input_select.restroom_heating','Uitgeschakeld') }}
     action:
-      ## kick of the script for setting the heating mode
+      # Set the input selector to new state
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.restroom_heating
+          option: 'Verwarmen'
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Toilet verwarming geschakeld. '
+          value2: 'Trigger = Niet-werkdag '
+          value3: '{{ states.input_select.restroom_heating.state }}'
+          who: 'ralph'
+          prio: -2
+
+  ## Added V0.4.0, V0.5.0
+  ## Switch toilet heating based on input selector state
+  - alias: "Toilet verwarming mode selectie"
+    hide_entity: false
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - input_select.restroom_heating
+    action:
+      ##start the script for setting the heating mode
       - service: script.set_toilet_heating_mode
         data_template:
-          mode: 'heat'           
-      ## Set the manual input selector to match current state
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.toilet_heating
-          option: 'heat'
-
-  ## Switch toilet heating based on time test automation (for testing only remove later)
-  - alias: "test climate"
-    hide_entity: false
-    initial_state: 'off' 
-    trigger:
-      platform: time
-      at: '07:30:00'
-    action:
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.toilet_heating
-          option: 'heat' 
-
+          mode: >
+            {{ 'off' if is_state('input_select.restroom_heating','Uitgeschakeld') else 'heat' }}
+          preset: >
+            {{ 'Energy Heat' if is_state('input_select.restroom_heating','Spaarstand') else 'none' }}
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
-## Script for setting the Hue scene manual
 script:
-  manual_set_toilet_heating:
-    alias: Stel toilet verwarming in
-    sequence: 
-      # - service: climate.set_operation_mode
-      #   entity_id: climate.toilet_heating_heating
-      #   data_template:
-      #     operation_mode: '{{ states.input_select.toilet_heating.state }}'
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.toilet_heating_dummy
-          option: '{{ states.input_select.toilet_heating.state }}'
-
-## Script for setting the heating mode in the toilet
-# used by multiple packages (this, miscellaneous)
-
+  ## Added V0.4.0, V0.5.0
+  ## Updated simplified script for setting the heating mode
   set_toilet_heating_mode:
     alias: Zend verwarmings mode naar toilet verwarming
-    sequence:
-      ## Test if the holiday mode is not set to on, otherwise quit
-      - condition: state
-        entity_id: input_boolean.holiday_mode
-        state: 'off'
-      ## Test if the toilet heating is not set to off, otherwise quit
-      - condition: template
-          # {% if (states.climate.toilet_heating_energy_heat.attributes["operation_mode"] != 'off') %}
-        value_template: >
-          {% if ( states.input_select.toilet_heating_dummy.state != 'off') %}
-            true
-          {% else %}
-            false
-          {% endif %}  
+    sequence: 
       # - service: climate.set_operation_mode
       #   data_template:
       #     entity_id: climate.toilet_heating_heating
       #     operation_mode: '{{ mode }}'
-
-      ## Set the dummy toilet heater selector for test, replace with code above after testing
-      - service: input_select.select_option
+      - service: climate.set_hvac_mode
         data_template:
-          entity_id: input_select.toilet_heating_dummy
-          option: '{{ mode }}'
-
-      ## Test if manual selector is the not the same, otherwise set this one to match actual state
-      - condition: template
-        value_template: >
-          {% if ( states.input_select.toilet_heating.state != mode) %}
-            true
-          {% else %}
-            false
-          {% endif %}
-      - service: input_select.select_option
+          entity_id: climate.thermofloor_as_heatit_thermostat_tf_021_mode
+          hvac_mode: '{{ mode }}'
+      - service: climate.set_preset_mode
         data_template:
-          entity_id: input_select.toilet_heating
-          option: '{{ mode }}'
+          entity_id: climate.thermofloor_as_heatit_thermostat_tf_021_mode
+          preset_mode: '{{ preset }}'
+      - service: script.notify_prowl
+        data_template:
+          value1: 'Toilet verwarming '
+          value2: 'nieuwe status: '
+          value3: '{{mode}} {{preset}}'
+          # value3: '{{ states.input_select.restroom_heating.state }}'
+          who: 'ralph'
+          prio: -2
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################

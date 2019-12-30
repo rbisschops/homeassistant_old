@@ -1,21 +1,22 @@
-# Package file for Home Assistant, used for mediacenter
-# Type: Home Assistant yaml file
-# Date: 19-01-2019
-# Author: R.Bisschops
-#
-# Changelog:
-# V0.1.0:  First version
-# V0.2.0:  Added tradfri entertainment switch (replaces domo switch)  
-# V0.2.1:  Removed domo entertainment switch 
-# V0.2.2:  Updated friendly names
-# V0.2.3:  Added HA Bridge selectors and commands
-# V0.2.4:  Added switches for Netflix and Spotify (after Harmony update)
-# V0.3.0:  Added lighting setting for video modes
-# V0.3.1:  Added test input and automation for Harmony hub commands, remove later
-# V0.3.2:  Added setting the video mode input selector. Used for switching lights on in the right mode 
+## Package file for Home Assistant, used for mediacenter
+## Type: Home Assistant yaml file
+## Date: 11-11-2019
+## Author: R.Bisschops
+##
+## Changelog:
+## V0.1.0:  First version
+## V0.2.0:  Added tradfri entertainment switch (replaces domo switch)  
+## V0.2.1:  Removed domo entertainment switch 
+## V0.2.2:  Updated friendly names
+## V0.2.3:  Added HA Bridge selectors and commands
+## V0.2.4:  Added switches for Netflix and Spotify (after Harmony update)
+## V0.3.0:  Added lighting setting for video modes
+## V0.3.1:  Added test input and automation for Harmony hub commands, remove later
+## V0.3.2:  Added setting the video mode input selector. Used for switching lights on in the right mode 
+## V0.3.3:  Code cleanup
 
 ###############################################################################
-#                              Homeassistant settings
+##  Homeassistant settings
 ###############################################################################
 homeassistant:
   customize:
@@ -44,24 +45,24 @@ homeassistant:
 
     ## Media devices from Harmony
     switch.poweroff:
-      friendly_name: PowerOff      
+      friendly_name: PowerOff
     switch.television:
-      friendly_name: Televisie    
+      friendly_name: Televisie
     switch.mediaplayer:
-      friendly_name: Mediaplayer    
+      friendly_name: Mediaplayer
     switch.appletv:
-      friendly_name: Apple-TV    
+      friendly_name: Apple-TV
     switch.radio:
-      friendly_name: Radio    
+      friendly_name: Radio
     switch.music:
-      friendly_name: Muziek    
+      friendly_name: Muziek
     switch.dvd:
-      friendly_name: DVD    
+      friendly_name: DVD
     switch.teletext:
-      friendly_name: Teletekst    
+      friendly_name: Teletekst
     switch.smarttv:
       friendly_name: Smart-TV
-    # Added in V0.2.4    
+    ## Added in V0.2.4
     switch.netflix:
       friendly_name: Netflix
     switch.spotify:
@@ -78,7 +79,7 @@ remote:
     host: !secret ip_harmony_hub
 
 ## Media players
-#  LG television
+##  LG television
 media_player:
   - platform: webostv
     host: !secret ip_lgtelevision
@@ -96,10 +97,10 @@ media_player:
         - Spotify Music - Luister gratis op LG TV
 
 ###############################################################################
-#                              Entities
+##  Entities
 ###############################################################################
 input_select: 
-  # Harmony activities that can be set with the Harmony Hub
+  ## Harmony activities that can be set with the Harmony Hub
   harmony_livingroom:
     name: Activiteiten Harmony 
     options:
@@ -114,7 +115,6 @@ input_select:
       - DVD
       - Teletekst
       - PowerOff 
-    initial: PowerOff
     icon: mdi:remote
   test_old_status:
     name: Oude status
@@ -130,29 +130,28 @@ input_select:
       - DVD
       - Teletekst
       - PowerOff 
-    initial: Televisie
     icon: mdi:remote      
 
 input_boolean:
   ## Switch used for setting the recorder mode on   
-  # used for disabling the media center switch-off when a recording is programmed
+  ## used for disabling the media center switch-off when a recording is programmed
   recording_mode:
     name: Recorder mode aan
     icon: mdi:video
   ## Enable buttons
-  # used for disabling the start of the media mode when lovelace buttons are changing from harmony
-  # on will enable the hub to switch, off will disable the hub from switching 
+  ## used for disabling the start of the media mode when lovelace buttons are changing from harmony
+  ## on will enable the hub to switch, off will disable the hub from switching 
   enable_media_buttons:
     name: Buttons enabled
     initial: on
   ## Test buttons me3dia mode
-  # used for testing commands to Harmony Hub
-  # remove after completion of media package
+  ## used for testing commands to Harmony Hub
+  ## remove after completion of media package
   test_hub_command:
     name: Test Hub commando
     initial: off  
   ## Harmony mode selector inputs, 
-  # used for manual selection from lovelace interface 
+  ## used for manual selection from lovelace interface 
   poweroff:
     name: PowerOff
   television:
@@ -187,7 +186,7 @@ sensor:
 
 switch:
   ## Media center operations, switch (Tradfri via Zigbee2MQTT)
-  # used for powering up all media devices
+  ## used for powering up all media devices
   - platform: "mqtt"
     name: tradfri_media_switch
     state_topic: "zigbee2mqtt/tradfri_media_switch"
@@ -198,7 +197,7 @@ switch:
     command_topic: "zigbee2mqtt/tradfri_media_switch/set"
 
   ## Template switches synchronizing with the Harmony Hub. Operates reciproke
-  # switches are updated from the Harmony hub and set the Harmony hub from Hass  
+  ## switches are updated from the Harmony hub and set the Harmony hub from Hass  
   - platform: template
     switches:
       poweroff:
@@ -260,7 +259,7 @@ switch:
           service: remote.turn_on
           data:
             entity_id: remote.bisschops
-            activity: ''            
+            activity: ''
       music:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Muziek') }}"
         turn_on:
@@ -296,7 +295,7 @@ switch:
           service: remote.turn_on
           data:
             entity_id: remote.bisschops
-            activity: ''                                        
+            activity: ''
       smarttv:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Smart-TV') }}"
         turn_on:
@@ -309,7 +308,7 @@ switch:
           data:
             entity_id: remote.bisschops
             activity: ''
-      # Added in V0.2.4       
+      ## Added in V0.2.4
       netflix:
         value_template: "{{ is_state_attr('remote.bisschops', 'current_activity', 'Netflix') }}"
         turn_on:
@@ -336,7 +335,7 @@ switch:
             activity: ''
 
 ###############################################################################
-#                               Groups
+##  Groups
 ###############################################################################
 group:
   ## Group for remotes
@@ -344,7 +343,7 @@ group:
     name: Afstandsbediening
     entities:
       - remote.bisschops
-  ## Group for manual selectors          
+  ## Group for manual selectors
   input_media_modes:
     name: Media modes (inputs)
     entities:
@@ -389,11 +388,11 @@ group:
       - switch.spotify
 
 ###############################################################################
-#                              Automations
+##  Automations
 ###############################################################################
 automation:
   ## Automation for Harmony mode selector inputs, 
-  # used for manual selection from lovelace interface
+  ## used for manual selection from lovelace interface
   - alias: "Media acties lovelace buttons"
     hide_entity: false
     initial_state: 'on'
@@ -410,7 +409,7 @@ automation:
         - input_boolean.teletext
         - input_boolean.smarttv
         - input_boolean.netflix
-        - input_boolean.spotify        
+        - input_boolean.spotify
       to: 'on'
     action:
       - service: script.media_mode
@@ -425,7 +424,7 @@ automation:
           {% endif%}
 
   ## Automation for Harmony mode selector from HA Bridge, 
-  # used for selection from HA Bridge (Alexa commands)
+  ## used for selection from HA Bridge (Alexa commands)
   - alias: "Media acties HA-Bridge"
     hide_entity: false
     initial_state: 'on'
@@ -440,21 +439,21 @@ automation:
         - binary_sensor.habridge_smarttv
         - binary_sensor.habridge_netflix
         - binary_sensor.habridge_spotify
-        - binary_sensor.habridge_poweroff  
+        - binary_sensor.habridge_poweroff
       to: 'on'
     action:
       - service: script.set_media_input
         data_template:
           name: '{{ trigger.to_state.object_id }}'  
       # - service: homeassistant.turn_on
-      #   data_template:        
+      #   data_template:
       #     entity_id: >-
       #       {% set name = name|replace('habridge_','') %}
       #       {% set entity = ["input_boolean",name]|join(".") %}
       #       {{ entity }}
 
   ## Automation for Harmony mode selector from Harmony Hub, 
-  # used for selection from Harmony Hub
+  ## used for selection from Harmony Hub
   - alias: "Media acties Harmony Hub"
     hide_entity: false
     initial_state: 'on'
@@ -478,13 +477,13 @@ automation:
           name: '{{ trigger.to_state.object_id }}'
           type: 'harmony'   
       # - service: homeassistant.turn_on
-      #   data_template:        
+      #   data_template:
       #     entity_id: >-
       #       {% set entity = ["input_boolean",name]|join(".") %}
       #       {{ entity }}
 
   ## Test automation for testen Harmony hub commands
-  # remove after completion of media package
+  ## remove after completion of media package
   - alias: "Test acties Harmony Hub"
     hide_entity: false
     initial_state: 'on'
@@ -502,12 +501,12 @@ automation:
           device: Popcorn 
 
 ###############################################################################
-#                              Templates
+##  Templates
 ###############################################################################
 
 
 ###############################################################################
-#                              Scripts
+##  Scripts
 ###############################################################################
 script:
   ## Script for updating the state of the input buttons in Lovelace
@@ -516,7 +515,7 @@ script:
     sequence:
       - condition: template
         value_template: >-
-          {% if newstate != oldstate %}
+          {% if new_state == old_state %}
             false
           {% else %}
             true
@@ -643,34 +642,36 @@ script:
           device: Versterker
           command:
             - ModeStereo
-      - service: media_player.select_source
-        data:
-          entity_id: media_player.living_room_tv
-          source: Spotify Music - Luister gratis op LG TV
+      # - service: media_player.select_source
+      #   data:
+      #     entity_id: media_player.living_room_tv
+      #     source: Spotify Music - Luister gratis op LG TV
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
   ## Script for additional settings when Netflix mode is set 
   media_mode_netflix:
     alias: Aanvullende media settings Netflix
     sequence:
       - delay: '00:00:05' 
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeDolbyPLII
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeDolbyPLII
       - service: media_player.select_source
         data:
           entity_id: media_player.living_room_tv
@@ -680,60 +681,66 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Video"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'    
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      # - service: script.hue_mode_video
+      - service: script.hue_mode_change
 
   ## Script for additional settings when Radio mode is set 
   media_mode_radio:
     alias: Aanvullende media settings Radio
     sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeStereo
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.livingroom_lights_mode
-          option: "Normaal"             
-      - condition: state
-        entity_id: input_boolean.livingroom_lights_status
-        state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'  
-
-  ## Script for additional settings when Music mode is set 
-  media_mode_music:
-    alias: Aanvullende media settings Music
-    sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeStereo
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeStereo
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'  
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
-  ## Script for additional settings when Poweroff is set 
+  ## Script for additional settings when Music mode is set 
+  media_mode_music:
+    alias: Aanvullende media settings Music
+    sequence:
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeStereo
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.livingroom_lights_mode
+          option: "Normaal"
+      - condition: state
+        entity_id: input_boolean.livingroom_lights
+        state: 'on'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
+
+      ## Script for additional settings when Poweroff is set 
   media_mode_poweroff:
     alias: Aanvullende media settings PowerOff
     sequence:
@@ -742,37 +749,42 @@ script:
           entity_id: input_select.livingroom_lights_mode
           option: "Normaal"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'Verlichting aan'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'Verlichting aan'
+      # - service: script.hue_mode_normal
+      - service: script.hue_mode_change
 
   ## Script for additional settings when any video mode is set 
   media_mode_video:
     alias: Aanvullende media settings video
     sequence:
-      - service: 
-          remote.send_command
-        data:
-          entity_id: remote.bisschops
-          device: Versterker
-          command:
-            - ModeDolbyPLII
+      # - service: 
+      #     remote.send_command
+      #   data:
+      #     entity_id: remote.bisschops
+      #     device: Versterker
+      #     command:
+      #       - ModeDolbyPLII
       - service: input_select.select_option
         data:
           entity_id: input_select.livingroom_lights_mode
           option: "Video"
       - condition: state
-        entity_id: input_boolean.livingroom_lights_status
+        entity_id: input_boolean.livingroom_lights
         state: 'on'
-      - service: script.set_hue_scene
-        data_template:
-          group: 'Woonkamer'
-          name: 'TV mode'
+      # - service: script.set_hue_scene
+      #   data_template:
+      #     group: 'Woonkamer'
+      #     name: 'TV mode'
+      # - service: script.hue_mode_video
+      - service: script.hue_mode_change
 
   ## Script for audio mode settings when music modes are selected 
+  ## Not used, romove?
   amplifier_mode_music:
     alias: Set device mode muziek
     sequence:
@@ -785,6 +797,7 @@ script:
           device: Versterker
 
   ## Script for audio mode settings when video modes are selected 
+  ## Not used, romove?
   amplifier_mode_dolby:
     alias: Set device mode Dolby
     sequence:
@@ -797,10 +810,10 @@ script:
           device: Versterker
 
 ###############################################################################
-#                              Timers
+##  Timers
 ###############################################################################
 timer:
   media_center_delay:
     duration: '00:00:30'
   media_center_dummy:
-    duration: '00:00:00'    
+    duration: '00:00:00'

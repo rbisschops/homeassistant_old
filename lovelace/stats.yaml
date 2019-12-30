@@ -145,17 +145,23 @@ cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
-              - sensor: laptop_ralph
-              - name: Ralph
+              - sensor: laptop_kim_prive
+              - name: Kim (P)
               - icon: laptop
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
-              - sensor: laptop_kim
-              - name: Kim
+              - sensor: laptop_kim_werk
+              - name: Kim (W)
               - icon: laptop
       - type: horizontal-stack
         cards:
+          - type: custom:decluttering-card
+            template: stats_normal_small_icon
+            variables:
+              - sensor: laptop_ralph
+              - name: Ralph
+              - icon: laptop
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
@@ -165,17 +171,17 @@ cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
-              - sensor: popcornhour
-              - name: Popcorn
-              - icon: popcorn
+              - sensor: ipad
+              - name: iPad
+              - icon: tablet-ipad
+      - type: horizontal-stack
+        cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
               - sensor: appletv
               - name: Apple-TV
               - icon: apple
-      - type: horizontal-stack
-        cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
@@ -188,20 +194,24 @@ cards:
               - sensor: denon
               - name: Denon
               - icon: volume-high
+      - type: horizontal-stack
+        cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
               - sensor: humax
               - name: Humax
               - icon: satellite-variant
-      - type: horizontal-stack
-        cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
-              - sensor: ipad
-              - name: iPad
-              - icon: tablet-ipad
+              - sensor: popcornhour
+              - name: Popcorn
+              - icon: popcorn
+          - type: custom:button-card
+            color_type: blank-card
+      - type: horizontal-stack
+        cards:
           - type: custom:decluttering-card
             template: stats_normal_small_icon
             variables:
@@ -214,3 +224,5 @@ cards:
               - sensor: bosch_dryer
               - name: Droger
               - icon: tumble-dryer
+          - type: custom:button-card
+            color_type: blank-card
